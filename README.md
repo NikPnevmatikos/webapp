@@ -1,4 +1,10 @@
 # webapp
-hi <3
+backend:
+django 
+django rest framework
 
-fyufufuygyu
+frontend:
+
+npm 
+nodejs
+

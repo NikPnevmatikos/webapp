@@ -9,7 +9,7 @@ function App() {
   return (
     <div>
       <Header/>
-      <main classname = "py-3">
+      <main className = "py-3">
         <Container>
           <Homescreen/>
         </Container>

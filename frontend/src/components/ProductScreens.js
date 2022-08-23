@@ -5,13 +5,13 @@ import axios from 'axios'
 
 
 function ProductScreens() {
+  
   const match = useParams()
-
   const [product, setProduct] = useState([])
 
   useEffect(() => {
     async function fetch(){
-      const { data } = await axios.get(`api/product/${match.id}/`)
+      const { data } = await axios.get(`/api/product/${match.id}/`)
       setProduct(data)
     }
 
@@ -75,7 +75,7 @@ function ProductScreens() {
 
               
               <ListGroup.Item className='d-grid gap-2'>
-                <Button className='btn btn-dark btn-lg' type='button' disabled={product.countInStock==0}>Add to Cart</Button>
+                <Button className='btn btn-dark btn-lg' type='button' disabled={product.countInStock===0}>Add to Cart</Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>

@@ -1,11 +1,9 @@
-from itertools import product
-from urllib import response
-from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import Product_Serializer
 from .models import Product
+from .products import products
 
 # Create your views here.
 def hello(request):
@@ -22,17 +20,30 @@ def api_overview(request):
     }
     return Response(apiurls)
 
+# @api_view(['GET'])
+# def all_products(request):
+#     product = Product.objects.all().order_by('-id')
+#     serializer = Product_Serializer(product, many=True)
+#     return Response(serializer.data)
+
 @api_view(['GET'])
 def all_products(request):
-    product = Product.objects.all().order_by('-id')
-    serializer = Product_Serializer(product, many=True)
-    return Response(serializer.data)
+    return Response(products)
+
+# @api_view(['GET'])
+# def product(request, pk):
+#     product = Product.objects.get(id=pk)
+#     serializer = Product_Serializer(product, many=False)
+#     return Response(serializer.data)
 
 @api_view(['GET'])
 def product(request, pk):
-    product = Product.objects.get(id=pk)
-    serializer = Product_Serializer(product, many=False)
-    return Response(serializer.data)
+    prod = None
+    for i in products:
+        if i['_id'] == pk :
+            prod = i
+            
+    return Response(prod)      
 
 
 @api_view(['POST'])

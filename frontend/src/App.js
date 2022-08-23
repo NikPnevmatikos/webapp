@@ -15,7 +15,8 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<Homescreen/>} exact />
-            <Route path='/product/:id' element={<ProductScreens/>} />
+            {/* <Route path='/product/:id' Render={({match}) => <ProductScreens match ={match}/> } /> */}
+            <Route path='/product/:id' element={<ProductScreens/>}/>
           </Routes>
         </Container>
       </main>

@@ -7,7 +7,7 @@ from .products import products
 
 # Create your views here.
 def hello(request):
-    return HttpResponse("<h1> E d a y <h1>")
+    return HttpResponse("<h1> E d la y <h1>")
 
 @api_view(['GET'])
 def api_overview(request):

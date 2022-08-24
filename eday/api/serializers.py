@@ -1,6 +1,7 @@
 from dataclasses import fields
 from xml.dom.expatbuilder import InternalSubsetExtractor
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Product
 
 # Add serializers here

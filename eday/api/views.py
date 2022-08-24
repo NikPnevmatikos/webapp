@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import Product_Serializer
 from .models import Product
-from .products import products
+# from .products import products
 
 # Create your views here.
 def hello(request):
@@ -21,30 +21,30 @@ def api_overview(request):
     }
     return Response(apiurls)
 
-# @api_view(['GET'])
-# def all_products(request):
-#     product = Product.objects.all().order_by('-id')
-#     serializer = Product_Serializer(product, many=True)
-#     return Response(serializer.data)
-
 @api_view(['GET'])
 def all_products(request):
-    return Response(products)
+    products = Product.objects.all().order_by('-_id')
+    serializer = Product_Serializer(products, many=True)
+    return Response(serializer.data)
 
 # @api_view(['GET'])
-# def product(request, pk):
-#     product = Product.objects.get(id=pk)
-#     serializer = Product_Serializer(product, many=False)
-#     return Response(serializer.data)
+# def all_products(request):
+#     return Response(products)
 
 @api_view(['GET'])
 def product(request, pk):
-    prod = None
-    for i in products:
-        if i['_id'] == pk :
-            prod = i
+    product = Product.objects.get(_id=pk)
+    serializer = Product_Serializer(product, many=False)
+    return Response(serializer.data)
+
+# @api_view(['GET'])
+# def product(request, pk):
+#     prod = None
+#     for i in products:
+#         if i['_id'] == pk :
+#             prod = i
             
-    return Response(prod)      
+#     return Response(prod)      
 
 
 @api_view(['POST'])

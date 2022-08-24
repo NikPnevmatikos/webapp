@@ -13,7 +13,7 @@ def hello(request):
 @api_view(['GET'])
 def api_overview(request):
     apiurls = {
-        'all_products' : '/products_list/',
+        'all_products' : '/product_list/',
         'product' : '/product/<str:pk>/',
         'create' : '/create/',
         'update' : '/update/<str:pk>/',

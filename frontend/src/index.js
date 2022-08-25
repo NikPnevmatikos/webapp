@@ -5,11 +5,29 @@ import './bootstrap.min.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {createStore, combineReducers, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { productListReducer , productReducer} from './reducers/ProductReducers'
+import { Provider } from 'react-redux'
+
+const reducer = combineReducers({
+    productListReducer,
+    productReducer,
+})
+
+const initialState = {}
+
+const middleware = [thunk]
+
+const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <Provider store = {store}>
     <App />
-  </React.StrictMode>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

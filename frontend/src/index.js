@@ -9,14 +9,21 @@ import {createStore, combineReducers, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { productListReducer , productReducer} from './reducers/ProductReducers'
+import { bidReducer} from './reducers/bidReducers'
 import { Provider } from 'react-redux'
 
 const reducer = combineReducers({
     productListReducer,
     productReducer,
+    bidReducer,
 })
 
-const initialState = {}
+const localStoreProducts = localStorage.getItem('bidItems') ? 
+  JSON.parse(localStorage.getItem('bidItems')) : []
+
+const initialState = {
+  bids: {mybids: localStoreProducts}
+}
 
 const middleware = [thunk]
 

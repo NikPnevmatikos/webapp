@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Homescreen from './components/Homescreen';
 import ProductScreens from './components/ProductScreens';
+import MyBids from './components/MyBids'
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<Homescreen/>} exact />
-            {/* <Route path='/product/:id' Render={({match}) => <ProductScreens match ={match}/> } /> */}
             <Route path='/product/:id' element={<ProductScreens/>}/>
+            <Route path="/myBids/:id" element={<MyBids/>}/>
+            <Route path="/myBids/" element={<MyBids/>}/>
           </Routes>
         </Container>
       </main>

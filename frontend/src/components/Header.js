@@ -20,8 +20,7 @@ function Header() {
         <div class="collapse navbar-collapse" id="navbarColor02">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <Link class="nav-link" to="/link">Link
-              </Link>
+              <Link class="nav-link" to="/myBids/">MyBids</Link>
             </li>
             <li class="nav-item">
               <Link class="nav-link" to="/features">Features</Link>

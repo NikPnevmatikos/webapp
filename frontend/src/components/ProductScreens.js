@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Link , useParams} from 'react-router-dom'
+import { Link , useParams, useNavigate} from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
@@ -7,9 +7,11 @@ import Spinner from 'react-bootstrap/Spinner';
 
 
 function ProductScreens() {
-  const [qty, setQty] = useState(1)
+  const [bid, setBid] = useState(0)
 
   const match = useParams()
+
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
   const singleproduct = useSelector(state => state.productReducer)
@@ -19,6 +21,10 @@ function ProductScreens() {
   useEffect(() => {
     dispatch(productsAction(match.id))
   } , [dispatch, match])
+
+  const addBidHandler = () => {
+    navigate(`/myBids/${match.id}?bid=${bid}`)
+  }
 
   //let product = {}
 // paciently waiting for bebe to come back to meeee uUu me back
@@ -93,22 +99,29 @@ function ProductScreens() {
                     {product.countInStock > 0 && (
                       <ListGroup.Item>
                         <Row>
-                          <Col>Qty</Col>
+                          <Col>Bid:</Col>
                           <Col>
-                            <Form.Control
-                              as = "select"
-                              value = {qty}
-                              onChange = {(e) = ? setQt}
-                              >
-                            </Form.Control>
+                            <Form.Control 
+                              type='number' 
+                              placeholder='Bid'
+                              value = {bid}
+                              onChange= {(e) => setBid(e.target.value)}  
+                            />                              
                           </Col>
                         </Row>
                       </ListGroup.Item>
                     )}
-                                
-                    
+                              
                     <ListGroup.Item className='d-grid gap-2'>
-                      <Button className='btn btn-dark btn-lg' type='button' disabled={product.countInStock===0}>Add to Cart</Button>
+                      <Button 
+                        onClick={addBidHandler}
+                        className='btn btn-dark btn-lg'
+                        type='button' 
+                        disabled={product.countInStock===0}
+                      >
+                        Add Bid plz uwu
+                      </Button>
+                      
                     </ListGroup.Item>
                   </ListGroup>
                 </Card>

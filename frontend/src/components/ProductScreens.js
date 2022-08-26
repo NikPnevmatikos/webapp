@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link , useParams} from 'react-router-dom'
-import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap'
+import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
 import Spinner from 'react-bootstrap/Spinner';
 
 
 function ProductScreens() {
-  
+  const [qty, setQty] = useState(1)
+
   const match = useParams()
 
   const dispatch = useDispatch()
@@ -20,7 +21,7 @@ function ProductScreens() {
   } , [dispatch, match])
 
   //let product = {}
-
+// paciently waiting for bebe to come back to meeee uUu me back
   return (
     <div>
       <Link to='/'>
@@ -88,7 +89,23 @@ function ProductScreens() {
                         </Col>
                       </Row>
                     </ListGroup.Item>
-
+                    
+                    {product.countInStock > 0 && (
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>Qty</Col>
+                          <Col>
+                            <Form.Control
+                              as = "select"
+                              value = {qty}
+                              onChange = {(e) = ? setQt}
+                              >
+                            </Form.Control>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    )}
+                                
                     
                     <ListGroup.Item className='d-grid gap-2'>
                       <Button className='btn btn-dark btn-lg' type='button' disabled={product.countInStock===0}>Add to Cart</Button>

@@ -17,7 +17,7 @@ export const productListReducer = (state = {products:[]}, action) => {
 export const productReducer = (state = {product:{}}, action) => {
     switch(action.type){
         case 'PRODUCT_REQUEST' :
-            return{loading: true, ...state }
+            return{loading: true, product: {} }  //previously -> '...state'
         
         case 'PRODUCT_SUCCESS' :
             return {loading: false , product: action.payload }

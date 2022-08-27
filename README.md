@@ -4,6 +4,7 @@ django
 django rest framework
 pip install django-cors-headers
 pip install pillow
+pip install djangorestframework-simplejwt
 
 frontend:
 

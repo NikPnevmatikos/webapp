@@ -27,7 +27,6 @@ function ProductScreens() {
   }
 
   //let product = {}
-// paciently waiting for bebe to come back to meeee uUu me back
   return (
     <div>
       <Link to='/'>

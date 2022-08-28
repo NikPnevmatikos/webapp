@@ -83,7 +83,7 @@ def registerUser(request):
     try:
         user = User.objects.create(
             first_name = data['name'], 
-            username = data['email'], # na baloume username ant gia email
+            username = data['username'], # na baloume username ant gia email
             email = data['email'],
             password = make_password(data['password'])
         )
@@ -91,7 +91,7 @@ def registerUser(request):
         serializer = UserSerializerWithToken(user, many = False)
         return Response(serializer.data)
     except:
-        message = {'detail' : 'There is already an account using this email.'}
+        message = {'detail' : 'There is already an account using this email or username.'}
             
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 

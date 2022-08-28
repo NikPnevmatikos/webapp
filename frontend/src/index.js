@@ -29,8 +29,8 @@ const localStoreUser = localStorage.getItem('userInfo') ?
   JSON.parse(localStorage.getItem('userInfo')) : null
 
 const initialState = {
-  bids: {bidItems: localStoreProducts},
-  user: {userInfo : localStoreUser}
+  bidReducer: {bidItems: localStoreProducts},
+  userLoginReducer: {userInfo : localStoreUser}
 }
 
 const middleware = [thunk]

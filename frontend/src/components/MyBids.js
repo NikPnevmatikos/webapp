@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap' 
 import { newBid, removeBid} from '../actions/bidActions'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function MyBids( ) {
     const match = useParams()
@@ -63,7 +63,7 @@ function MyBids( ) {
                                             variant='light'
                                             onClick={()=> removeItem(item.product)}
                                         >
-                                          <h2>X</h2>
+                                          <h5>x</h5>
                                         </Button>
                                     </Col>
                                 </Row>

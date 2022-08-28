@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (username, password) => async (dispatch) => {
     try {
 
 
@@ -18,7 +18,7 @@ export const login = (email, password) => async (dispatch) => {
 
         const { data } = await axios.post(
             '/api/users/login/',
-            { 'username': email, 'password': password },
+            { 'username': username, 'password': password },
             config
         )
 
@@ -37,4 +37,21 @@ export const login = (email, password) => async (dispatch) => {
                 : error.message,
         })
     }
+}
+
+export const logout = () => (dispatch) => {
+    localStorage.removeItem('userInfo')
+    
+    dispatch({ 
+        type: 'USER_LOGOUT'
+    })
+    // dispatch({ 
+    //     type: USER_DETAILS_RESET 
+    // })
+    // dispatch({ 
+    //     type: ORDER_LIST_MY_RESET 
+    // })
+    // dispatch({ 
+    //     type: USER_LIST_RESET 
+    // })
 }

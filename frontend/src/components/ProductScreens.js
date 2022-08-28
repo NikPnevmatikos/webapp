@@ -66,9 +66,6 @@ function ProductScreens() {
                     Description: {product.description}
                   </ListGroup.Item>
 
-                  <ListGroup.Item>
-                    Published by: {product.User}
-                  </ListGroup.Item>
                 </ListGroup>
               </Col>
               

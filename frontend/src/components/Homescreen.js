@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {Row, Col} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from 'react-bootstrap/Spinner';
 import Product from './Product'
 import { listProductsAction } from '../actions/ProductActions'
-// import axios from 'axios'
+
 
 function Homescreen() {
-  // const [products, setProduct] = useState([])
 
   const dispatch = useDispatch()
   const productList = useSelector(state => state.productListReducer)
@@ -17,12 +16,6 @@ function Homescreen() {
   useEffect(() => {
     dispatch(listProductsAction())
 
-    // async function fetch(){
-    //   const { data } = await axios.get('/api/product_list/')
-    //   setProduct(data)
-    // }
-
-    // fetch()
   } , [dispatch])
 
   return (
@@ -37,7 +30,7 @@ function Homescreen() {
             <span className="visually-hidden">Loading</span>
           </Spinner>
           : error ?
-            <div class="alert alert-dismissible alert-danger">
+            <div className="alert alert-dismissible alert-danger">
               <strong>{error}</strong>
             </div>
             :

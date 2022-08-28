@@ -30,7 +30,7 @@ function ProductScreens() {
   return (
     <div>
       <Link to='/'>
-        <button type="button" class="btn btn-secondary my-3">
+        <button type="button" className="btn btn-secondary my-3">
           Go Back
         </button>
       </Link>
@@ -43,7 +43,7 @@ function ProductScreens() {
           <span className="visually-hidden">Loading</span>
         </Spinner>
         : error ?
-          <div class="alert alert-dismissible alert-danger">
+          <div className="alert alert-dismissible alert-danger">
             <strong>{error}</strong>
           </div>
           :
@@ -64,6 +64,10 @@ function ProductScreens() {
 
                   <ListGroup.Item>
                     Description: {product.description}
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    Published by: {product.User}
                   </ListGroup.Item>
                 </ListGroup>
               </Col>

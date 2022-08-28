@@ -5,6 +5,8 @@ django rest framework
 pip install django-cors-headers
 pip install pillow
 pip install djangorestframework-simplejwt
+postman
+
 
 frontend:
 
@@ -19,3 +21,7 @@ redux
 react-redux
 react-thunk
 react-devtools-extension
+
+
+Ti prepei na kanoume:
+-na baloume to usename username, anti gia email sto userAction kai sta upoloipa user

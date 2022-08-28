@@ -12,5 +12,8 @@ urlpatterns = [
     path('delete/<str:pk>/', delete),
 
     path('users/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('users/profile/', getUserProfile)
+    
+    path('users/register/', registerUser),
+    path('users/profile/', getUserProfile),
+    path('users/', getUsers),
 ]

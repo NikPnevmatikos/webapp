@@ -8,21 +8,29 @@ import reportWebVitals from './reportWebVitals';
 import {createStore, combineReducers, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { Provider } from 'react-redux'
+
 import { productListReducer , productReducer} from './reducers/ProductReducers'
 import { bidReducer} from './reducers/bidReducers'
-import { Provider } from 'react-redux'
+import { userLoginReducer } from './reducers/userReducer'
+
 
 const reducer = combineReducers({
     productListReducer,
     productReducer,
     bidReducer,
+    userLoginReducer,
 })
 
 const localStoreProducts = localStorage.getItem('bidItems') ? 
   JSON.parse(localStorage.getItem('bidItems')) : []
 
+const localStoreUser = localStorage.getItem('userInfo') ? 
+  JSON.parse(localStorage.getItem('userInfo')) : null
+
 const initialState = {
-  bids: {mybids: localStoreProducts}
+  bids: {bidItems: localStoreProducts},
+  user: {userInfo : localStoreUser}
 }
 
 const middleware = [thunk]

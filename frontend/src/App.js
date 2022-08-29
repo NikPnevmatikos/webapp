@@ -9,6 +9,8 @@ import ProductScreens from './components/ProductScreens';
 import MyBids from './components/MyBids'
 import LoginScreen from './components/LoginScreen';
 import RegisterScreen from './components/RegisterScreen';
+import ProfileScreen from './components/ProfileScreen';
+import UpdateScreen from './components/UpdateScreen';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/myBids/" element={<MyBids/>}/>
             <Route path="/login/" element={<LoginScreen/>}/>
             <Route path="/register/" element={<RegisterScreen/>}/>
+            <Route path="/profile/" element={<ProfileScreen/>}/>
+            <Route path="/profile/update/" element={<UpdateScreen/>}/>
           </Routes>
         </Container>
       </main>

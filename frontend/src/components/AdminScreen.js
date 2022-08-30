@@ -30,7 +30,7 @@ function AdminScreen() {
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, success])
+    }, [dispatch , navigate, success, userInfo])
 
     const deleteHandler = (id) => {
 
@@ -70,34 +70,41 @@ function AdminScreen() {
                     </thead>
 
                     <tbody>
-                        {users.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.is_staff ? (
-                                    <h5>yes</h5>
-                                    // <i className='fas fa-check' style={{ color: 'green' }}></i>
-                                ) : (
-                                        // <i className='fas fa-check' style={{ color: 'red' }}></i>
-                                        <h5>no</h5>
-                                    )}</td>
 
-                                <td>
-                                    <LinkContainer to={`/admin/user/${user.id}/`}>
-                                        <Button variant='light' className='btn-sm'>
-                                            {/* <i className='fas fa-edit'></i> */}
-                                            <h5>Edit</h5>
+                        {Array.isArray(users)
+                            ?
+                            (users.map(user => (
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.is_staff ? (
+                                        <h5>yes</h5>
+                                        // <i className='fas fa-check' style={{ color: 'green' }}></i>
+                                    ) : (
+                                            // <i className='fas fa-check' style={{ color: 'red' }}></i>
+                                            <h5>no</h5>
+                                        )}</td>
+
+                                    <td>
+                                        <LinkContainer to={`/admin/user/${user.id}/`}>
+                                            <Button variant='light' className='btn-sm'>
+                                                {/* <i className='fas fa-edit'></i> */}
+                                                <h5>Edit</h5>
+                                            </Button>
+                                        </LinkContainer>
+
+                                        <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
+                                            {/* <i className='fas fa-trash'></i> */}
+                                            <h5>X</h5>
                                         </Button>
-                                    </LinkContainer>
-
-                                    <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
-                                        {/* <i className='fas fa-trash'></i> */}
-                                        <h5>X</h5>
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
+                                    </td>
+                                </tr>
+                        
+                            ))
+                            ):
+                                null
+                        }
                     </tbody>
                 </Table>       
                 )

@@ -26,7 +26,7 @@ function ProfileScreen() {
             navigate('/login')
         }
         else {
-            if (user == null || !user.name)  {
+            if (user == null || !user.name || userInfo.id != user.id)  {
                 dispatch(userProfile('profile'))
             }
             else {

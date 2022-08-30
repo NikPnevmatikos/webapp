@@ -117,6 +117,27 @@ def updateUserProfile(request):
     
     return Response(serializer.data)
 
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateUserProfile_by_Id(request , pk):
+    user = User.objects.get(id=pk)
+
+    
+    data = request.data
+    
+    user.first_name = data['name']
+    user.username = data['username']
+    user.email = data['email']
+    user.is_staff = data['is_staff']
+
+    user.save()    
+    
+    serializer = User_Serializer(user, many=False)
+            
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
@@ -127,7 +148,24 @@ def getUserProfile(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+def getUserProfile_by_Id(request, pk):
+    user = User.objects.get(id=pk)
+    serializer = User_Serializer(user, many=False)
+    
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getUsers(request):
     users = User.objects.all()
     serializer = User_Serializer(users, many=True)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteUser(request, pk):
+    user = User.objects.get(id=pk)
+    user.delete()
+
+    return Response('User succsesfully delete!')
+    

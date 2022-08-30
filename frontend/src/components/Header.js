@@ -36,6 +36,16 @@ function Header() {
 
             {userInfo ?(
               <NavDropdown title={userInfo.name} id='username'>
+
+
+                {userInfo.is_staff &&
+                  <LinkContainer to='/admin'>
+                    <NavDropdown.Item>
+                      Admin Page
+                    </NavDropdown.Item>
+                  </LinkContainer>  
+                } 
+
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>
                     Profile

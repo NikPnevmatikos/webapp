@@ -10,7 +10,7 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { Provider } from 'react-redux'
 
-import { productListReducer , productReducer} from './reducers/ProductReducers'
+import { productListReducer , userProductListReducer, productReducer, deleteProductReducer} from './reducers/ProductReducers'
 import { bidReducer} from './reducers/bidReducers'
 import { userLoginReducer, userRegisterReducer , userProfileReducer, userUpdateReducer , usersReducer , userDeleteReducer} from './reducers/userReducer'
 
@@ -18,13 +18,16 @@ import { userLoginReducer, userRegisterReducer , userProfileReducer, userUpdateR
 const reducer = combineReducers({
     productListReducer,
     productReducer,
+    deleteProductReducer,
     bidReducer,
+
     userLoginReducer,
     userRegisterReducer,
     userProfileReducer,
     userUpdateReducer,
     usersReducer,
     userDeleteReducer,
+    userProductListReducer,
 })
 
 const localStoreProducts = localStorage.getItem('bidItems') ? 

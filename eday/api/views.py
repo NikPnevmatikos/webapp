@@ -1,4 +1,6 @@
 from email import message
+from pydoc import describe
+from unicodedata import category
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -39,6 +41,18 @@ def all_products(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_products(request):
+
+    user = request.user
+
+    products = Product.objects.filter(user=user.id).order_by('-_id')
+    serializer = Product_Serializer(products, many=True)
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def product(request, pk):
     product = Product.objects.get(_id=pk)
     serializer = Product_Serializer(product, many=False)
@@ -46,28 +60,52 @@ def product(request, pk):
 
 
 @api_view(['POST'])
-def create(request):
-    serializer = Product_Serializer(data=request.data)
+@permission_classes([IsAuthenticated])
+def create_product(request):
 
-    if serializer.is_valid():
-        serializer.save()
+    user = request.user
+    
+    product = Product.objects.create(
+        user = user,
+        name = 'iamname',
+        price = 0,
+        brand = 'iambrand',
+        category = 'iamcategory',
+        describe = '',
+        countInStock = 0
+        
+    )
+    
+    
+    serializer = Product_Serializer(product, many = False)
 
     return Response(serializer.data)
 
 @api_view(['POST'])
-def update(request, pk):
+@permission_classes([IsAuthenticated])
+def update_product(request, pk):
+
+    data = request.data
     product = Product.objects.get(id=pk)
-    serializer = Product_Serializer(instance=product, data=request.data)
 
-    if serializer.is_valid():
-        serializer.save()
+    product.name = data['name']
+    product.price = data['price']
+    product.brand = data['brand']
+    product.category = data['category']
+    product.countInStock = data['countInStock']
+    #product.image = data['image']
+    product.description = data['description']
+    
+    product.save()
 
+    serializer = Product_Serializer(product, many=False)
     return Response(serializer.data)
 
 
 @api_view(['DELETE'])
-def delete(request, pk):
-    product = Product.objects.get(id=pk)
+@permission_classes([IsAuthenticated])
+def delete_product(request, pk):
+    product = Product.objects.get(_id=pk)
     product.delete()
 
     return Response('Item succsesfully delete!')

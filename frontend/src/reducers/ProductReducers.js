@@ -14,6 +14,22 @@ export const productListReducer = (state = {products:[]}, action) => {
         }       
 }
 
+export const userProductListReducer = (state = {products:[]}, action) => {
+    switch(action.type){
+        case 'USER_PRODUCTS_REQUEST' :
+           return{loading: true, products: [] }
+        
+        case 'USER_PRODUCTS_SUCCESS' :
+            return {loading: false , products: action.payload }
+        
+        case 'USER_PRODUCTS_FAIL' :
+            return {loading: false, error: action.payload}
+            
+        default:
+            return state
+        }       
+}
+
 export const productReducer = (state = {product:{}}, action) => {
     switch(action.type){
         case 'PRODUCT_REQUEST' :
@@ -28,6 +44,23 @@ export const productReducer = (state = {product:{}}, action) => {
         default:
             return state
         }       
-            // error.response && error.response.data.message ? error.response.data.messaga.data.message : error.message,
+}
+
+
+
+export const deleteProductReducer = (state = {}, action) => {
+    switch(action.type){
+        case 'PRODUCT_DELETE_REQUEST' :
+            return{loading: true}
+        
+        case 'PRODUCT_DELETE_SUCCESS' :
+            return {loading: false , success: true}
+        
+        case 'PRODUCT_DELETE_FAIL' :
+            return {loading: false, error: action.payload}
+            
+        default:
+            return state
+        }       
 }
 

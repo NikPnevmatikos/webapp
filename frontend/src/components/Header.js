@@ -52,6 +52,13 @@ function Header() {
                   </NavDropdown.Item>
                 </LinkContainer>
 
+                <LinkContainer to='/myProducts'>
+                  <NavDropdown.Item>
+                    My Products
+                  </NavDropdown.Item>
+                </LinkContainer>
+
+
                 <LinkContainer to='/myBids'>
                   <NavDropdown.Item>
                     My Bids

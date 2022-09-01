@@ -21,9 +21,45 @@ export const listProductsAction = () => async(dispatch) =>{
               
         })
     }
-
 }
 
+export const userListProductsAction = () => async(dispatch, getState) =>{
+    
+    try {
+        dispatch({
+            type: 'USER_PRODUCTS_REQUEST'
+        })
+        
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(
+            "/api/user_products/",
+            config
+        )
+
+        dispatch ({
+            type: 'USER_PRODUCTS_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error) {
+        dispatch ({
+            type: 'USER_PRODUCTS_FAIL',
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+              
+        })
+    }
+}
 
 export const productsAction = (id) => async(dispatch) =>{
     
@@ -49,3 +85,41 @@ export const productsAction = (id) => async(dispatch) =>{
 
 }
 
+
+export const deleteProductAction = (id) => async(dispatch, getState) =>{
+    
+    try {
+        dispatch({
+            type: 'PRODUCT_DELETE_REQUEST'
+        })
+        
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.delete(
+            `/api/product/delete/${id}/`,
+            config
+        )
+
+        dispatch ({
+            type: 'PRODUCT_DELETE_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error) {
+        dispatch ({
+            type: 'PRODUCT_DELETE_FAIL',
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+              
+        })
+    }
+}

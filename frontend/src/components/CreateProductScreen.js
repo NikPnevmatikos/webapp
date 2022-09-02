@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
+import { createProductAction } from '../actions/ProductActions';
 
 function CreateProductScreen() {
 
@@ -15,48 +16,47 @@ function CreateProductScreen() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setprice] = useState('')   
-    const [countInStock, setCountInStock] = useState('')
-
-    
+    const [price, setPrice] = useState(0)   
+    const [countInStock, setCountInStock] = useState(0)
 
     const dispatch = useDispatch()
-    const userRegister = useSelector(state => state.userRegisterReducer)
-    const {error, loading, userInfo} = userRegister
+
+    const createProduct = useSelector(state => state.createProductReducer)
+    const {error, loading, success, product} = createProduct
+
+    const userLogin = useSelector(state => state.userLoginReducer)
+    const {userInfo} = userLogin
 
     useEffect(() =>{
-        if (userInfo != null) {
-            navigate(redirect)
+        dispatch({type:'CREATE_PRODUCT_RESET'})
+        if (userInfo == null) {
+            navigate('/login/')
         }
-    }, [userInfo, navigate, redirect])
+        else {
+            if (product != null) {
+                navigate('/myProducts')
+            }
+        }
+    }, [userInfo, navigate, product])
 
-    const submitHandler = (e) =>{
+
+    const submitHandler = (e) => {
         e.preventDefault()
-        if (password !== confirmPassword) {
-            setErrorMessage("Password does not match.")
-        }
-        else{
-            dispatch(register(username, email, name, password))
-        }
+        dispatch(createProductAction(name, brand, category, price, description, countInStock))
     }
 
     return (
     <Container>
         <Row className = "justify-content-md-center">
             <Col xs={12} md={6}>
-                <h1>Sign Up</h1>
-
-                {errorMessage && 
-                    <div className="alert alert-dismissible alert-danger">
-                    <strong>{errorMessage}</strong>
-                    </div>
-                }
+                <h1>Create a Little Product</h1>
 
                 {error && 
                     <div className="alert alert-dismissible alert-danger">
                     <strong>{error}</strong>
                     </div>
                 }
+                
                 {loading &&
                     <Spinner 
                     animation="border" role="status" style={{ margin: 'auto',
@@ -67,68 +67,88 @@ function CreateProductScreen() {
                 }
                 
                 <Form onSubmit={submitHandler}>
-                    <Form.Group controlId='username' className='py-1'>
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control 
-                            required
-                            type='username' 
-                            placeholder='Enter username' 
-                            value={username}
-                            onChange = {(e) => setUsername(e.target.value)}                            
-                        >        
-                        </Form.Control>
-                    </Form.Group> 
-                    
                     <Form.Group controlId='name' className='py-1'>
                         <Form.Label>Name</Form.Label>
                         <Form.Control 
+                            required
                             type='name' 
-                            placeholder='Enter name' 
+                            placeholder='Enter Name' 
                             value={name}
                             onChange = {(e) => setName(e.target.value)}                            
                         >        
                         </Form.Control>
                     </Form.Group> 
-
-                    <Form.Group controlId='email' className='py-1'>
-                        <Form.Label>Email</Form.Label>
+                    
+                    <Form.Group controlId='brand' className='py-1'>
+                        <Form.Label>Brand</Form.Label>
                         <Form.Control 
                             required
-                            type='Email' 
-                            placeholder='Enter email' 
-                            value={email}
-                            onChange = {(e) => setEmail(e.target.value)}                            
+                            type='brand' 
+                            placeholder='Enter Brand' 
+                            value={brand}
+                            onChange = {(e) => setBrand(e.target.value)}                            
+                        >        
+                        </Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group controlId='category' className='py-1'>
+                        <Form.Label>Category</Form.Label>
+                        <Form.Control 
+                            required
+                            type='Category' 
+                            placeholder='Enter Category' 
+                            value={category}
+                            onChange = {(e) => setCategory(e.target.value)}                            
                         >        
                         </Form.Control>
                     </Form.Group> 
                     
-                    <Form.Group controlId='password' className='py-1'>
-                        <Form.Label>Password</Form.Label>
+                    <Form.Group controlId='price' className='py-1'>
+                        <Form.Label>Price</Form.Label>
                         <Form.Control 
                             required
-                            type='password' 
-                            placeholder='Enter Password' 
-                            value={password}
-                            onChange = {(e) => setPassword(e.target.value)}                            
+                            type='number' 
+                            placeholder='Enter Bid' 
+                            value={price}
+                            onChange = {(e) => setPrice(e.target.value)}                            
                         >
                         </Form.Control>
                     </Form.Group> 
 
-                    <Form.Group controlId='passwordConfirm' className='py-1'>
-                        <Form.Label>Confirm Password</Form.Label>
+                    <Form.Group controlId='description' className='py-1'>
+                        <Form.Label>Description</Form.Label>
                         <Form.Control 
                             required
-                            type='password' 
-                            placeholder='Confirm Password' 
-                            value={confirmPassword}
-                            onChange = {(e) => setConfirmPassword(e.target.value)}                            
+                            type='text' 
+                            placeholder='Enter Description' 
+                            value={description}
+                            onChange = {(e) => setDescription(e.target.value)}                            
+                        >
+                        </Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group controlId='countInStock' className='py-1'>
+                        <Form.Label>Count In Stock</Form.Label>
+                        <Form.Control 
+                            required
+                            type='number' 
+                            placeholder='Enter Count In Stock' 
+                            value={countInStock}
+                            onChange = {(e) => setCountInStock(e.target.value)}                            
                         >
                         </Form.Control>
                     </Form.Group> 
 
                     <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>
-                        Register
+                        Create
                     </Button>
+
+                    <Link to='/myProducts'>
+                            <Button type="button" className="btn btn-dark btn-lg">
+                                Discard
+                            </Button>
+                    </Link>
+
                 </Form>
             </Col>
         </Row>

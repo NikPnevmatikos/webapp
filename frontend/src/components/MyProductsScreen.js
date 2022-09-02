@@ -121,7 +121,7 @@ function MyProductScreen() {
                                         <td>{product.category}</td>
                                         <td>{product.price}</td>
                                         <td>
-                                            <LinkContainer to={`/product/${product._id}/`}>
+                                            <LinkContainer to={`update/${product._id}/`}>
                                                 <Button variant='light' className='btn-sm'>
                                                     {/* <i className='fas fa-edit'></i> */}
                                                     <h5>Edit</h5>

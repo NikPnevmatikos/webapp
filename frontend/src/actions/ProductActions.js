@@ -112,14 +112,14 @@ export const createProductAction = (
         }
 
         const { data } = await axios.post(
-            "/api/product/create/",
+            '/api/product/create/',
             {
                 'name': name,
                 'brand': brand,
                 'category': category,
                 'price': price,
                 'description' : description,
-                'countInStock': countInStock,
+                'countInStock': countInStock
             },
             config
         )
@@ -132,6 +132,53 @@ export const createProductAction = (
     catch(error) {
         dispatch ({
             type: 'CREATE_PRODUCT_FAIL',
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+              
+        })
+    }
+}
+
+
+export const editProductAction = (id, product) => async(dispatch, getState) =>{
+    
+    try {
+        dispatch({
+            type: 'EDIT_PRODUCT_REQUEST'
+        })
+        
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/product/update/${id}`,
+            product,
+            config
+        )
+
+        dispatch ({
+            type: 'EDIT_PRODUCT_SUCCESS',
+            payload: data
+        })
+
+        dispatch ({
+            type: 'PRODUCT_SUCCESS',
+            payload: data
+        })
+
+
+    }
+    catch(error) {
+        dispatch ({
+            type: 'EDIT_PRODUCT_FAIL',
             payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
               
         })

@@ -71,7 +71,7 @@ def create_product(request):
         price = 0,
         brand = 'iambrand',
         category = 'iamcategory',
-        describe = '',
+        description = '',
         countInStock = 0
         
     )
@@ -86,7 +86,7 @@ def create_product(request):
 def update_product(request, pk):
 
     data = request.data
-    product = Product.objects.get(id=pk)
+    product = Product.objects.get(_id=pk)
 
     product.name = data['name']
     product.price = data['price']

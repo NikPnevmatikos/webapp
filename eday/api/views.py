@@ -81,7 +81,7 @@ def create_product(request):
 
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_product(request, pk):
 

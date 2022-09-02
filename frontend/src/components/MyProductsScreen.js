@@ -40,12 +40,9 @@ function MyProductScreen() {
         }
     }
 
-
-
-    const createProduct = (product) => {
-        
+    const createProduct = () => {
+        navigate('create/')
     }
-
     
     return (
         <div>
@@ -54,7 +51,7 @@ function MyProductScreen() {
                     <h5>uwu my little kawaii product list uwu</h5>
                 </Col>
                 <Col className='text-right'>
-                    <Button className="btn btn-dark btn-lg float-right" style={{float: 'right'}} onClick={() => createProduct}>
+                    <Button className="btn btn-dark btn-lg float-right" style={{float: 'right'}} onClick={() => createProduct()}>
                         Create Product    
                     </Button>    
                 </Col>

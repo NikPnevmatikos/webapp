@@ -64,18 +64,24 @@ def product(request, pk):
 def create_product(request):
 
     user = request.user
+    data = request.data
     
-    product = Product.objects.create(
+    product = Product.objects.create (
+        # user = user,
+        # name = 'iamname',
+        # price = 0,
+        # brand = 'iambrand',
+        # category = 'iamcategory',
+        # description = '',
+        # countInStock = 0
         user = user,
-        name = 'iamname',
-        price = 0,
-        brand = 'iambrand',
-        category = 'iamcategory',
-        description = '',
-        countInStock = 0
-        
-    )
-    
+        name =  data['name'],
+        price = data['price'],
+        brand = data['brand'],
+        category = data['category'],
+        description = data['description'],
+        countInStock = data['countInStock']        
+    )   
     
     serializer = Product_Serializer(product, many = False)
 

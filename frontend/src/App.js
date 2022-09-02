@@ -12,6 +12,7 @@ import UpdateScreen from './components/UpdateScreen';
 import AdminScreen from './components/AdminScreen';
 import IdProfileScreen from './components/IdProfileScreen';
 import MyProductsScreen from './components/MyProductsScreen';
+import CreateProductScreen from './components/CreateProductScreen'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/admin/" element={<AdminScreen/>}/>
             <Route path="/admin/user/:id" element={<IdProfileScreen/>}/>
             <Route path="/myProducts" element={<MyProductsScreen/>}/>
+            <Route path="/myProducts/create/" element={<CreateProductScreen/>}/>
           </Routes>
         </Container>
       </main>

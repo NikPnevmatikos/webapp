@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-export const listProductsAction = () => async(dispatch) =>{
+export const listProductsAction = (keyword='') => async(dispatch) =>{
     
     try {
         dispatch({
             type: 'PRODUCT_LIST_REQUEST'
         })
         
-        const { data } = await axios.get('/api/product_list/')
+        const { data } = await axios.get(`/api/product_list${keyword}`)
 
         dispatch ({
             type: 'PRODUCT_LIST_SUCCESS',
@@ -23,7 +23,7 @@ export const listProductsAction = () => async(dispatch) =>{
     }
 }
 
-export const userListProductsAction = () => async(dispatch, getState) =>{
+export const userListProductsAction = (keyword='') => async(dispatch, getState) =>{
     
     try {
         dispatch({
@@ -43,7 +43,7 @@ export const userListProductsAction = () => async(dispatch, getState) =>{
         }
 
         const { data } = await axios.get(
-            "/api/user_products/",
+            `/api/user_products${keyword}`,
             config
         )
 

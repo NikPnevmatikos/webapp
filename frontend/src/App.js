@@ -35,7 +35,7 @@ function App() {
             <Route path="/profile/update/" element={<UpdateScreen/>}/>
             <Route path="/admin/" element={<AdminScreen/>}/>
             <Route path="/admin/user/:id" element={<IdProfileScreen/>}/>
-            <Route path="/myProducts" element={<MyProductsScreen/>}/>
+            <Route path="/myProducts/" element={<MyProductsScreen/>}/>
             <Route path="/myProducts/create/" element={<CreateProductScreen/>}/>
             <Route path="/myProducts/update/:id" element={<EditProductScreen/>}/>
 

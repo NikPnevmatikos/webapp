@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { allUsers, deleteUser } from '../actions/userActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import PageButtons from './PageButtons'
 
 function AdminScreen() {
   
@@ -15,22 +16,24 @@ function AdminScreen() {
     const dispatch = useDispatch()
     
     const allusers = useSelector(state => state.usersReducer)
-    const {error, loading, users} = allusers
+    const {error, loading, users, page, pages} = allusers
 
     const singleuser = useSelector(state => state.userLoginReducer)
     const { userInfo } = singleuser
     
     const deleteuser = useSelector(state => state.userDeleteReducer)
     const { success } = deleteuser
+
+    let keyword = location.search
     
     useEffect(() => {
         if (userInfo != null && userInfo.is_staff == true) {
-            dispatch(allUsers())
+            dispatch(allUsers(keyword))
         }
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, success, userInfo])
+    }, [dispatch , navigate, success, userInfo, keyword])
 
     const deleteHandler = (id) => {
 
@@ -56,57 +59,65 @@ function AdminScreen() {
                     <strong>{error}</strong>
                     </div>
                 ) : (
+                    <div>
+                        <Table striped bordered hover responsive className='table-sm'>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ADMIN</th>
+                                <th></th>
+                                {/* na valw kapoio field gia verify user */}
+                            </tr>
+                        </thead>
 
-                    <Table striped bordered hover responsive className='table-sm'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NAME</th>
-                            <th>EMAIL</th>
-                            <th>ADMIN</th>
-                            <th></th>
-                            {/* na valw kapoio field gia verify user */}
-                        </tr>
-                    </thead>
+                        <tbody>
 
-                    <tbody>
+                            {Array.isArray(users)
+                                ?
+                                (users.map(user => (
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.is_staff ? (
+                                            <h5>yes</h5>
+                                            // <i className='fas fa-check' style={{ color: 'green' }}></i>
+                                        ) : (
+                                                // <i className='fas fa-check' style={{ color: 'red' }}></i>
+                                                <h5>no</h5>
+                                            )}</td>
 
-                        {Array.isArray(users)
-                            ?
-                            (users.map(user => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.is_staff ? (
-                                        <h5>yes</h5>
-                                        // <i className='fas fa-check' style={{ color: 'green' }}></i>
-                                    ) : (
-                                            // <i className='fas fa-check' style={{ color: 'red' }}></i>
-                                            <h5>no</h5>
-                                        )}</td>
+                                        <td>
+                                            <LinkContainer to={`/admin/user/${user.id}/`}>
+                                                <Button variant='light' className='btn-sm'>
+                                                    {/* <i className='fas fa-edit'></i> */}
+                                                    <h5>Edit</h5>
+                                                </Button>
+                                            </LinkContainer>
 
-                                    <td>
-                                        <LinkContainer to={`/admin/user/${user.id}/`}>
-                                            <Button variant='light' className='btn-sm'>
-                                                {/* <i className='fas fa-edit'></i> */}
-                                                <h5>Edit</h5>
+                                            <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
+                                                {/* <i className='fas fa-trash'></i> */}
+                                                <h5>X</h5>
                                             </Button>
-                                        </LinkContainer>
+                                        </td>
+                                    </tr>
+                            
+                                ))
+                                ):
+                                    null
+                            }
+                        </tbody>
+                    </Table>  
 
-                                        <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
-                                            {/* <i className='fas fa-trash'></i> */}
-                                            <h5>X</h5>
-                                        </Button>
-                                    </td>
-                                </tr>
-                        
-                            ))
-                            ):
-                                null
-                        }
-                    </tbody>
-                </Table>       
+                    <PageButtons 
+                            page= {page}
+                            pages={pages}
+                            adminScreen={true}
+                    />
+
+                </div>     
                 )
             }
     </div>

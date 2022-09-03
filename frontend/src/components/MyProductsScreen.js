@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import PageButtons from './PageButtons';
 
 function MyProductScreen() {
   
@@ -16,7 +17,7 @@ function MyProductScreen() {
     const dispatch = useDispatch()
     
     const userProducts = useSelector(state => state.userProductListReducer)
-    const {error, loading, products} = userProducts 
+    const {error, loading, products, page, pages} = userProducts 
     
     const deleteProduct = useSelector(state => state.deleteProductReducer)
     const {error: delete_error, loading: delete_load, success } = deleteProduct
@@ -24,14 +25,15 @@ function MyProductScreen() {
     const singleuser = useSelector(state => state.userLoginReducer)
     const { userInfo } = singleuser
     
+    let keyword = location.search
     useEffect(() => {
         if (userInfo != null) {
-            dispatch(userListProductsAction())
+            dispatch(userListProductsAction(keyword))
         }
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, userInfo, success])
+    }, [dispatch , navigate, userInfo, success, keyword])
 
     const deleteHandler = (id) => {
 
@@ -87,61 +89,69 @@ function MyProductScreen() {
                     </div>
                 ) : products.length > 0 
                 ? (
-                    <Table striped bordered hover responsive className='table-sm'>
-                        <thead>
-                            <tr>
-                                <th>IMAGE</th>
-                                <th>NAME</th>
-                                <th>BRAND</th>
-                                <th>CATEGORY</th>
-                                <th>CURRENT BID</th>
-                                <th></th>
-                            </tr>
-                        </thead>
+                    
+                    <div>
+                        <Table striped bordered hover responsive className='table-sm'>
+                            <thead>
+                                <tr>
+                                    <th>IMAGE</th>
+                                    <th>NAME</th>
+                                    <th>BRAND</th>
+                                    <th>CATEGORY</th>
+                                    <th>CURRENT BID</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
+                            <tbody>
 
-                            {Array.isArray(products)
-                                ?
-                                (products.map(product => (
-                                    <tr key={product._id}>
-                                        <td>
-                                            <Image 
+                                {Array.isArray(products)
+                                    ?
+                                    (products.map(product => (
+                                        <tr key={product._id}>
+                                            <td>
+                                                <Image 
 
-                                                src={product.image} 
-                                                alt= {product.name} 
-                                                width={150} 
-                                                height={150} 
-                                                fluid 
-                                                rounded
-                                            />
-                                        </td>
-                                        <td>{product.name}</td>
-                                        <td>{product.brand}</td>
-                                        <td>{product.category}</td>
-                                        <td>{product.price}</td>
-                                        <td>
-                                            <LinkContainer to={`update/${product._id}/`}>
-                                                <Button variant='light' className='btn-sm'>
-                                                    {/* <i className='fas fa-edit'></i> */}
-                                                    <h5>Edit</h5>
+                                                    src={product.image} 
+                                                    alt= {product.name} 
+                                                    width={150} 
+                                                    height={150} 
+                                                    fluid 
+                                                    rounded
+                                                />
+                                            </td>
+                                            <td>{product.name}</td>
+                                            <td>{product.brand}</td>
+                                            <td>{product.category}</td>
+                                            <td>{product.price}</td>
+                                            <td>
+                                                <LinkContainer to={`update/${product._id}/`}>
+                                                    <Button variant='light' className='btn-sm'>
+                                                        {/* <i className='fas fa-edit'></i> */}
+                                                        <h5>Edit</h5>
+                                                    </Button>
+                                                </LinkContainer>
+
+                                                <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(product._id)}>
+                                                    {/* <i className='fas fa-trash'></i> */}
+                                                    <h5>X</h5>
                                                 </Button>
-                                            </LinkContainer>
-
-                                            <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(product._id)}>
-                                                {/* <i className='fas fa-trash'></i> */}
-                                                <h5>X</h5>
-                                            </Button>
-                                        </td>
-                                    </tr>
-                            
-                                ))
-                                ):
-                                    null
-                            }
-                        </tbody>
-                
-                    </Table>       
+                                            </td>
+                                        </tr>
+                                
+                                    ))
+                                    ):
+                                        null
+                                }
+                            </tbody>
+                    
+                        </Table>     
+                        <PageButtons 
+                            page={page}
+                            pages={pages}
+                            productScreen={true}
+                        />
+                    </div>  
                 
                 ):
                 <h1>You Have No Products Yet :(</h1> 

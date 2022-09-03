@@ -85,13 +85,18 @@ export const usersReducer = (state = {users:[]}, action) => {
             return {loading: true }
 
         case 'USERS_SUCCESS':
-            return { loading: false, users: action.payload }
+            return { 
+                loading: false, 
+                users: action.payload.users,
+                pages: action.payload.pages,
+                page: action.payload.page
+            }
 
         case 'USERS_FAIL':
             return { loading: false, error: action.payload }
 
         case 'USERS_RESET':
-            return {users : {}}
+            return {users : []}
 
         default:
             return state

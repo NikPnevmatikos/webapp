@@ -1,5 +1,7 @@
 import { logout } from '../actions/userActions'
+import {useState} from 'react'
 import Button from 'react-bootstrap/Button';
+import { useNavigate, useLocation } from 'react-router-dom'
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
@@ -9,7 +11,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import {FaHeart} from "react-icons/fa";
 
 function Header() {
+
+  const navigate = useNavigate()
+  const location = useLocation()
   
+  const[keyword, setKeyword] = useState('')
+
   const dispatch = useDispatch()
   const userLogin = useSelector(state => state.userLoginReducer)
   const {userInfo} = userLogin
@@ -17,6 +24,17 @@ function Header() {
   const logoutHandler = () => {
     dispatch(logout())
   }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    console.log(location)
+    if(keyword){
+      navigate(`/?keyword=${keyword}&page=1`)
+    }
+    else{
+      navigate(location.pathname)
+    }
+  } 
 
   return (
     <Navbar bg="dark" expand="lg" variant="dark">
@@ -51,6 +69,7 @@ function Header() {
                 <NavDropdown.Item href='/myProducts'>
                   My Products
                 </NavDropdown.Item>
+                <NavDropdown.Divider />
                 <NavDropdown.Item href='/myBids'>
                   My Bids
                 </NavDropdown.Item>
@@ -72,14 +91,15 @@ function Header() {
           
           </Nav>
           
-          <Form className="d-flex">
+          <Form onSubmit={submitHandler} className="d-flex">
             <Form.Control
               type="search"
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              onChange={(e) => setKeyword(e.target.value)}
             />
-            <Button variant="secondary">
+            <Button type='submit' variant="secondary">
               Search
             </Button>
           </Form>

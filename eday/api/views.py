@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from .serializers import *
@@ -35,9 +36,34 @@ def api_overview(request):
 
 @api_view(['GET'])
 def all_products(request):
-    products = Product.objects.all().order_by('-_id')
+    
+    query = request.query_params.get('keyword')
+    page = request.query_params.get('page')
+    
+    if query == None:
+        query=''
+        
+    
+    products = Product.objects.filter(name__icontains=query) | Product.objects.filter(category=query)
+    products = products.order_by('-_id')
+    
+    paginator = Paginator(products,4)
+    
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
     serializer = Product_Serializer(products, many=True)
-    return Response(serializer.data)
+    
+    return Response({'products':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
 
 @api_view(['GET'])
@@ -45,11 +71,27 @@ def all_products(request):
 def user_products(request):
 
     user = request.user
+    page = request.query_params.get('page')
 
     products = Product.objects.filter(user=user.id).order_by('-_id')
+    
+    paginator = Paginator(products,4)
+    
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
     serializer = Product_Serializer(products, many=True)
     
-    return Response(serializer.data)
+    return Response({'products':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
 
 @api_view(['GET'])
@@ -200,9 +242,28 @@ def getUserProfile_by_Id(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUsers(request):
+    
+    page = request.query_params.get('page')
+    
     users = User.objects.all()
+    
+    paginator = Paginator(users,5)
+    
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
+    
     serializer = User_Serializer(users, many=True)
-    return Response(serializer.data)
+    return Response({'users':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])

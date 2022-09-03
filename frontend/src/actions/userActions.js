@@ -186,7 +186,7 @@ export const userUpdate = (user) => async (dispatch ,getState) => {
 }
 
 
-export const allUsers = () => async (dispatch ,getState) => {
+export const allUsers = (keyword='') => async (dispatch ,getState) => {
     try {
         dispatch({
             type: 'USERS_REQUEST'
@@ -204,7 +204,7 @@ export const allUsers = () => async (dispatch ,getState) => {
         }
 
         const { data } = await axios.get(
-            '/api/users/',
+            `/api/users${keyword}`,
             config
         )
 

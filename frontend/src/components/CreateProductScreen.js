@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Link , useNavigate, useLocation } from 'react-router-dom'
-import { Form, Container, Button, Col, Row } from 'react-bootstrap'
+import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
@@ -18,7 +18,8 @@ function CreateProductScreen() {
     const [description, setDescription] = useState('')   
     const [price, setPrice] = useState(0)   
     const [countInStock, setCountInStock] = useState(0)
-    //const [image, setImage] = useState('')
+    const [preview, setPreview] = useState('')
+    const [image, setImage] = useState()
 
     const dispatch = useDispatch()
 
@@ -38,13 +39,31 @@ function CreateProductScreen() {
                 navigate('/myProducts')
             }
         }
+
     }, [userInfo, navigate, product])
 
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(createProductAction(name, brand, category, price, description, countInStock))
+        const form = new FormData()
+
+        form.append('name', name)
+        form.append('brand', brand)
+        form.append('category', category)
+        form.append('price', price)
+        form.append('description', description)
+        form.append('countInStock', countInStock)
+        form.append('image', image)
+
+        dispatch(createProductAction(form))
     }
+
+    const upload = (e) => {
+        const file = e.target.files[0]
+        setImage(file)
+        setPreview(URL.createObjectURL(file))
+    }
+
 
     return (
     <Container>
@@ -76,6 +95,31 @@ function CreateProductScreen() {
                             placeholder='Enter Name' 
                             value={name}
                             onChange = {(e) => setName(e.target.value)}                            
+                        >        
+                        </Form.Control>
+                    </Form.Group> 
+
+                    {preview && 
+                        <Form.Group>
+                            <Form.Label>Preview</Form.Label>
+                            <Image 
+                                src={preview} 
+                                alt= {preview} 
+                                width={150} 
+                                height={150} 
+                                fluid 
+                                rounded
+                            />
+                            
+                        </Form.Group>}
+
+                    <Form.Group controlId='image' className='py-1'>
+                        <Form.Label>Image</Form.Label>
+                        <Form.Control 
+                            required
+                            type='file' 
+                            //value={image ? image.name : undefined}
+                            onChange = {upload}                            
                         >        
                         </Form.Control>
                     </Form.Group> 

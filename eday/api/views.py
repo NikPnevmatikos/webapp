@@ -68,21 +68,12 @@ def create_product(request):
     
     
     product = Product.objects.create (
-        
-        #         user = user,
-        # name =  request.FILES.get('name'),
-        # price = request.FILES.get('price'),
-        # brand = request.FILES.get('brand'),
-        # category = request.FILES.get('category'),
-        # image = request.FILES.get('image'),
-        # description = request.FILES.get('description'),
-        # countInStock = request.FILES.get('countInStock') 
-        
         user = user,
         name =  data['name'],
         price = data['price'],
         brand = data['brand'],
         category = data['category'],
+        image = request.FILES.get('image'),
         description = data['description'],
         countInStock = data['countInStock']        
     )   
@@ -96,12 +87,17 @@ def create_product(request):
 def update_product(request, pk):
 
     data = request.data
+    
     product = Product.objects.get(_id=pk)
 
     product.name = data['name']
     product.price = data['price']
     product.brand = data['brand']
     product.category = data['category']
+    
+    if(data['flag'] == 'true'):
+        product.image = request.FILES.get('image')
+    
     product.countInStock = data['countInStock']
     product.description = data['description']
     

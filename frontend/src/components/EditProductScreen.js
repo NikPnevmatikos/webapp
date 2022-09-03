@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Link , useNavigate ,useParams} from 'react-router-dom'
-import { Form, Container, Button, Col, Row } from 'react-bootstrap'
+import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction , editProductAction} from '../actions/ProductActions';
@@ -16,6 +16,9 @@ function EditProduct() {
     const [description, setDescription] = useState('')   
     const [price, setPrice] = useState(0)   
     const [countInStock, setCountInStock] = useState(0)
+    const [image, setImage] = useState()
+    const [preview, setPreview] = useState('')
+    const [flag, setFlag] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -24,6 +27,7 @@ function EditProduct() {
 
     const editproduct = useSelector(state => state.editProductReducer)
     const { error: errorEdit, loading: loadingEdit, success: successEdit } = editproduct
+
 
     // const userLogin = useSelector(state => state.userLoginReducer)
     // const {userInfo} = userLogin
@@ -41,25 +45,37 @@ function EditProduct() {
             setName(product.name)
             setBrand(product.brand)
             setCategory(product.category)
+            setImage(product.image)
+            setPreview(product.image)
             setDescription(product.description)
             setPrice(product.price)
             setCountInStock(product.countInStock)
         }
     }, [dispatch, product, match, navigate, successEdit])
 
+    const upload = (e) => {
+        setFlag(true)
+        const file = e.target.files[0]
+        setImage(file)
+        setPreview(URL.createObjectURL(file))
+    }
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(editProductAction({
-            _id: match.id,
-            name,
-            price,
-            //image,
-            brand,
-            category,
-            countInStock,
-            description
-        }))
+
+        const form = new FormData()
+
+        form.append('flag', flag)
+        form.append('_id', match.id)
+        form.append('name', name)
+        form.append('brand', brand)
+        form.append('category', category)
+        form.append('price', price)
+        form.append('description', description)
+        form.append('countInStock', countInStock)
+        form.append('image', image)
+
+        dispatch(editProductAction(form))
     }
 
     return (
@@ -105,6 +121,30 @@ function EditProduct() {
                                         placeholder='Enter Name' 
                                         value={name}
                                         onChange = {(e) => setName(e.target.value)}                            
+                                    >        
+                                    </Form.Control>
+                                </Form.Group> 
+
+
+                                {preview && 
+                                    <Form.Group>
+                                        <Form.Label>Preview</Form.Label>
+                                        <Image 
+                                            src={preview} 
+                                            alt= {preview} 
+                                            width={150} 
+                                            height={150} 
+                                            fluid 
+                                            rounded
+                                        />
+                                        
+                                    </Form.Group>}
+
+                                <Form.Group controlId='image' className='py-1'>
+                                    <Form.Label>Image</Form.Label>
+                                    <Form.Control 
+                                        type='file' 
+                                        onChange = {upload}                            
                                     >        
                                     </Form.Control>
                                 </Form.Group> 

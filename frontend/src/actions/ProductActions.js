@@ -86,13 +86,7 @@ export const productsAction = (id) => async(dispatch) =>{
 }
 
 
-export const createProductAction = (
-                                name, 
-                                brand, 
-                                category, 
-                                price, 
-                                description, 
-                                countInStock) => async(dispatch, getState) =>{
+export const createProductAction = (form) => async(dispatch, getState) =>{
     
     try {
         dispatch({
@@ -106,28 +100,13 @@ export const createProductAction = (
 
         const config = {
             headers: {
-                'Content-type': 'application/json',
+                'Content-type': 'multipart/form-data',
                 Authorization : `Bearer ${userInfo.token}`
             }
         }
-
-        // form.append('name', name)
-        // form.append('brand', brand)
-        // form.append('category', category)
-        // form.append('price', price)
-        // form.append('image', image)
-        // form.append('description', description)
-        // form.append('countInStock', countInStock)
         const { data } = await axios.post(
             '/api/product/create/',
-            {
-                'name': name,
-                'brand': brand,
-                'category': category,
-                'price': price,
-                'description' : description,
-                'countInStock': countInStock
-            },
+            form,
             config
         )
 
@@ -146,7 +125,7 @@ export const createProductAction = (
 }
 
 
-export const editProductAction =(product) => async(dispatch, getState) =>{
+export const editProductAction =(form) => async(dispatch, getState) =>{
     
     try {
         dispatch({
@@ -160,14 +139,14 @@ export const editProductAction =(product) => async(dispatch, getState) =>{
 
         const config = {
             headers: {
-                'Content-type': 'application/json',
+                'Content-type': 'multipart/form-data',
                 Authorization : `Bearer ${userInfo.token}`
             }
         }
 
         const { data } = await axios.put(
-            `/api/product/update/${product._id}/`,
-            product,
+            `/api/product/update/${form.get('_id')}/`,
+            form,
             config
         )
 

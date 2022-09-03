@@ -19,6 +19,7 @@ function ProductScreens() {
   //const {error, loading, product} = singleproduct
 
   useEffect(() => {
+    dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
   } , [dispatch, match])
 

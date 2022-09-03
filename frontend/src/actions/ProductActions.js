@@ -111,6 +111,13 @@ export const createProductAction = (
             }
         }
 
+        // form.append('name', name)
+        // form.append('brand', brand)
+        // form.append('category', category)
+        // form.append('price', price)
+        // form.append('image', image)
+        // form.append('description', description)
+        // form.append('countInStock', countInStock)
         const { data } = await axios.post(
             '/api/product/create/',
             {
@@ -139,7 +146,7 @@ export const createProductAction = (
 }
 
 
-export const editProductAction = (id, product) => async(dispatch, getState) =>{
+export const editProductAction =(product) => async(dispatch, getState) =>{
     
     try {
         dispatch({
@@ -158,8 +165,8 @@ export const editProductAction = (id, product) => async(dispatch, getState) =>{
             }
         }
 
-        const { data } = await axios.post(
-            `/api/product/update/${id}`,
+        const { data } = await axios.put(
+            `/api/product/update/${product._id}/`,
             product,
             config
         )

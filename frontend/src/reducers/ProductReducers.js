@@ -33,13 +33,16 @@ export const userProductListReducer = (state = {products:[]}, action) => {
 export const productReducer = (state = {product:{}}, action) => {
     switch(action.type){
         case 'PRODUCT_REQUEST' :
-            return{loading: true, product: {} }  //previously -> '...state'
+            return{loading: true, ...state }  //previously -> '...state'
         
         case 'PRODUCT_SUCCESS' :
             return {loading: false , product: action.payload }
         
         case 'PRODUCT_FAIL' :
             return {loading: false, error: action.payload}
+
+        case 'PRODUCT_RESET' :
+            return {product: {}}
             
         default:
             return state

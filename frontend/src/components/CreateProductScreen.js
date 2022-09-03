@@ -18,6 +18,7 @@ function CreateProductScreen() {
     const [description, setDescription] = useState('')   
     const [price, setPrice] = useState(0)   
     const [countInStock, setCountInStock] = useState(0)
+    //const [image, setImage] = useState('')
 
     const dispatch = useDispatch()
 

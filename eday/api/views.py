@@ -66,14 +66,18 @@ def create_product(request):
     user = request.user
     data = request.data
     
+    
     product = Product.objects.create (
-        # user = user,
-        # name = 'iamname',
-        # price = 0,
-        # brand = 'iambrand',
-        # category = 'iamcategory',
-        # description = '',
-        # countInStock = 0
+        
+        #         user = user,
+        # name =  request.FILES.get('name'),
+        # price = request.FILES.get('price'),
+        # brand = request.FILES.get('brand'),
+        # category = request.FILES.get('category'),
+        # image = request.FILES.get('image'),
+        # description = request.FILES.get('description'),
+        # countInStock = request.FILES.get('countInStock') 
+        
         user = user,
         name =  data['name'],
         price = data['price'],
@@ -99,7 +103,6 @@ def update_product(request, pk):
     product.brand = data['brand']
     product.category = data['category']
     product.countInStock = data['countInStock']
-    #product.image = data['image']
     product.description = data['description']
     
     product.save()

@@ -65,11 +65,9 @@ function Header() {
                 <NavDropdown.Item href='/profile'>
                   My Profile
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
                 <NavDropdown.Item href='/myProducts'>
                   My Products
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
                 <NavDropdown.Item href='/myBids'>
                   My Bids
                 </NavDropdown.Item>

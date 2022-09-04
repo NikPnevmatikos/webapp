@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from .serializers import *
-from .models import Product
+from .models import Product, Profile
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -158,6 +158,8 @@ def delete_product(request, pk):
     return Response('Item succsesfully delete!')
 
 
+# /////////////////////////////////////////////////////////////////////////////////////////////////
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
@@ -168,13 +170,18 @@ def registerUser(request):
     try:
         user = User.objects.create(
             first_name = data['name'], 
-            username = data['username'], # na baloume username ant gia email
+            username = data['username'], 
             email = data['email'],
             password = make_password(data['password'])
         )
 
+        user.profile.location = data['location']
+        user.save()
+
         serializer = UserSerializerWithToken(user, many = False)
+        
         return Response(serializer.data)
+
     except:
         message = {'detail' : 'There is already an account using this email or username.'}
             
@@ -194,10 +201,12 @@ def updateUserProfile(request):
     user.first_name = data['name']
     user.username = data['username']
     user.email = data['email']
-    
+
     if data['password'] != '':
         user.password = make_password(data['password'])
-        
+    
+    user.profile.location = data['location']
+    
     user.save()
     
     return Response(serializer.data)

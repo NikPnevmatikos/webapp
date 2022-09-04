@@ -14,11 +14,13 @@ function RegisterScreen() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')    
+    // const [phone, setPhone] = useState(0)
+    // const [afm , setAfm] = useState(0) 
+    const [userlocation, setLocation] = useState('')
     const [password, setPassword] = useState('')   
     const [confirmPassword, setConfirmPassword] = useState('')   
     const [errorMessage, setErrorMessage] = useState('')
-
-
+    
     const dispatch = useDispatch()
 
     const userprofile = useSelector(state => state.userProfileReducer)
@@ -47,6 +49,9 @@ function RegisterScreen() {
                 setUsername(user.username)
                 setName(user.name)
                 setEmail(user.email)
+                // setPhone(user.phone)
+                // setAfm(user.afm)
+                setLocation(user.location)
             }
         }
     }, [userInfo, navigate, dispatch, user])
@@ -63,7 +68,10 @@ function RegisterScreen() {
                 'username': username,
                 'name': name,
                 'password': password,
-                'email': email
+                'email': email,
+                'location': userlocation,
+                // 'afm' : afk,
+                // 'phone' : phone
             }))
         }
     }
@@ -130,7 +138,43 @@ function RegisterScreen() {
                         >        
                         </Form.Control>
                     </Form.Group> 
+
+                    <Form.Group controlId='location' className='py-1'>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control 
+                            required
+                            type='Location'   
+                            placeholder='Disabled input' 
+                            value={userlocation}
+                            onChange = {(e) => setLocation(e.target.value)}
+                        >        
+                        </Form.Control>           
+                    </Form.Group> 
+
+                    {/* <Form.Group controlId='afm' className='py-1'>
+                        <Form.Label>AFM</Form.Label>
+                        <Form.Control 
+                            required
+                            type='text'   
+                            placeholder='Disabled input' 
+                            value={afm}
+                            onChange = {(e) => setAfm(e.target.value)}
+                        >        
+                        </Form.Control>           
+                    </Form.Group> 
                     
+                    <Form.Group controlId='phone' className='py-1'>
+                        <Form.Label>Phone</Form.Label>
+                        <Form.Control 
+                            required
+                            type='integer'   
+                            placeholder='Disabled input' 
+                            value={phone}
+                            onChange = {(e) => setPhone(e.target.value)} 
+                        >        
+                        </Form.Control>           
+                    </Form.Group>  */}
+                
                     <Form.Group controlId='password' className='py-1'>
                         <Form.Label>New Password (Optional)</Form.Label>
                         <Form.Control 

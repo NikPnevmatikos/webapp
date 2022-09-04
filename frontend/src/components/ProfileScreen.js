@@ -11,7 +11,10 @@ function ProfileScreen() {
     
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
-    const [name, setName] = useState('')    
+    const [name, setName] = useState('')   
+    // const [phone, setPhone] = useState(0)
+    // const [afm , setAfm] = useState(0) 
+    const [location, setLocation] = useState('')
     
     const dispatch = useDispatch()
 
@@ -33,6 +36,9 @@ function ProfileScreen() {
                 setUsername(user.username)
                 setName(user.name)
                 setEmail(user.email)
+                // setPhone(user.phone)
+                // setAfm(user.afm)
+                setLocation(user.location)
             }
         }
     }, [userInfo, navigate, dispatch, user])
@@ -100,8 +106,44 @@ function ProfileScreen() {
                                 disabled
                                 readOnly  
                             >        
-                            </Form.Control>
+                            </Form.Control>           
                         </Form.Group> 
+                        
+                        <Form.Group controlId='location' className='py-1'>
+                            <Form.Label>Location</Form.Label>
+                            <Form.Control 
+                                type='Location'   
+                                placeholder='Disabled input' 
+                                value={location}
+                                disabled
+                                readOnly  
+                            >        
+                            </Form.Control>           
+                        </Form.Group> 
+
+                        {/* <Form.Group controlId='afm' className='py-1'>
+                            <Form.Label>AFM</Form.Label>
+                            <Form.Control 
+                                type='text'   
+                                placeholder='Disabled input' 
+                                value={afm}
+                                disabled
+                                readOnly  
+                            >        
+                            </Form.Control>           
+                        </Form.Group> 
+                        
+                        <Form.Group controlId='phone' className='py-1'>
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control 
+                                type='integer'   
+                                placeholder='Disabled input' 
+                                value={phone}
+                                disabled
+                                readOnly  
+                            >        
+                            </Form.Control>           
+                        </Form.Group>  */}
 
                     </Form>
                 </Col>

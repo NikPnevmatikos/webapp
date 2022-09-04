@@ -66,7 +66,7 @@ function AdminScreen() {
                                 <th>ID</th>
                                 <th>NAME</th>
                                 <th>EMAIL</th>
-                                <th>ADMIN</th>
+                                <th>VERIFIED</th>
                                 <th></th>
                                 {/* na valw kapoio field gia verify user */}
                             </tr>
@@ -81,7 +81,7 @@ function AdminScreen() {
                                         <td>{user.id}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td>{user.is_staff ? (
+                                        <td>{user.verified ? (
                                             <h5>yes</h5>
                                             // <i className='fas fa-check' style={{ color: 'green' }}></i>
                                         ) : (

@@ -12,7 +12,14 @@ import { Provider } from 'react-redux'
 
 import { productListReducer , userProductListReducer, productReducer,createProductReducer, editProductReducer,deleteProductReducer} from './reducers/ProductReducers'
 import { bidReducer} from './reducers/bidReducers'
-import { userLoginReducer, userRegisterReducer , userProfileReducer, userUpdateReducer , usersReducer , userDeleteReducer} from './reducers/userReducer'
+import { userLoginReducer, 
+          userRegisterReducer , 
+          userProfileReducer, 
+          userUpdateReducer , 
+          usersReducer , 
+          userDeleteReducer,
+          userVerifyReducer
+        } from './reducers/userReducer'
 
 
 const reducer = combineReducers({
@@ -30,6 +37,7 @@ const reducer = combineReducers({
     usersReducer,
     userDeleteReducer,
     userProductListReducer,
+    userVerifyReducer,
 })
 
 const localStoreProducts = localStorage.getItem('bidItems') ? 

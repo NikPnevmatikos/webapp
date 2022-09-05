@@ -17,6 +17,7 @@ urlpatterns = [
     path('users/profile/', getUserProfile),
     path('users/profile/<str:pk>/', getUserProfile_by_Id),
     path('users/update/', updateUserProfile),
+    path('users/verify/<str:pk>/', verify_user),
     # path('users/adminUpdate/<str:pk>', updateUserProfile_by_Id),
     path('users/delete/<str:pk>/', deleteUser),
     path('users/', getUsers),

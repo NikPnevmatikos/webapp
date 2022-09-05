@@ -21,7 +21,12 @@ function LoginScreen() {
 
     useEffect(() =>{
         if (userInfo != null) {
-            navigate(redirect)
+            if(userInfo.verified == true){
+                navigate(redirect)  
+            }
+            else{
+                navigate('/verify')
+            }
         }
     }, [userInfo, navigate, redirect])
 

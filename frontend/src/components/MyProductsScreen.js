@@ -28,7 +28,12 @@ function MyProductScreen() {
     let keyword = location.search
     useEffect(() => {
         if (userInfo != null) {
-            dispatch(userListProductsAction(keyword))
+            if(userInfo.verified == true){
+                dispatch(userListProductsAction(keyword)) 
+            }
+            else{
+                navigate('/verify')
+            }
         }
         else {
             navigate('/login')

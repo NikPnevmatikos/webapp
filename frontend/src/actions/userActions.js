@@ -267,3 +267,44 @@ export const deleteUser = (id) => async (dispatch ,getState) => {
         })
     }
 }
+
+
+export const verifyUser = (id) => async (dispatch ,getState) => {
+    try {
+        dispatch({
+            type: 'USER_VERIFY_REQUEST'
+        })
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.put(
+            `/api/users/verify/${id}/`,
+            {},
+            config
+        )
+
+        dispatch({
+            type: 'USER_VERIFY_SUCCESS',
+            payload: data
+        })
+
+
+    } 
+    catch (error) {
+        dispatch({
+            type: 'USER_VERIFY_FAIL',
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}

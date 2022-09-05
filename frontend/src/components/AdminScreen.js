@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Table, Container, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { allUsers, deleteUser } from '../actions/userActions'
+import { allUsers, deleteUser, verifyUser } from '../actions/userActions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons'
 
@@ -24,6 +24,9 @@ function AdminScreen() {
     const deleteuser = useSelector(state => state.userDeleteReducer)
     const { success } = deleteuser
 
+    const verifyuser = useSelector(state => state.userVerifyReducer)
+    const { success: verifySuccess } = verifyuser
+
     let keyword = location.search
     
     useEffect(() => {
@@ -33,12 +36,18 @@ function AdminScreen() {
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, success, userInfo, keyword])
+    }, [dispatch , navigate, success, userInfo, keyword, verifySuccess])
 
     const deleteHandler = (id) => {
 
         if (window.confirm('Are you sure you want to delete this user?')) {
             dispatch(deleteUser(id))
+        }
+    }
+
+    const verifyHandler = (id) => {
+        if (window.confirm('Are you sure you want to verify this user?')) {
+            dispatch(verifyUser(id))
         }
     }
 
@@ -86,7 +95,13 @@ function AdminScreen() {
                                             // <i className='fas fa-check' style={{ color: 'green' }}></i>
                                         ) : (
                                                 // <i className='fas fa-check' style={{ color: 'red' }}></i>
-                                                <h5>no</h5>
+                                            <Button 
+                                                variant='light' 
+                                                className='btn-sm' 
+                                                onClick={() => verifyHandler(user.id)}>
+                                                {/* <i className='fas fa-trash'></i> */}
+                                                <h5>verify</h5>
+                                            </Button>
                                             )}</td>
 
                                         <td>

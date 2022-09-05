@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator,MaxLengthValidator
+from phone_field import PhoneField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -8,9 +9,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.PositiveIntegerField( 
-                            validators=[MaxLengthValidator(12), MinLengthValidator(12)],
-                            blank=True, null = True)
+    phone = PhoneField(blank = True, null = True)
     location = models.CharField(max_length=30, blank=True)
     afm = models.PositiveIntegerField(
                             validators=[MaxLengthValidator(9), MinLengthValidator(9)],

@@ -14,6 +14,7 @@ import IdProfileScreen from './components/IdProfileScreen';
 import MyProductsScreen from './components/MyProductsScreen';
 import CreateProductScreen from './components/CreateProductScreen'
 import EditProductScreen from './components/EditProductScreen'
+import VerifyScreen from './components/VerifyScreen'
 import { IconName } from "react-icons/fa";
 import { IconNamemd } from "react-icons/md";
 
@@ -38,6 +39,7 @@ function App() {
             <Route path="/myProducts/" element={<MyProductsScreen/>}/>
             <Route path="/myProducts/create/" element={<CreateProductScreen/>}/>
             <Route path="/myProducts/update/:id" element={<EditProductScreen/>}/>
+            <Route path="/verify" element={<VerifyScreen/>}/>
 
           </Routes>
         </Container>

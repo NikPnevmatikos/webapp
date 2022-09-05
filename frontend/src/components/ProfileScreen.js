@@ -30,15 +30,20 @@ function ProfileScreen() {
         }
         else {
             if (user == null || !user.name || userInfo.id != user.id)  {
-                dispatch(userProfile('profile'))
+                    dispatch(userProfile('profile'))
             }
             else {
-                setUsername(user.username)
-                setName(user.name)
-                setEmail(user.email)
-                // setPhone(user.phone)
-                // setAfm(user.afm)
-                setLocation(user.location)
+                if(user.verified == true){
+                    setUsername(user.username)
+                    setName(user.name)
+                    setEmail(user.email)
+                    // setPhone(user.phone)
+                    // setAfm(user.afm)
+                    setLocation(user.location)
+                }
+                else{
+                    navigate('/verify')
+                }
             }
         }
     }, [userInfo, navigate, dispatch, user])

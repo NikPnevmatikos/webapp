@@ -176,6 +176,7 @@ def registerUser(request):
         )
 
         user.profile.location = data['location']
+        #user.profile.phone = data['phone']
         user.save()
 
         serializer = UserSerializerWithToken(user, many = False)
@@ -206,6 +207,7 @@ def updateUserProfile(request):
         user.password = make_password(data['password'])
     
     user.profile.location = data['location']
+    #user.profile.phone = data['phone']
     
     user.save()
     
@@ -281,4 +283,18 @@ def deleteUser(request, pk):
     user.delete()
 
     return Response('User succsesfully delete!')
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def verify_user(request, pk):
+    user = User.objects.get(id=pk)
+    
+    user.profile.verified = True
+    
+    user.save()
+    
+    serializer = User_Serializer(user, many=False)
+    
+    return Response(serializer.data)
+    
     

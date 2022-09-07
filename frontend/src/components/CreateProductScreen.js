@@ -16,11 +16,12 @@ function CreateProductScreen() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setPrice] = useState(0)   
+    const [price, setPrice] = useState()   
     const [countInStock, setCountInStock] = useState(0)
     const [preview, setPreview] = useState('')
     const [image, setImage] = useState()
-
+    const [firstBid, setFirstBid] = useState(0)
+    
     const dispatch = useDispatch()
 
     const createProduct = useSelector(state => state.createProductReducer)
@@ -54,6 +55,7 @@ function CreateProductScreen() {
         form.append('description', description)
         form.append('countInStock', countInStock)
         form.append('image', image)
+        form.append('firstBid', firstBid)
 
         dispatch(createProductAction(form))
     }
@@ -149,13 +151,25 @@ function CreateProductScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='price' className='py-1'>
-                        <Form.Label>Price</Form.Label>
+                        <Form.Label>Buy Price</Form.Label>
                         <Form.Control 
                             required
                             type='number' 
-                            placeholder='Enter Bid' 
+                            placeholder='Enter Buy Price' 
                             value={price}
                             onChange = {(e) => setPrice(e.target.value)}                            
+                        >
+                        </Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group controlId='bid' className='py-1'>
+                        <Form.Label>Starting Bid</Form.Label>
+                        <Form.Control 
+                            required
+                            type='number' 
+                            placeholder='Enter Starting Bid' 
+                            value={firstBid}
+                            onChange = {(e) => setFirstBid(e.target.value)}                            
                         >
                         </Form.Control>
                     </Form.Group> 

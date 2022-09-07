@@ -15,7 +15,11 @@ function Product({product}) {
                 </Card.Title>
             </Link>
                 <Card.Text as="h3">
-                    {product.price}$
+                    {product.currently}$
+                </Card.Text>
+
+                <Card.Text className='secondary'>
+                    {product.number_of_bids} bids
                 </Card.Text>
         </Card.Body>
     </Card>

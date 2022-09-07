@@ -23,6 +23,7 @@ class Bids_Serializer(serializers.ModelSerializer):
     brand = serializers.CharField(source = 'product.brand')
     category = serializers.CharField(source = 'product.category')
     price = serializers.DecimalField(source = 'product.price', max_digits=7, decimal_places=2)
+    currently = serializers.DecimalField(source = 'product.currently',max_digits=7, decimal_places=2)
 
     class Meta:
         model = MyBids
@@ -32,6 +33,7 @@ class Bids_Serializer(serializers.ModelSerializer):
             'brand',
             'category',
             'price',
+            'currently',
             'user',
             'product',
             'value',

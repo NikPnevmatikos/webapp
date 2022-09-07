@@ -14,9 +14,10 @@ function EditProduct() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setPrice] = useState(0)   
+    const [price, setPrice] = useState('')   
+    const [firstBid, setFirstBid] = useState('')
     const [countInStock, setCountInStock] = useState(0)
-    const [image, setImage] = useState()
+    const [image, setImage] = useState('')
     const [preview, setPreview] = useState('')
     const [flag, setFlag] = useState(false)
 
@@ -48,6 +49,7 @@ function EditProduct() {
             setImage(product.image)
             setPreview(product.image)
             setDescription(product.description)
+            setFirstBid(product.first_bid)
             setPrice(product.price)
             setCountInStock(product.countInStock)
         }
@@ -74,6 +76,8 @@ function EditProduct() {
         form.append('description', description)
         form.append('countInStock', countInStock)
         form.append('image', image)
+        form.append('firstBid', firstBid)
+
 
         dispatch(editProductAction(form))
     }
@@ -128,7 +132,7 @@ function EditProduct() {
 
                                 {preview && 
                                     <Form.Group>
-                                        <Form.Label>Preview</Form.Label>
+                                        <Form.Label>Image Preview</Form.Label>
                                         <Image 
                                             src={preview} 
                                             alt= {preview} 
@@ -174,13 +178,25 @@ function EditProduct() {
                                 </Form.Group> 
                                 
                                 <Form.Group controlId='price' className='py-1'>
-                                    <Form.Label>Price</Form.Label>
+                                    <Form.Label>Buy Price</Form.Label>
                                     <Form.Control 
                                         required
                                         type='number' 
-                                        placeholder='Enter Bid' 
+                                        placeholder='Enter Buy Price' 
                                         value={price}
                                         onChange = {(e) => setPrice(e.target.value)}                            
+                                    >
+                                    </Form.Control>
+                                </Form.Group> 
+
+                                <Form.Group controlId='firstbid' className='py-1'>
+                                    <Form.Label>Starting Bid</Form.Label>
+                                    <Form.Control 
+                                        required
+                                        type='number' 
+                                        placeholder='Enter Starting Bid' 
+                                        value={firstBid}
+                                        onChange = {(e) => setFirstBid(e.target.value)}                            
                                     >
                                     </Form.Control>
                                 </Form.Group> 

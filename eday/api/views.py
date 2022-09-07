@@ -117,7 +117,8 @@ def create_product(request):
         category = data['category'],
         image = request.FILES.get('image'),
         description = data['description'],
-        countInStock = data['countInStock']        
+        countInStock = data['countInStock'],
+        first_bid = data['firstBid']       
     )   
     
     serializer = Product_Serializer(product, many = False)
@@ -142,6 +143,7 @@ def update_product(request, pk):
     
     product.countInStock = data['countInStock']
     product.description = data['description']
+    product.first_bid = data['firstBid']
     
     product.save()
 

@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 
 function ProductScreens() {
-  const [bid, setBid] = useState(0)
+  const [bid, setBid] = useState('')
 
   const match = useParams()
 
@@ -24,7 +24,23 @@ function ProductScreens() {
   } , [dispatch, match])
 
   const addBidHandler = () => {
-    navigate(`/myBids/${match.id}?bid=${bid}`)
+    //navigate(`/myBids/${match.id}?bid=${bid}`)
+    if (Number(product.currently) <= 0) {
+      if (Number(bid) < Number(product.first_bid)) {
+        window.alert('Your bid must be higher or equal to starting bid price!')
+      }
+      else {
+        console.log("added your bid", bid)
+      }
+    }
+    else {
+      if (Number(bid) < Number(product.currently)) {
+        window.alert('Your bid must be higher than the current bid price!')
+      }
+      else {
+        console.log("added your bid", bid)
+      }
+    }
   }
 
   //let product = {}
@@ -60,7 +76,16 @@ function ProductScreens() {
                   </ListGroup.Item>
                   
                   <ListGroup.Item>
-                    Price: ${product.price}
+                    <strong>Buy Price: </strong>{product.price}$ 
+                    <p className='text-muted'><small>If you bid higher or the same price as the buy price, you automatically win the auction.</small></p>
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <strong>Current Bid: </strong> { product.currently}$
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    Starting Bid: {product.first_bid}
                   </ListGroup.Item>
 
                   <ListGroup.Item>
@@ -80,7 +105,7 @@ function ProductScreens() {
                         </Col>
                         <Col>
                           <strong>
-                            ${product.price}
+                            ${product.currently}
                           </strong>
                         </Col>
                       </Row>

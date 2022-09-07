@@ -113,6 +113,3 @@ export const deleteProductReducer = (state = {}, action) => {
             return state
         }       
 }
-
-
-

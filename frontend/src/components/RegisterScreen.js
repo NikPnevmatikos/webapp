@@ -4,6 +4,8 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 function RegisterScreen() {
 
@@ -14,8 +16,8 @@ function RegisterScreen() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')    
-    // const [phone, setPhone] = useState(0)
-    // const [afm , setAfm] = useState(0) 
+    const [phone, setPhone] = useState()
+    const [afm , setAfm] = useState('') 
     const [userlocation, setLocation] = useState('')
     const [password, setPassword] = useState('')   
     const [confirmPassword, setConfirmPassword] = useState('')   
@@ -44,7 +46,7 @@ function RegisterScreen() {
             setErrorMessage("Password does not match.")
         }
         else{
-            dispatch(register(username, email, name, userlocation, password))
+            dispatch(register(username, email, name, userlocation,phone,afm, password))
         }
     }
 
@@ -103,19 +105,19 @@ function RegisterScreen() {
                         <Form.Control 
                             required
                             type='Location'   
-                            placeholder='Disabled input' 
+                            placeholder='Enter your Location' 
                             value={userlocation}
                             onChange = {(e) => setLocation(e.target.value)}
                         >        
                         </Form.Control>           
                     </Form.Group> 
 
-                    {/* <Form.Group controlId='afm' className='py-1'>
+                    <Form.Group controlId='afm' className='py-1'>
                         <Form.Label>AFM</Form.Label>
                         <Form.Control 
                             required
                             type='text'   
-                            placeholder='Disabled input' 
+                            placeholder='Enter Your AFM' 
                             value={afm}
                             onChange = {(e) => setAfm(e.target.value)}
                         >        
@@ -123,16 +125,19 @@ function RegisterScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='phone' className='py-1'>
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control 
-                            required
-                            type='integer'   
-                            placeholder='Disabled input' 
-                            value={phone}
-                            onChange = {(e) => setPhone(e.target.value)} 
-                        >        
-                        </Form.Control>           
-                    </Form.Group>  */}
+                            <Form.Label>Phone</Form.Label>
+                                <PhoneInput
+                                    required
+                                    placeholder='Enter your Phone'
+                                    value={phone}
+                                    onChange = {setPhone}
+                                    inputStyle={{
+                                        width: "535px",
+                                        height: "40px",
+                                    }}
+                                    
+                                />
+                        </Form.Group>
 
                     <Form.Group controlId='email' className='py-1'>
                         <Form.Label>Email</Form.Label>

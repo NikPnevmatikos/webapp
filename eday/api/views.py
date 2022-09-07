@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from .serializers import *
-from .models import Product, Profile
+from .models import Product, Profile, MyBids
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -158,7 +158,49 @@ def delete_product(request, pk):
     return Response('Item succsesfully delete!')
 
 
-# /////////////////////////////////////////////////////////////////////////////////////////////////
+
+# ///////////////////////////////////////////     B   I   D   S     //////////////////////////////////////////////////////
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_bids(request):
+
+    user = request.user
+    page = request.query_params.get('page')
+
+    bids = MyBids.objects.filter(user=user.id).order_by('-_id')
+    
+    paginator = Paginator(bids, 4)
+    
+    try:
+        bids = paginator.page(page)
+    except PageNotAnInteger:
+        bids = paginator.page(1)
+    except EmptyPage:
+        bids = paginator.page(paginator.num_pages)
+        
+    if page == None:
+        page=1
+        
+    page = int(page)
+    
+    serializer = Bids_Serializer(bids, many=True)
+    
+    return Response({'bids':serializer.data, 'pages': paginator.num_pages, 'page': page})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_bid(request, pk):
+    bid = MyBids.objects.get(_id=pk)
+    bid.delete()
+    return Response('Item succsesfully delete!')
+
+
+
+
+# /////////////////////////////////////////////   U   S   E   R   S   ////////////////////////////////////////////////////
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -176,7 +218,8 @@ def registerUser(request):
         )
 
         user.profile.location = data['location']
-        #user.profile.phone = data['phone']
+        user.profile.phone = data['phone']
+        user.profile.afm = data['afm']
         user.save()
 
         serializer = UserSerializerWithToken(user, many = False)
@@ -207,7 +250,8 @@ def updateUserProfile(request):
         user.password = make_password(data['password'])
     
     user.profile.location = data['location']
-    #user.profile.phone = data['phone']
+    user.profile.phone = data['phone']
+    user.profile.afm = data['afm']
     
     user.save()
     

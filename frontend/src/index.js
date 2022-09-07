@@ -11,7 +11,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { Provider } from 'react-redux'
 
 import { productListReducer , userProductListReducer, productReducer,createProductReducer, editProductReducer,deleteProductReducer} from './reducers/ProductReducers'
-import { bidReducer} from './reducers/bidReducers'
+import { bidReducer, userBidsListReducer, deleteBidReducer} from './reducers/bidReducers'
 import { userLoginReducer, 
           userRegisterReducer , 
           userProfileReducer, 
@@ -27,6 +27,8 @@ const reducer = combineReducers({
     productReducer,
     deleteProductReducer,
     bidReducer,
+    deleteBidReducer,
+    userBidsListReducer,
     createProductReducer,
     editProductReducer,
 

@@ -21,4 +21,7 @@ urlpatterns = [
     # path('users/adminUpdate/<str:pk>', updateUserProfile_by_Id),
     path('users/delete/<str:pk>/', deleteUser),
     path('users/', getUsers),
+    
+    path('users/bids/', user_bids),
+    path('users/bids/delete/<str:pk>/', delete_bid)
 ]

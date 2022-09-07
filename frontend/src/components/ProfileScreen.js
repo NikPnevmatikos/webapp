@@ -4,6 +4,8 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 function ProfileScreen() {
 
@@ -12,8 +14,8 @@ function ProfileScreen() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')   
-    // const [phone, setPhone] = useState(0)
-    // const [afm , setAfm] = useState(0) 
+    const [phone, setPhone] = useState(0)
+    const [afm , setAfm] = useState('') 
     const [location, setLocation] = useState('')
     
     const dispatch = useDispatch()
@@ -37,8 +39,8 @@ function ProfileScreen() {
                     setUsername(user.username)
                     setName(user.name)
                     setEmail(user.email)
-                    // setPhone(user.phone)
-                    // setAfm(user.afm)
+                    setPhone(user.phone)
+                    setAfm(user.afm)
                     setLocation(user.location)
                 }
                 else{
@@ -126,7 +128,7 @@ function ProfileScreen() {
                             </Form.Control>           
                         </Form.Group> 
 
-                        {/* <Form.Group controlId='afm' className='py-1'>
+                        <Form.Group controlId='afm' className='py-1'>
                             <Form.Label>AFM</Form.Label>
                             <Form.Control 
                                 type='text'   
@@ -138,17 +140,21 @@ function ProfileScreen() {
                             </Form.Control>           
                         </Form.Group> 
                         
-                        <Form.Group controlId='phone' className='py-1'>
-                            <Form.Label>Phone</Form.Label>
-                            <Form.Control 
-                                type='integer'   
-                                placeholder='Disabled input' 
-                                value={phone}
+                    <Form.Group controlId='phone' className='py-1'>
+                        <Form.Label>Phone</Form.Label>
+                            <PhoneInput
+                                required
                                 disabled
-                                readOnly  
-                            >        
-                            </Form.Control>           
-                        </Form.Group>  */}
+                                placeholder='Enter your Phone'
+                                value={phone}
+                                onChange = {setPhone}
+                                inputStyle={{
+                                    width: "535px",
+                                    height: "40px",
+                                  }}
+                                
+                            />
+                    </Form.Group>
 
                     </Form>
                 </Col>

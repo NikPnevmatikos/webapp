@@ -2,7 +2,8 @@ from dataclasses import fields
 from xml.dom.expatbuilder import InternalSubsetExtractor
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Product, Profile
+from .models import Product, Profile, MyBids
+from phonenumber_field.serializerfields import PhoneNumberField
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -15,6 +16,37 @@ class Product_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class Bids_Serializer(serializers.ModelSerializer):
+    
+    name = serializers.CharField(source = 'product.name')
+    image = serializers.ImageField(source = 'product.image')
+    brand = serializers.CharField(source = 'product.brand')
+    category = serializers.CharField(source = 'product.category')
+    price = serializers.DecimalField(source = 'product.price', max_digits=7, decimal_places=2)
+
+    class Meta:
+        model = MyBids
+        fields = [
+            'name',
+            'image',
+            'brand',
+            'category',
+            'price',
+            'user',
+            'product',
+            'value',
+            'winningBid',
+            '_id'
+            ]
+
+    def get_productinfo(self,obj):
+        product = Product.objects.filter(_id = obj.product._id)
+
+        serializer = Product_Serializer(product,many=False)
+
+        return serializer.data
+
+
 class Profile_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -24,8 +56,8 @@ class User_Serializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField(read_only=True)
     location = serializers.CharField(source = 'profile.location')
-    phone = serializers.IntegerField(source = 'profile.phone')
-    afm = serializers.IntegerField(source = 'profile.afm')
+    phone = PhoneNumberField(source = 'profile.phone')
+    afm = serializers.CharField(source = 'profile.afm')
     verified = serializers.BooleanField(source = 'profile.verified')
 
     class Meta:
@@ -42,20 +74,6 @@ class User_Serializer(serializers.ModelSerializer):
             'verified',
         ]
         
-        
-    # def create(self, validated_data):
-    #     dob_data = validated_data.pop('dob')
-
-    #     user = User.objects.create(
-    #         username=validated_data.get('username'),
-    #         email=validated_data.get('email'),
-    #         password=validated_data.get('password')
-    #     )
-    #     user.set_password(validated_data.get('password'))
-    #     user.save()
-
-    #     Profile.objects.create(user=user, dob=dob_data)
-    #     return user
     def get_name(self, obj):
         name = obj.first_name
         if name == '':
@@ -93,9 +111,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializerWithToken(User_Serializer):
 
     token = serializers.SerializerMethodField(read_only = True)
-    location = serializers.CharField(source = 'profile.location')
-    phone = serializers.IntegerField(source = 'profile.phone')
-    afm = serializers.IntegerField(source = 'profile.afm')
     verified = serializers.BooleanField(source = 'profile.verified')
         
     class Meta:
@@ -106,11 +121,9 @@ class UserSerializerWithToken(User_Serializer):
             'email', 
             'name',
             'is_staff', 
-            'token', 
-            'location',
-            'phone',
-            'afm',
             'verified',
+            'token', 
+
         ]
         
     def get_token(self, obj):

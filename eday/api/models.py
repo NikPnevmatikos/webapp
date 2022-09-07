@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator,MaxLengthValidator
+from django.core.validators import MinLengthValidator
 from phone_field import PhoneField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -11,9 +11,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = PhoneField(blank = True, null = True)
     location = models.CharField(max_length=30, blank=True)
-    afm = models.PositiveIntegerField(
-                            validators=[MaxLengthValidator(9), MinLengthValidator(9)],
-                            blank=True, null = True)
+    afm = models.CharField(max_length=20, null=True, blank=True)
     verified = models.BooleanField(default=False)
 
     _id = models.AutoField(primary_key=True, editable=False)  
@@ -29,15 +27,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-
-#pip install django-phone-field
-# <PhoneNumberField
-#   defaultDialCode="+30"
-#   label="Phone number"
-#   descriptiveText="Please enter your phone number"
-#   placeholder="123-456-7890"
-#   hasError
-# />
 
 
 
@@ -60,6 +49,17 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+class MyBids(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    value = models.IntegerField(null=True, blank=True)
+    winningBid = models.BooleanField(default=False)
+
+    _id = models.AutoField(primary_key=True, editable=False)  
+
+    def __str__(self):
+        return self.product.name + " -> $" + str(self.value)
 
 
 # class Review(models.Model):

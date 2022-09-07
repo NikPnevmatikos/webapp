@@ -4,24 +4,32 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { Table, Container, Button, Row, Col, Image} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
+import { userListProductsAction, deleteProductAction, productsAction} from '../actions/ProductActions'
+import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons';
-import {FaTrash} from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
-function MyProductScreen() {
+function MyBidScreen() {
   
     const match = useParams()
     const location = useLocation()  
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
+
+    const userBids = useSelector(state => state.userBidsListReducer)
+    const { error, loading, bids, page, pages} = userBids
     
-    const userProducts = useSelector(state => state.userProductListReducer)
-    const {error, loading, products, page, pages} = userProducts 
+    // const userProducts = useSelector(state => state.userProductListReducer)
+    // const {error, loading, products, page, pages} = userProducts 
+
+    // const singleproduct = useSelector(state => state.userProductReducer)
+    // const { product } = singleproduct
     
-    const deleteProduct = useSelector(state => state.deleteProductReducer)
-    const {error: delete_error, loading: delete_load, success } = deleteProduct
+    const deleteBid = useSelector(state => state.deleteBidReducer)
+    const {error: delete_error, loading: delete_load, success } = deleteBid
 
     const singleuser = useSelector(state => state.userLoginReducer)
     const { userInfo } = singleuser
@@ -30,7 +38,7 @@ function MyProductScreen() {
     useEffect(() => {
         if (userInfo != null) {
             if(userInfo.verified == true){
-                dispatch(userListProductsAction(keyword)) 
+                dispatch(userListBidsAction(keyword)) 
             }
             else{
                 navigate('/verify')
@@ -39,30 +47,30 @@ function MyProductScreen() {
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, userInfo, success, keyword])
+    }, [dispatch , navigate, userInfo, keyword, success])
 
     const deleteHandler = (id) => {
 
         if (window.confirm('Are you sure you want to delete this Product?')) {
-            dispatch(deleteProductAction(id))
+            dispatch(deleteBidAction(id))
         }
     }
 
-    const createProduct = () => {
-        navigate('create/')
-    }
+    // const createProduct = () => {
+    //     navigate('create/')
+    // }
     
     return (
         <div>
             <Row className="align-items-center my-3">
                 <Col>
-                    <h5>uwu my little kawaii product list uwu</h5>
+                    <h5>uwu my little kawaii Bid list uwu</h5>
                 </Col>
-                <Col className='text-right'>
+                {/* <Col className='text-right'>
                     <Button className="btn btn-dark btn-lg float-right" style={{float: 'right'}} onClick={() => createProduct()}>
                         Create Product    
                     </Button>    
-                </Col>
+                </Col> */}
             </Row>
 
             {delete_load && 
@@ -93,7 +101,7 @@ function MyProductScreen() {
                     <div className="alert alert-dismissible alert-danger">
                     <strong>{error}</strong>
                     </div>
-                ) : products.length > 0 
+                ) : bids.length > 0 
                 ? (
                     
                     <div>
@@ -103,46 +111,46 @@ function MyProductScreen() {
                                     <th>IMAGE</th>
                                     <th>NAME</th>
                                     <th>BRAND</th>
-                                    <th>CATEGORY</th>
                                     <th>CURRENT BID</th>
+                                    <th>YOUR BID</th>
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
-                                {Array.isArray(products)
+                                {Array.isArray(bids)
                                     ?
-                                    (products.map(product => (
-                                        <tr key={product._id}>
-                                            <td>
-                                                <Image 
+                                    (bids.map(bid => (
+                                            <tr key={bid._id}>
+                                                <td>
+                                                    <LinkContainer to= {`/product/${bid.product}/`}>
+                                                        <Image
 
-                                                    src={product.image} 
-                                                    alt= {product.name} 
-                                                    width={150} 
-                                                    height={150} 
-                                                    fluid 
-                                                    rounded
-                                                />
-                                            </td>
-                                            <td>{product.name}</td>
-                                            <td>{product.brand}</td>
-                                            <td>{product.category}</td>
-                                            <td>{product.price}</td>
-                                            <td>
-                                                <LinkContainer to={`update/${product._id}/`}>
-                                                    <Button variant='light' className='btn-md'>
-                                                        {/* <i className='fas fa-edit'></i> */}
-                                                        Edit
+                                                            src={bid.image} 
+                                                            alt= {bid.name} 
+                                                            width={150} 
+                                                            height={150} 
+                                                            fluid 
+                                                            rounded
+                                                        />
+                                                    </LinkContainer>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <Link to={`/product/${bid.product}/`} style={{color: 'black'}}>
+                                                        {bid.name}
+                                                    </Link>
+                                                </td>
+                                                <td>{bid.brand}</td>
+                                                <td>{bid.price}</td>
+                                                <td>{bid.value}</td>
+                                                <td>
+                                                    <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
+                                                        <FaTrash/>
                                                     </Button>
-                                                </LinkContainer>
-
-                                                <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(product._id)}>
-                                                    <FaTrash/>
-                                                </Button>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                 
                                     ))
                                     ):
@@ -159,12 +167,10 @@ function MyProductScreen() {
                     </div>  
                 
                 ):
-                <h1>You Have No Products Yet :(</h1> 
+                <h1>You Have No Bids Yet :( You Must Be Poor</h1> 
             }
     </div>
     )
 }
 
-export default MyProductScreen
-
-
+export default MyBidScreen

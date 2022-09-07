@@ -4,6 +4,8 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile, userUpdate } from '../actions/userActions'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 function RegisterScreen() {
 
@@ -14,8 +16,8 @@ function RegisterScreen() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')    
-    // const [phone, setPhone] = useState(0)
-    // const [afm , setAfm] = useState(0) 
+    const [phone, setPhone] = useState(0)
+    const [afm , setAfm] = useState('') 
     const [userlocation, setLocation] = useState('')
     const [password, setPassword] = useState('')   
     const [confirmPassword, setConfirmPassword] = useState('')   
@@ -50,8 +52,8 @@ function RegisterScreen() {
                     setUsername(user.username)
                     setName(user.name)
                     setEmail(user.email)
-                    // setPhone(user.phone)
-                    // setAfm(user.afm)
+                    setPhone(user.phone)
+                    setAfm(user.afm)
                     setLocation(user.location)
                 }
                 else{
@@ -75,8 +77,8 @@ function RegisterScreen() {
                 'password': password,
                 'email': email,
                 'location': userlocation,
-                // 'afm' : afk,
-                // 'phone' : phone
+                'afm' : afm,
+                'phone' : phone
             }))
         }
     }
@@ -156,7 +158,7 @@ function RegisterScreen() {
                         </Form.Control>           
                     </Form.Group> 
 
-                    {/* <Form.Group controlId='afm' className='py-1'>
+                    <Form.Group controlId='afm' className='py-1'>
                         <Form.Label>AFM</Form.Label>
                         <Form.Control 
                             required
@@ -170,15 +172,19 @@ function RegisterScreen() {
                     
                     <Form.Group controlId='phone' className='py-1'>
                         <Form.Label>Phone</Form.Label>
-                        <Form.Control 
-                            required
-                            type='integer'   
-                            placeholder='Disabled input' 
-                            value={phone}
-                            onChange = {(e) => setPhone(e.target.value)} 
-                        >        
-                        </Form.Control>           
-                    </Form.Group>  */}
+                            <PhoneInput
+                                required
+                                placeholder='Enter your Phone'
+                                value={phone}
+                                onChange = {setPhone}
+                                inputStyle={{
+                                    width: "535px",
+                                    height: "40px",
+                                  }}
+                                
+                            />
+                    </Form.Group>
+
                 
                     <Form.Group controlId='password' className='py-1'>
                         <Form.Label>New Password (Optional)</Form.Label>

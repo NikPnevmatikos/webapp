@@ -56,7 +56,7 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (username, email, name, location, password) => async (dispatch) => {
+export const register = (username, email, name, location,phone,afm, password) => async (dispatch) => {
     try {
 
         dispatch({
@@ -75,8 +75,8 @@ export const register = (username, email, name, location, password) => async (di
                 'name': name, 
                 'email': email,
                 'location': location,
-                // 'afm' : afk,
-                // 'phone' : phone'
+                'afm' : afm,
+                'phone' : phone,
                 'password': password 
             },
             config

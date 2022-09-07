@@ -22,7 +22,14 @@ redux
 react-redux
 react-thunk
 react-devtools-extension
+react-phone-number-input --save
+
+Ylopoihsh:
+-" https://stripe.com/docs/billing/customer/tax-ids#supported-tax-id " Ylopoihsame to taxid dld to afm san char field ka8ws to afm se diaforetikes xwres einai ka8e fora diaforetiko
+
 
 
 Ti prepei na kanoume:
 -na baloume to usename username, anti gia email sto userAction kai sta upoloipa user
+-na kanoume to bid decimal anti int
+

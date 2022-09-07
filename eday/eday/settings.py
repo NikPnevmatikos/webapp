@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig' ,
     'rest_framework',
     'corsheaders',
+    'phonenumber_field',
 ]
 
 REST_FRAMEWORK = {

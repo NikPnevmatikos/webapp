@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
 import { createProductAction } from '../actions/ProductActions';
+import DateTimePicker from 'react-datetime-picker';
 
 function CreateProductScreen() {
 
@@ -21,6 +22,8 @@ function CreateProductScreen() {
     const [preview, setPreview] = useState('')
     const [image, setImage] = useState()
     const [firstBid, setFirstBid] = useState(0)
+    const [startingdate, setstartingdate] = useState(new Date());
+    const [endingdate, setendingdate] = useState(new Date());
     
     const dispatch = useDispatch()
 
@@ -40,8 +43,8 @@ function CreateProductScreen() {
                 navigate('/myProducts')
             }
         }
-
-    }, [userInfo, navigate, product])
+        console.log(startingdate)
+    }, [userInfo, navigate, product, startingdate])
 
 
     const submitHandler = (e) => {
@@ -56,6 +59,8 @@ function CreateProductScreen() {
         form.append('countInStock', countInStock)
         form.append('image', image)
         form.append('firstBid', firstBid)
+        form.append('startingdate', startingdate)
+        form.append('endingdate', endingdate)
 
         dispatch(createProductAction(form))
     }
@@ -196,6 +201,46 @@ function CreateProductScreen() {
                             onChange = {(e) => setCountInStock(e.target.value)}                            
                         >
                         </Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group controlId='startingdate' className='py-1'>
+                        <Form.Label>Starting Date</Form.Label>                        
+                            {/* <DateTimePicker 
+                                required
+                                // controls={['date', 'time']}
+                                // dateFormat="YYYY-MM-DD"
+                                // timeFormat="H:MM:ss"
+                                format = "y-MM-dd h:mm:ss"
+                                onChange={(e) => setstartingdate(new Date(e.target.value))} 
+                                value={startingdate} 
+                            /> */}
+                        <Form.Control 
+                            required
+                            type='text' 
+                            placeholder='Enter YYYY-MM-DD HH:MM:ss' 
+                            value={startingdate}
+                            onChange = {(e) => setstartingdate(e.target.value)}                            
+                        ></Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group controlId='endingdate' className='py-1'>
+                        <Form.Label>Ending Date</Form.Label>                        
+                            {/* <DateTimePicker 
+                                required
+                                // controls={['date', 'time']}
+                                // dateFormat="YYYY-MM-DD"
+                                // timeFormat="H:MM:ss"
+                                format = "y-MM-dd h:mm:ss"
+                                onChange={(e) => setendingdate(new Date(e.target.value))} 
+                                value={endingdate} 
+                            /> */}
+                        <Form.Control 
+                            required
+                            type='text' 
+                            placeholder='Enter YYYY-MM-DD HH:MM:ss' 
+                            value={endingdate}
+                            onChange = {(e) => setendingdate(e.target.value)}                            
+                        ></Form.Control>
                     </Form.Group> 
 
                     <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>

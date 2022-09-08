@@ -30,24 +30,6 @@ export const bidReducer = (state = { bidItems: []}, action) => {
                 bidItems: state.bidItems.filter(x => x.product !== action.payload)
             }
 
-        // case CART_SAVE_SHIPPING_ADDRESS:
-        //     return {
-        //         ...state,
-        //         shippingAddress: action.payload
-        //     }
-
-        // case CART_SAVE_PAYMENT_METHOD:
-        //     return {
-        //         ...state,
-        //         paymentMethod: action.payload
-        //     }
-
-        // case CART_CLEAR_ITEMS:
-        //     return {
-        //         ...state,
-        //         cartItems: []
-        //     }
-
         default:
             return state
     }
@@ -61,7 +43,7 @@ export const userBidsListReducer = (state = {bids:[]}, action) => {
         
         case 'USER_BIDS_SUCCESS' :
             return {                
-                loading: false , 
+                loading: false, 
                 bids: action.payload.bids,
                 pages:  action.payload.pages,
                 page: action.payload.page
@@ -75,19 +57,56 @@ export const userBidsListReducer = (state = {bids:[]}, action) => {
         }       
 }
 
+export const productBidsListReducer = (state = {bids:[]}, action) => {
+    switch(action.type){
+        case 'PRODUCT_BIDS_REQUEST' :
+           return{loading: true, bids: [] }
+        
+        case 'PRODUCT_BIDS_SUCCESS' :
+            return {                
+                loading: false, 
+                bids: action.payload.bids,
+                pages:  action.payload.pages,
+                page: action.payload.page
+            }
+        
+        case 'PRODUCT_BIDS_FAIL' :
+            return {loading: false, error: action.payload}
+            
+        default:
+            return state
+        }       
+}
+
+export const createBidReducer = (state = {}, action) => {
+    switch(action.type) {
+        case 'BID_CREATE_REQUEST' :
+            return{loading: true}
+        
+        case 'BID_CREATE_SUCCESS' :
+            return {loading: false, success: true, message: action.payload}
+        
+        case 'BID_CREATE_FAIL' :
+            return {loading: false, error: action.payload}
+            
+        default:
+            return state
+    }       
+}
+
 
 export const deleteBidReducer = (state = {}, action) => {
-    switch(action.type){
+    switch(action.type) {
         case 'BID_DELETE_REQUEST' :
             return{loading: true}
         
         case 'BID_DELETE_SUCCESS' :
-            return {loading: false , success: true}
+            return {loading: false, success: true}
         
         case 'BID_DELETE_FAIL' :
             return {loading: false, error: action.payload}
             
         default:
             return state
-        }       
+    }       
 }

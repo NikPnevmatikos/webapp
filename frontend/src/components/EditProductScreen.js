@@ -19,6 +19,8 @@ function EditProduct() {
     const [countInStock, setCountInStock] = useState(0)
     const [image, setImage] = useState('')
     const [preview, setPreview] = useState('')
+    const [startingdate, setstartingdate] = useState(new Date());
+    const [endingdate, setendingdate] = useState(new Date());
     const [flag, setFlag] = useState(false)
 
     const dispatch = useDispatch()
@@ -52,6 +54,8 @@ function EditProduct() {
             setFirstBid(product.first_bid)
             setPrice(product.price)
             setCountInStock(product.countInStock)
+            setstartingdate(product.started)
+            setendingdate(product.ended)
         }
     }, [dispatch, product, match, navigate, successEdit])
 
@@ -77,6 +81,8 @@ function EditProduct() {
         form.append('countInStock', countInStock)
         form.append('image', image)
         form.append('firstBid', firstBid)
+        form.append('startingdate', startingdate)
+        form.append('endingdate', endingdate)
 
 
         dispatch(editProductAction(form))
@@ -224,6 +230,47 @@ function EditProduct() {
                                     >
                                     </Form.Control>
                                 </Form.Group> 
+                                
+                                <Form.Group controlId='startingdate' className='py-1'>
+
+                                    <Form.Label>Starting Date</Form.Label>                        
+                                    {/* <DateTimePicker 
+                                        required
+                                        // controls={['date', 'time']}
+                                        // dateFormat="YYYY-MM-DD"
+                                        // timeFormat="H:MM:ss"
+                                        format = "y-MM-dd h:mm:ss"
+                                        onChange={(e) => setstartingdate(new Date(e.target.value))} 
+                                        value={startingdate} 
+                                    /> */}
+                                <Form.Control 
+                                    required
+                                    type='text' 
+                                    placeholder='Enter YYYY-MM-DD HH:MM:ss' 
+                                    value={startingdate}
+                                    onChange = {(e) => setstartingdate(e.target.value)}                            
+                                ></Form.Control>
+                            </Form.Group> 
+
+                    <Form.Group controlId='endingdate' className='py-1'>
+                        <Form.Label>Ending Date</Form.Label>                        
+                            {/* <DateTimePicker 
+                                required
+                                // controls={['date', 'time']}
+                                // dateFormat="YYYY-MM-DD"
+                                // timeFormat="H:MM:ss"
+                                format = "y-MM-dd h:mm:ss"
+                                onChange={(e) => setendingdate(new Date(e.target.value))} 
+                                value={endingdate} 
+                            /> */}
+                        <Form.Control 
+                            required
+                            type='text' 
+                            placeholder='Enter YYYY-MM-DD HH:MM:ss' 
+                            value={endingdate}
+                            onChange = {(e) => setendingdate(e.target.value)}                            
+                        ></Form.Control>
+                    </Form.Group> 
             
                                 <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>
                                     Save Changes

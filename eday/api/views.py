@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
+from django.db.models import Max
 from .serializers import *
 from .models import Product, Profile, MyBids
 
@@ -118,7 +119,9 @@ def create_product(request):
         image = request.FILES.get('image'),
         description = data['description'],
         countInStock = data['countInStock'],
-        first_bid = data['firstBid']       
+        first_bid = data['firstBid'],
+        started = data['startingdate'],
+        ended = data['endingdate']   
     )   
     
     serializer = Product_Serializer(product, many = False)
@@ -144,6 +147,8 @@ def update_product(request, pk):
     product.countInStock = data['countInStock']
     product.description = data['description']
     product.first_bid = data['firstBid']
+    product.started = data['startingdate'] 
+    product.ended = data['endingdate']  
     
     product.save()
 
@@ -191,13 +196,86 @@ def user_bids(request):
     
     return Response({'bids':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def product_bids(request, pk):
+
+    page = request.query_params.get('page')
+    
+    bids = MyBids.objects.filter(product = pk).order_by('-_id')
+    
+    paginator = Paginator(bids,5)
+    
+    try:
+        bids = paginator.page(page)
+    except PageNotAnInteger:
+        bids = paginator.page(1)
+    except EmptyPage:
+        bids = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
+    
+    serializer = Bids_Serializer(bids, many=True)
+    
+    return Response({'bids':serializer.data, 'pages': paginator.num_pages, 'page': page})
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_bid(request, pk):
     bid = MyBids.objects.get(_id=pk)
+    
+    product = Product.objects.get(_id = bid.product._id)
+    value = bid.value
+    
     bid.delete()
-    return Response('Item succsesfully delete!')
+    
+    if (float(product.currently) == float(value)):
+        maxbid = MyBids.objects.all().order_by('-value').first()
+        maxbid.winningBid = True
+        maxbid.save()
+        product.currently = maxbid.value    
+    
+    product.number_of_bids -= 1
+    product.save()
+    
+    return Response('Bid succsesfully delete!')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_bid(request, pk):
+
+    user = request.user
+    product = Product.objects.get(_id = pk)
+    
+    data = request.data
+    
+    maxbid = MyBids.objects.all().order_by('-value').first()
+    
+    if(maxbid != None):
+        maxbid.winningBid = False
+        maxbid.save()
+
+    bid = MyBids.objects.create (
+        user = user,
+        product = product,
+        value = data['value']         
+    )   
+    if (float(bid.value) >= product.price):
+        product.payed = True
+        
+    bid.save()
+    
+    product.currently = data['value']
+    product.number_of_bids += 1
+    product.save()
+
+    return Response("Bid succesfully placed")
 
 
 

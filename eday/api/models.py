@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
-from phone_field import PhoneField
+#from phone_field import PhoneField
+from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -9,7 +10,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = PhoneField(blank = True, null = True)
+    phone = PhoneNumberField(blank = True, null = True)
     location = models.CharField(max_length=30, blank=True)
     afm = models.CharField(max_length=20, null=True, blank=True)
     verified = models.BooleanField(default=False)
@@ -50,18 +51,20 @@ class Product(models.Model):
 
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
+    started = models.DateTimeField(null=True, blank=True)
+    ended = models.DateTimeField(null=True, blank=True)
+    payed = models.BooleanField(default=False)
     _id = models.AutoField(primary_key=True, editable=False)   
     
     def __str__(self):
         return self.name
-
 
 class MyBids(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     value = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
-    winningBid = models.BooleanField(default=False)
+    winningBid = models.BooleanField(default=True)
 
     _id = models.AutoField(primary_key=True, editable=False)  
 

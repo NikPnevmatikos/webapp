@@ -7,6 +7,7 @@ urlpatterns = [
     path('', api_overview),
     path('product_list/', all_products),
     path('user_products/', user_products),
+    path('user_products/bid_list/<str:pk>/', product_bids),
     path('product/create/', create_product),
     path('product/update/<str:pk>/', update_product),
     path('product/delete/<str:pk>/', delete_product),
@@ -23,5 +24,6 @@ urlpatterns = [
     path('users/', getUsers),
     
     path('users/bids/', user_bids),
+    path('users/bids/create/<str:pk>/', create_bid),
     path('users/bids/delete/<str:pk>/', delete_bid)
 ]

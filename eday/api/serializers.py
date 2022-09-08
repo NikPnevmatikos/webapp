@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Product, Profile, MyBids
 from phonenumber_field.serializerfields import PhoneNumberField
 
+
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -18,16 +19,24 @@ class Product_Serializer(serializers.ModelSerializer):
 
 class Bids_Serializer(serializers.ModelSerializer):
     
+    username = serializers.CharField(source = 'user.username')
     name = serializers.CharField(source = 'product.name')
     image = serializers.ImageField(source = 'product.image')
     brand = serializers.CharField(source = 'product.brand')
     category = serializers.CharField(source = 'product.category')
     price = serializers.DecimalField(source = 'product.price', max_digits=7, decimal_places=2)
-    currently = serializers.DecimalField(source = 'product.currently',max_digits=7, decimal_places=2)
+    currently = serializers.DecimalField(source = 'product.currently', max_digits=7, decimal_places=2)
+    start = serializers.DateTimeField(source = 'product.started')
+    end = serializers.DateTimeField(source = 'product.ended')
+    payed = serializers.BooleanField(source = 'product.payed')
+    
+    # created_at = serializers.DateField(format=None, input_formats=None)
+
 
     class Meta:
         model = MyBids
         fields = [
+            'username',
             'name',
             'image',
             'brand',
@@ -38,6 +47,9 @@ class Bids_Serializer(serializers.ModelSerializer):
             'product',
             'value',
             'winningBid',
+            'started',
+            'ended',
+            'payed',
             '_id'
             ]
 

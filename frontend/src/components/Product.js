@@ -21,6 +21,10 @@ function Product({product}) {
                 <Card.Text className='secondary'>
                     {product.number_of_bids} bids
                 </Card.Text>
+
+                <Card.Text className='secondary'>
+                   Ending in {product.ended}
+                </Card.Text>
         </Card.Body>
     </Card>
   )

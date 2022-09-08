@@ -2,7 +2,16 @@ import React from 'react'
 import { Pagination } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-function PageButtons({ pages, page, keyword = '', productScreen = false, adminScreen = false, bidScreen = false }) {
+function PageButtons({ 
+                        pages, 
+                        page, 
+                        keyword = '', 
+                        productScreen = false, 
+                        adminScreen = false, 
+                        bidScreen = false, 
+                        productBidsScreen = false,  
+                        productid = 0
+                    }) {
     if (keyword) {
         keyword = keyword.split('?keyword=')[1].split('&')[0]
     }
@@ -16,7 +25,10 @@ function PageButtons({ pages, page, keyword = '', productScreen = false, adminSc
                         to={!productScreen ? 
                                 !adminScreen ?
                                     !bidScreen ?
-                                        `/?keyword=${keyword}&page=${x + 1}`
+                                        !productBidsScreen ?
+                                            `/?keyword=${keyword}&page=${x + 1}`
+                                        
+                                        : `/myProducts/history/${productid}/?keyword=${keyword}&page=${x + 1}`
 
                                     : `/myBids/?keyword=${keyword}&page=${x + 1}`
                                     

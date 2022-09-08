@@ -106,6 +106,7 @@ function MyProductScreen() {
                                     <th>CATEGORY</th>
                                     <th>BUY PRICE</th>
                                     <th>CURRENT BID</th>
+                                    <th>HISTORY</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -132,6 +133,13 @@ function MyProductScreen() {
                                             <td>{product.category}</td>
                                             <td>{product.price}</td>
                                             <td>{product.currently}</td>
+                                            <td>
+                                                <LinkContainer to={`history/${product._id}/`}>
+                                                    <Button variant='light' className='btn-md'>
+                                                        history
+                                                    </Button>
+                                                </LinkContainer>                                                
+                                            </td>
                                             <td>
                                                 <LinkContainer to={`update/${product._id}/`}>
                                                     <Button variant='light' className='btn-md'>

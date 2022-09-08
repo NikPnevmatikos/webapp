@@ -34,7 +34,7 @@ function RegisterScreen() {
             if(userInfo.verified == true){
                 navigate(redirect)  
             }
-            else{
+            else {
                 navigate('/verify')
             }
         }
@@ -45,8 +45,8 @@ function RegisterScreen() {
         if (password !== confirmPassword) {
             setErrorMessage("Password does not match.")
         }
-        else{
-            dispatch(register(username, email, name, userlocation,phone,afm, password))
+        else {
+            dispatch(register(username, email, name, userlocation, phone, afm, password))
         }
     }
 

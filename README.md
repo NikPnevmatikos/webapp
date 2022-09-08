@@ -23,6 +23,7 @@ react-redux
 react-thunk
 react-devtools-extension
 react-phone-number-input --save
+npm install react-datetime-picker
 
 Ylopoihsh:
 -" https://stripe.com/docs/billing/customer/tax-ids#supported-tax-id " Ylopoihsame to taxid dld to afm san char field ka8ws to afm se diaforetikes xwres einai ka8e fora diaforetiko

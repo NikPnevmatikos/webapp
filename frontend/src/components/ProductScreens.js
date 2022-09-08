@@ -3,11 +3,13 @@ import { Link , useParams, useNavigate} from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
+import { createBidAction } from '../actions/bidActions'
 import Spinner from 'react-bootstrap/Spinner';
 
 
 function ProductScreens() {
   const [bid, setBid] = useState('')
+  const [Message, setMessage] = useState('')
 
   const match = useParams()
 
@@ -18,10 +20,16 @@ function ProductScreens() {
   const { loading, error, product } = singleproduct
   //const {error, loading, product} = singleproduct
 
+  const mybid = useSelector(state => state.createBidReducer)
+  const { loading: bidload, error: biderror, success, message } = mybid
+
   useEffect(() => {
     dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
-  } , [dispatch, match])
+    if (success == true) {
+      setMessage(message)
+    }
+  } , [dispatch, match, success])
 
   const addBidHandler = () => {
     //navigate(`/myBids/${match.id}?bid=${bid}`)
@@ -30,15 +38,15 @@ function ProductScreens() {
         window.alert('Your bid must be higher or equal to starting bid price!')
       }
       else {
-        console.log("added your bid", bid)
+        dispatch(createBidAction(product._id, bid))
       }
     }
     else {
-      if (Number(bid) < Number(product.currently)) {
+      if (Number(bid) <= Number(product.currently)) {
         window.alert('Your bid must be higher than the current bid price!')
       }
       else {
-        console.log("added your bid", bid)
+        dispatch(createBidAction(product._id, bid))
       }
     }
   }
@@ -51,7 +59,26 @@ function ProductScreens() {
           Go Back
         </button>
       </Link>
-      
+
+      {Message && 
+          <div className="alert alert-dismissible alert-success">
+          <strong>{Message}</strong>
+          </div>
+      }
+      {biderror && 
+          <div className="alert alert-dismissible alert-danger">
+          <strong>{biderror}</strong>
+          </div>
+      }    
+      {bidload &&
+          <Spinner 
+          animation="border" role="status" style={{ margin: 'auto',
+                                                      display: 'block'
+                                                  }}>
+              <span className="visually-hidden">Loading</span>
+          </Spinner>
+      }
+
       {loading ? 
         <Spinner 
         animation="border" role="status" style={{ margin: 'auto',
@@ -85,11 +112,19 @@ function ProductScreens() {
                   </ListGroup.Item>
 
                   <ListGroup.Item>
-                    Starting Bid: {product.first_bid}
+                    <strong>Starting Bid: </strong> {product.first_bid}
                   </ListGroup.Item>
 
                   <ListGroup.Item>
-                    Description: {product.description}
+                    <strong>Starting date: </strong> {product.started}
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <strong>Ending Date: </strong> {product.ended}
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <strong>Description: </strong> {product.description}
                   </ListGroup.Item>
 
                 </ListGroup>

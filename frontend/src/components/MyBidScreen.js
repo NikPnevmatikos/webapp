@@ -8,7 +8,7 @@ import { userListProductsAction, deleteProductAction, productsAction} from '../a
 import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons';
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaMedal } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 function MyBidScreen() {
@@ -113,6 +113,7 @@ function MyBidScreen() {
                                     <th>BRAND</th>
                                     <th>CURRENT BID</th>
                                     <th>YOUR BID</th>
+                                    <th>STATE</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -121,7 +122,8 @@ function MyBidScreen() {
 
                                 {Array.isArray(bids)
                                     ?
-                                    (bids.map(bid => (
+                                    (
+                                        bids.map(bid => (
                                             <tr key={bid._id}>
                                                 <td>
                                                     <LinkContainer to= {`/product/${bid.product}/`}>
@@ -143,8 +145,29 @@ function MyBidScreen() {
                                                     </Link>
                                                 </td>
                                                 <td>{bid.brand}</td>
-                                                <td>{bid.price}</td>
-                                                <td>{bid.value}</td>
+                                                <td>{bid.currently}</td>                                               
+                                                <td>{bid.currently == bid.value ?
+                                                        
+                                                        <h5 className="text-success">
+                                                            {bid.value}
+                                                        </h5> 
+                                                    :
+                                                        <h5 className="text-danger">
+                                                            {bid.value}
+                                                        </h5> 
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {bid.winningBid ?
+                                                        <h5 className="text-success">
+                                                            WON <FaMedal/>
+                                                        </h5>
+                                                        : 
+                                                        <h5>
+                                                            Pending...
+                                                        </h5>
+                                                    }
+                                                </td>
                                                 <td>
                                                     <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
                                                         <FaTrash/>
@@ -162,7 +185,7 @@ function MyBidScreen() {
                         <PageButtons 
                             page={page}
                             pages={pages}
-                            productScreen={true}
+                            bidScreen={true}
                         />
                     </div>  
                 

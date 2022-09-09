@@ -24,7 +24,10 @@ function CreateProductScreen() {
     const [firstBid, setFirstBid] = useState(0)
     const [startingdate, setstartingdate] = useState(new Date());
     const [endingdate, setendingdate] = useState(new Date());
-    
+    const [errorMessage, setErrorMessage] = useState('')
+    const [currentDate, setCurrent] = useState('')
+
+
     const dispatch = useDispatch()
 
     const createProduct = useSelector(state => state.createProductReducer)
@@ -34,6 +37,15 @@ function CreateProductScreen() {
     const {userInfo} = userLogin
 
     useEffect(() =>{
+        let mydate = new Date()
+        let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
+        let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
+        let hours = mydate.getHours() <10 ? `0${mydate.getHours()}`:`${mydate.getHours()}`
+        let minutes = mydate.getMinutes() <10 ? `0${mydate.getMinutes()}`:`${mydate.getMinutes()}`
+        let seconds = mydate.getSeconds() <10 ? `0${mydate.getSeconds()}`:`${mydate.getSeconds()}`
+        
+        setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+
         dispatch({type:'CREATE_PRODUCT_RESET'})
         if (userInfo == null) {
             navigate('/login/')
@@ -43,26 +55,33 @@ function CreateProductScreen() {
                 navigate('/myProducts')
             }
         }
-        console.log(startingdate)
-    }, [userInfo, navigate, product, startingdate])
+    }, [userInfo, navigate, product])
 
 
     const submitHandler = (e) => {
         e.preventDefault()
-        const form = new FormData()
+        if (startingdate < currentDate) {
+            setErrorMessage("Starting date should be after today's date or today!")
+        }
+        else if (startingdate >= endingdate) {
+            setErrorMessage("Endend date should be after starting date.")
+        }
+        else {
+           const form = new FormData()
 
-        form.append('name', name)
-        form.append('brand', brand)
-        form.append('category', category)
-        form.append('price', price)
-        form.append('description', description)
-        form.append('countInStock', countInStock)
-        form.append('image', image)
-        form.append('firstBid', firstBid)
-        form.append('startingdate', startingdate)
-        form.append('endingdate', endingdate)
+            form.append('name', name)
+            form.append('brand', brand)
+            form.append('category', category)
+            form.append('price', price)
+            form.append('description', description)
+            form.append('countInStock', countInStock)
+            form.append('image', image)
+            form.append('firstBid', firstBid)
+            form.append('startingdate', startingdate)
+            form.append('endingdate', endingdate)
 
-        dispatch(createProductAction(form))
+            dispatch(createProductAction(form))
+        }
     }
 
     const upload = (e) => {
@@ -77,6 +96,12 @@ function CreateProductScreen() {
         <Row className = "justify-content-md-center">
             <Col xs={12} md={6}>
                 <h1>Create a Little Product</h1>
+
+                {errorMessage && 
+                    <div className="alert alert-dismissible alert-danger">
+                    <strong>{errorMessage}</strong>
+                    </div>
+                }
 
                 {error && 
                     <div className="alert alert-dismissible alert-danger">

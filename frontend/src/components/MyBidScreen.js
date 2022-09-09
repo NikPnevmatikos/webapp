@@ -19,6 +19,8 @@ function MyBidScreen() {
 
     const dispatch = useDispatch()
 
+    const [currentDate, setCurrent] = useState('')
+
     const userBids = useSelector(state => state.userBidsListReducer)
     const { error, loading, bids, page, pages} = userBids
     
@@ -36,6 +38,15 @@ function MyBidScreen() {
     
     let keyword = location.search
     useEffect(() => {
+        let mydate = new Date()
+        let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
+        let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
+        let hours = mydate.getHours() <10 ? `0${mydate.getHours()}`:`${mydate.getHours()}`
+        let minutes = mydate.getMinutes() <10 ? `0${mydate.getMinutes()}`:`${mydate.getMinutes()}`
+        let seconds = mydate.getSeconds() <10 ? `0${mydate.getSeconds()}`:`${mydate.getSeconds()}`
+        
+        setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+
         if (userInfo != null) {
             if(userInfo.verified == true){
                 dispatch(userListBidsAction(keyword)) 
@@ -158,18 +169,23 @@ function MyBidScreen() {
                                                     }
                                                 </td>
                                                 <td>
-                                                    {bid.winningBid ?
-                                                        <h5 className="text-success">
-                                                            WON <FaMedal/>
-                                                        </h5>
-                                                        : 
-                                                        <h5>
-                                                            Pending...
-                                                        </h5>
+                                                    {(bid.end <= currentDate || bid.payed == true) ? (
+                                                        bid.winningBid == true ?
+                                                            <h5 className="text-success">
+                                                                Winning Bid<FaMedal/>
+                                                            </h5>
+                                                        :
+                                                            <h5 className="text-danger">
+                                                                Lost Bid
+                                                            </h5>
+                                                    ) : 
+                                                    <h5>
+                                                        Pending...
+                                                    </h5>
                                                     }
                                                 </td>
                                                 <td>
-                                                    <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
+                                                    <Button disabled={currentDate >= bid.end || bid.payed == true} variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
                                                         <FaTrash/>
                                                     </Button>
                                                 </td>

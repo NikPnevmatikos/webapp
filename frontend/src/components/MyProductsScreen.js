@@ -15,6 +15,8 @@ function MyProductScreen() {
     const location = useLocation()  
     const navigate = useNavigate()
 
+    const [currentDate, setCurrent] = useState('')
+
     const dispatch = useDispatch()
     
     const userProducts = useSelector(state => state.userProductListReducer)
@@ -28,6 +30,16 @@ function MyProductScreen() {
     
     let keyword = location.search
     useEffect(() => {
+
+        let mydate = new Date()
+        let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
+        let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
+        let hours = mydate.getHours() <10 ? `0${mydate.getHours()}`:`${mydate.getHours()}`
+        let minutes = mydate.getMinutes() <10 ? `0${mydate.getMinutes()}`:`${mydate.getMinutes()}`
+        let seconds = mydate.getSeconds() <10 ? `0${mydate.getSeconds()}`:`${mydate.getSeconds()}`
+        
+        setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+
         if (userInfo != null) {
             if(userInfo.verified == true){
                 dispatch(userListProductsAction(keyword)) 
@@ -142,7 +154,7 @@ function MyProductScreen() {
                                             </td>
                                             <td>
                                                 <LinkContainer to={`update/${product._id}/`}>
-                                                    <Button variant='light' className='btn-md'>
+                                                    <Button disabled={currentDate >= product.started || product.payed == true} variant='light' className='btn-md'>
                                                         {/* <i className='fas fa-edit'></i> */}
                                                         Edit
                                                     </Button>

@@ -12,6 +12,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # Add serializers here
 
 class Product_Serializer(serializers.ModelSerializer):
+    started = serializers.DateTimeField(format = '%Y-%m-%d %H:%M:%S')
+    ended = serializers.DateTimeField(format = '%Y-%m-%d %H:%M:%S')
     class Meta:
         model = Product
         fields = '__all__'
@@ -26,8 +28,8 @@ class Bids_Serializer(serializers.ModelSerializer):
     category = serializers.CharField(source = 'product.category')
     price = serializers.DecimalField(source = 'product.price', max_digits=7, decimal_places=2)
     currently = serializers.DecimalField(source = 'product.currently', max_digits=7, decimal_places=2)
-    start = serializers.DateTimeField(source = 'product.started')
-    end = serializers.DateTimeField(source = 'product.ended')
+    start = serializers.DateTimeField(source = 'product.started', format = '%Y-%m-%d %H:%M:%S')
+    end = serializers.DateTimeField(source = 'product.ended',format = '%Y-%m-%d %H:%M:%S')
     payed = serializers.BooleanField(source = 'product.payed')
     
     # created_at = serializers.DateField(format=None, input_formats=None)
@@ -47,8 +49,8 @@ class Bids_Serializer(serializers.ModelSerializer):
             'product',
             'value',
             'winningBid',
-            'started',
-            'ended',
+            'start',
+            'end',
             'payed',
             '_id'
             ]

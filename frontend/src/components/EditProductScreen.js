@@ -21,6 +21,9 @@ function EditProduct() {
     const [preview, setPreview] = useState('')
     const [startingdate, setstartingdate] = useState(new Date());
     const [endingdate, setendingdate] = useState(new Date());
+    const [payed, setPayed] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
+    const [currentDate, setCurrent] = useState('')
     const [flag, setFlag] = useState(false)
 
     const dispatch = useDispatch()
@@ -37,14 +40,28 @@ function EditProduct() {
 
     useEffect(() =>{
 
-        if(successEdit == true){
+        let mydate = new Date()
+        let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
+        let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
+        let hours = mydate.getHours() <10 ? `0${mydate.getHours()}`:`${mydate.getHours()}`
+        let minutes = mydate.getMinutes() <10 ? `0${mydate.getMinutes()}`:`${mydate.getMinutes()}`
+        let seconds = mydate.getSeconds() <10 ? `0${mydate.getSeconds()}`:`${mydate.getSeconds()}`
+        
+        setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+
+        if (startingdate != null && currentDate != null) {
+            if (currentDate > startingdate || payed == true) {
+                navigate('/myProducts')
+            }
+        }
+        if (successEdit == true) {
             dispatch({ type: 'EDIT_PRODUCT_RESET' })
             navigate('/myProducts')
         }
-        if(!product || product._id !== Number(match.id)){
+        if (!product || product._id !== Number(match.id)) {
             dispatch(productsAction(match.id))
         }
-        else{
+        else {
             setName(product.name)
             setBrand(product.brand)
             setCategory(product.category)
@@ -56,8 +73,9 @@ function EditProduct() {
             setCountInStock(product.countInStock)
             setstartingdate(product.started)
             setendingdate(product.ended)
+            setPayed(product.payed)
         }
-    }, [dispatch, product, match, navigate, successEdit])
+    }, [dispatch, product, match, navigate, successEdit, startingdate, currentDate])
 
     const upload = (e) => {
         setFlag(true)
@@ -68,24 +86,29 @@ function EditProduct() {
 
     const submitHandler = (e) => {
         e.preventDefault()
+        if (startingdate < currentDate) {
+            setErrorMessage("Starting date should be after today's date or today!")
+        }
+        else if (startingdate >= endingdate) {
+            setErrorMessage("Endend date should be after starting date.")
+        }
+        else {
+           const form = new FormData()
 
-        const form = new FormData()
+            form.append('name', name)
+            form.append('flag',flag)
+            form.append('brand', brand)
+            form.append('category', category)
+            form.append('price', price)
+            form.append('description', description)
+            form.append('countInStock', countInStock)
+            form.append('image', image)
+            form.append('firstBid', firstBid)
+            form.append('startingdate', startingdate)
+            form.append('endingdate', endingdate)
 
-        form.append('flag', flag)
-        form.append('_id', match.id)
-        form.append('name', name)
-        form.append('brand', brand)
-        form.append('category', category)
-        form.append('price', price)
-        form.append('description', description)
-        form.append('countInStock', countInStock)
-        form.append('image', image)
-        form.append('firstBid', firstBid)
-        form.append('startingdate', startingdate)
-        form.append('endingdate', endingdate)
-
-
-        dispatch(editProductAction(form))
+            dispatch(editProductAction(form))
+        }
     }
 
     return (
@@ -93,6 +116,12 @@ function EditProduct() {
         <Row className = "justify-content-md-center">
             <Col xs={12} md={6}>
                 <h1>Edit a Little Product</h1>
+
+                {errorMessage && 
+                    <div className="alert alert-dismissible alert-danger">
+                    <strong>{errorMessage}</strong>
+                    </div>
+                }
 
                 {errorEdit && 
                     <div className="alert alert-dismissible alert-danger">

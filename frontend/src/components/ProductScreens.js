@@ -10,6 +10,7 @@ import Spinner from 'react-bootstrap/Spinner';
 function ProductScreens() {
   const [bid, setBid] = useState('')
   const [Message, setMessage] = useState('')
+  const [currentDate, setCurrent] = useState('')
 
   const match = useParams()
 
@@ -24,6 +25,17 @@ function ProductScreens() {
   const { loading: bidload, error: biderror, success, message } = mybid
 
   useEffect(() => {
+
+    let mydate = new Date()
+    let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
+    let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
+    let hours = mydate.getHours() <10 ? `0${mydate.getHours()}`:`${mydate.getHours()}`
+    let minutes = mydate.getMinutes() <10 ? `0${mydate.getMinutes()}`:`${mydate.getMinutes()}`
+    let seconds = mydate.getSeconds() <10 ? `0${mydate.getSeconds()}`:`${mydate.getSeconds()}`
+    
+    setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
+
+    
     dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
     if (success == true) {
@@ -60,16 +72,17 @@ function ProductScreens() {
         </button>
       </Link>
 
-      {Message && 
+      {Message ? (
           <div className="alert alert-dismissible alert-success">
           <strong>{Message}</strong>
           </div>
-      }
-      {biderror && 
+        ) : (
+        biderror && 
           <div className="alert alert-dismissible alert-danger">
           <strong>{biderror}</strong>
           </div>
-      }    
+      )} 
+
       {bidload &&
           <Spinner 
           animation="border" role="status" style={{ margin: 'auto',
@@ -77,7 +90,7 @@ function ProductScreens() {
                                                   }}>
               <span className="visually-hidden">Loading</span>
           </Spinner>
-      }
+      } 
 
       {loading ? 
         <Spinner 
@@ -91,6 +104,19 @@ function ProductScreens() {
             <strong>{error}</strong>
           </div>
           :
+          <div>
+            <Row>
+              {product.started > currentDate  ? 
+                <div className="alert alert-dismissible alert-primary">
+                <strong>Auction has not started yet</strong>
+                </div>
+                : 
+                (product.ended < currentDate || product.payed == true) &&
+                  <div className="alert alert-dismissible alert-primary">
+                  <strong>Auction has ended</strong>
+                  </div>
+              } 
+            </Row>
             <Row>
               <Col md={5}>
                 <Image src={product.image} alt={product.name} fluid />
@@ -178,7 +204,7 @@ function ProductScreens() {
                         onClick={addBidHandler}
                         className='btn btn-dark btn-lg'
                         type='button' 
-                        disabled={product.countInStock===0}
+                        disabled={product.started > currentDate || product.ended < currentDate || product.payed == true}
                       >
                         Add Bid plz uwu
                       </Button>
@@ -189,7 +215,7 @@ function ProductScreens() {
 
               </Col>
             </Row>
-            
+          </div>
       }                            
     </div>
   )

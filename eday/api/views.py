@@ -235,7 +235,7 @@ def delete_bid(request, pk):
     bid.delete()
     
     if (float(product.currently) == float(value)):
-        maxbid = MyBids.objects.all().order_by('-value').first()
+        maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
         maxbid.winningBid = True
         maxbid.save()
         product.currently = maxbid.value    
@@ -255,8 +255,8 @@ def create_bid(request, pk):
     
     data = request.data
     
-    maxbid = MyBids.objects.all().order_by('-value').first()
-    
+    maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
+    print(maxbid)
     if(maxbid != None):
         maxbid.winningBid = False
         maxbid.save()

@@ -13,7 +13,9 @@ from rest_framework import status
 from django.db.models import Max
 from .serializers import *
 from .models import Product, Profile, MyBids
-
+from datetime import datetime
+from django.utils import timezone
+import pytz
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -254,28 +256,41 @@ def create_bid(request, pk):
     product = Product.objects.get(_id = pk)
     
     data = request.data
-    
-    maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
-    print(maxbid)
-    if(maxbid != None):
-        maxbid.winningBid = False
-        maxbid.save()
 
-    bid = MyBids.objects.create (
-        user = user,
-        product = product,
-        value = data['value']         
-    )   
-    if (float(bid.value) >= product.price):
-        product.payed = True
+    try:
         
-    bid.save()
-    
-    product.currently = data['value']
-    product.number_of_bids += 1
-    product.save()
+        cur = timezone.now().replace(tzinfo=(pytz.timezone('Europe/Athens'))).strftime('%Y-%m-%d %H:%M:%S')
+        #current_time = datetime.now().replace(tzinfo=(pytz.timezone('Europe/Athens'))).strftime('%Y-%m-%d %H:%M:%S')
+        
+        if(cur > product.ended.strftime('%Y-%m-%d %H:%M:%S')):
+            raise Exception
+        
+        maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
+        
+        if(maxbid != None):
+            maxbid.winningBid = False
+            maxbid.save()
 
-    return Response("Bid succesfully placed")
+        bid = MyBids.objects.create (
+            user = user,
+            product = product,
+            value = data['value']         
+        )   
+        if (float(bid.value) >= product.price):
+            product.payed = True
+            
+        bid.save()
+        
+        product.currently = data['value']
+        product.number_of_bids += 1
+        product.save()
+
+        return Response("Bid succesfully placed")
+    
+    except Exception:
+        message = {'detail' : 'Cannot place Bid, Auction has ended'}
+            
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 

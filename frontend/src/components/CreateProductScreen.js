@@ -22,8 +22,8 @@ function CreateProductScreen() {
     const [preview, setPreview] = useState('')
     const [image, setImage] = useState()
     const [firstBid, setFirstBid] = useState(0)
-    const [startingdate, setstartingdate] = useState(new Date());
-    const [endingdate, setendingdate] = useState(new Date());
+    const [startingdate, setstartingdate] = useState('');
+    const [endingdate, setendingdate] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
     const [currentDate, setCurrent] = useState('')
 

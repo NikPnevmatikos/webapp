@@ -14,13 +14,13 @@ function EditProduct() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setPrice] = useState('')   
+    const [price, setPrice] = useState()   
     const [firstBid, setFirstBid] = useState('')
     const [countInStock, setCountInStock] = useState(0)
     const [image, setImage] = useState('')
     const [preview, setPreview] = useState('')
-    const [startingdate, setstartingdate] = useState(new Date());
-    const [endingdate, setendingdate] = useState(new Date());
+    const [startingdate, setstartingdate] = useState('');
+    const [endingdate, setendingdate] = useState('');
     const [payed, setPayed] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [currentDate, setCurrent] = useState('')
@@ -95,6 +95,7 @@ function EditProduct() {
         else {
            const form = new FormData()
 
+            form.append('_id', match.id)
             form.append('name', name)
             form.append('flag',flag)
             form.append('brand', brand)

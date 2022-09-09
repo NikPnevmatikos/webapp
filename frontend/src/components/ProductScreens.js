@@ -70,16 +70,16 @@ function ProductScreens() {
         <button type="button" className="btn btn-secondary my-3">
           Go Back
         </button>
-      </Link>
+      </Link> 
 
-      {Message ? (
-          <div className="alert alert-dismissible alert-success">
-          <strong>{Message}</strong>
+      {biderror ? (
+          <div className="alert alert-dismissible alert-danger">
+            <strong>{biderror}</strong>
           </div>
         ) : (
-        biderror && 
-          <div className="alert alert-dismissible alert-danger">
-          <strong>{biderror}</strong>
+          Message && 
+          <div className="alert alert-dismissible alert-success">
+            <strong>{Message}</strong>
           </div>
       )} 
 

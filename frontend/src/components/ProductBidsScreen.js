@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction} from '../actions/ProductActions'
 import { productListBidsAction } from '../actions/bidActions'
+import { Rating } from 'react-simple-star-rating'
 import PageButtons from './PageButtons';
 import { Link } from 'react-router-dom';
 
@@ -82,6 +83,7 @@ function ProductBidScreen() {
                                 <tr>
                                     <th>USER</th>
                                     <th>PLACED BID</th>
+                                    <th>USER'S RATING</th>
                                 </tr>
                             </thead>
 
@@ -91,8 +93,11 @@ function ProductBidScreen() {
                                     ?
                                     (bids.map(bid => (
                                             <tr key={bid._id}>
-                                                <td>{bid.username}</td>
+                                                <td style={{width:350}}>{bid.username}</td>
                                                 <td>{bid.value}</td>
+                                                <td>
+                                                    <Rating readonly={true} initialValue={bid.seller_rating} />
+                                                </td>
                                             </tr>
                                 
                                     ))

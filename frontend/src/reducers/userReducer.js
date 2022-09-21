@@ -139,3 +139,42 @@ export const userVerifyReducer = (state = {}, action) => {
             return state
     }
 }
+
+
+export const buyerReviewReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'BUYER_REVIEW_REQUEST':
+            return {loading: true }
+
+        case 'BUYER_REVIEW_SUCCESS':
+            return { loading: false, success: true, message: action.payload }
+
+        case 'BUYER_REVIEW_FAIL':
+            return { loading: false, error: action.payload }
+
+        case 'BUYER_REVIEW_RESET':
+            return {}
+        
+        default:
+            return state
+    }
+}
+
+export const sellerReviewReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'SELLER_REVIEW_REQUEST':
+            return {loading: true }
+
+        case 'SELLER_REVIEW_SUCCESS':
+            return { loading: false, success: true, message: action.payload }
+
+        case 'SELLER_REVIEW_FAIL':
+            return { loading: false, error: action.payload }
+
+        case 'BUYER_REVIEW_RESET':
+            return {}
+        
+        default:
+            return state
+    }
+}

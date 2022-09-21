@@ -308,3 +308,84 @@ export const verifyUser = (id) => async (dispatch ,getState) => {
         })
     }
 }
+
+
+export const buyerReviewAction = (id,rating) => async (dispatch ,getState) => {
+    try {
+        dispatch({
+            type: 'BUYER_REVIEW_REQUEST'
+        })
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/users/rating/${id}/`,
+            {rating: rating},
+            config
+        )
+
+        dispatch({
+            type: 'BUYER_REVIEW_SUCCESS',
+            payload: data
+        })
+
+
+    } 
+    catch (error) {
+        dispatch({
+            type: 'BUYER_REVIEW_FAIL',
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const sellerReviewAction = (id,rating) => async (dispatch ,getState) => {
+    try {
+        dispatch({
+            type: 'SELLER_REVIEW_REQUEST'
+        })
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/users/seller_rating/${id}/`,
+            {rating: rating},
+            config
+        )
+
+        dispatch({
+            type: 'SELLER_REVIEW_SUCCESS',
+            payload: data
+        })
+
+
+    } 
+    catch (error) {
+        dispatch({
+            type: 'SELLER_REVIEW_FAIL',
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}

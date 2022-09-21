@@ -1,4 +1,5 @@
 from email import message
+from genericpath import exists
 from pydoc import describe
 from unicodedata import category
 from django.shortcuts import render
@@ -12,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from django.db.models import Max
 from .serializers import *
-from .models import Product, Profile, MyBids
+from .models import Product, Profile, MyBids, Buyer_Review, Seller_Review
 from datetime import datetime
 from django.utils import timezone
 import pytz
@@ -282,6 +283,7 @@ def create_bid(request, pk):
         bid.save()
         
         product.currently = data['value']
+        product.currentwinner = user.id
         product.number_of_bids += 1
         product.save()
 
@@ -406,16 +408,110 @@ def deleteUser(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def verify_user(request, pk):
-    user = User.objects.get(id=pk)
+    user = User.objects.get(id = pk)
     
     user.profile.verified = True
     
     user.save()
     
-    serializer = User_Serializer(user, many=False)
+    serializer = User_Serializer(user, many = False)
     
     return Response(serializer.data)
+
+#///////////////////////////////////////////////////////////////////////////////////////////
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_buyer_review(request, pk):
+    owner = request.user 
+    buyer = User.objects.get(id = pk)
+
+    data = request.data
+    exist = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer).exists()
+
+    if (exist == False):
+        Buyer_Review.objects.create(
+            owner = owner,
+            buyer = buyer,
+            rating = data['rating']
+        )
     
+    else:
+        review = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer)
+        for i in review:
+            i.rating = data['rating']
+            i.save()
+
+    allreviews = Buyer_Review.objects.filter(buyer=buyer)
+    buyer.profile.buyer_rev_num = len(allreviews)
+    
+    total = 0
+
+    for i in allreviews:
+        total += i.rating 
+    
+    # find the average rating of the buyer
+    buyer.profile.buyer_rating = total / len(allreviews)
+
+    buyer.save()
+
+    return Response('Rating Succesfully Uploaded.')
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_seller_review(request, pk):
+    owner = request.user 
+    seller = User.objects.get(id = pk)
+
+    data = request.data
+    exist = Seller_Review.objects.filter(owner=owner).filter(seller=seller).exists()
+
+    if (exist == False):
+        Seller_Review.objects.create(
+            owner = owner,
+            seller = seller,
+            rating = data['rating']
+        )
+    
+    else:
+        review = Seller_Review.objects.filter(owner=owner).filter(seller=seller)
+        for i in review:
+            i.rating = data['rating']
+            i.save()
+
+    allreviews = Seller_Review.objects.filter(seller=seller)
+    seller.profile.seller_rev_num = len(allreviews)
+    
+    total = 0
+
+    for i in allreviews:
+        total += i.rating 
+    
+    # find the average rating of the seller
+    seller.profile.seller_rating = total / len(allreviews)
+
+    seller.save()
+
+    return Response('Rating Succesfully Uploaded.')
+
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def create_seller_review(request, pk):
+#     owner = request.user 
+#     buyer = User.objects.get(id = pk)
+
+#     data = request.data
+#     exist = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer).exist()
+
+#     if (exist == False):
+#         Buyer_Review.objects.create(
+#             owner = owner,
+#             buyer = buyer,
+#             rating = data['rating']
+#         )
+        
+
 #///////////////////////////////////////////////////////////////////////////////////////////
 
 @api_view(['POST'])

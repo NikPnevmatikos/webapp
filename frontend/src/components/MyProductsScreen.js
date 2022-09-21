@@ -5,8 +5,12 @@ import { Table, Button, Row, Col, Image} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
+import { sellerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
 import {FaTrash} from "react-icons/fa";
+import { Rating } from 'react-simple-star-rating'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 
 function MyProductScreen() {
   
@@ -14,6 +18,8 @@ function MyProductScreen() {
     const navigate = useNavigate()
 
     const [currentDate, setCurrent] = useState('')
+    const [rating, setRating] = useState(0) 
+    const [ratingmessage, setRatingMessage] = useState('') 
 
     const dispatch = useDispatch()
     
@@ -23,12 +29,15 @@ function MyProductScreen() {
     const deleteProduct = useSelector(state => state.deleteProductReducer)
     const {error: delete_error, loading: delete_load, success } = deleteProduct
 
+    const singlerating = useSelector(state => state.sellerReviewReducer)
+    const { success: ratesuccess, message: ratemessage } = singlerating
+
     const singleuser = useSelector(state => state.userLoginReducer)
     const { userInfo } = singleuser
     
     let keyword = location.search
     useEffect(() => {
-
+        dispatch({type: 'SELLER_REVIEW_RESET'})
         let mydate = new Date()
         let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
         let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
@@ -49,7 +58,11 @@ function MyProductScreen() {
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, userInfo, success, keyword])
+        if (ratesuccess === true) {
+            setRatingMessage(ratemessage)
+        }
+
+    }, [dispatch , navigate, userInfo, success, keyword, ratesuccess])
 
     const deleteHandler = (id) => {
 
@@ -60,6 +73,20 @@ function MyProductScreen() {
 
     const createProduct = () => {
         navigate('create/')
+    }
+
+
+    const sendMessageHandler = (id) => {
+        navigate(`/message/${id}`)
+    }
+    
+    const handleRating = (number) => {
+        setRating(number/20)
+
+    }
+
+    const submitHandler = (id, number) => {
+        dispatch(sellerReviewAction(id, number))
     }
     
     return (
@@ -84,6 +111,12 @@ function MyProductScreen() {
                 </Spinner>
             }
 
+            {ratingmessage &&
+                <div className="alert alert-dismissible alert-success">
+                    <strong>{ratingmessage}</strong>
+                </div> 
+            }
+            
             {delete_error && 
                 <div className="alert alert-dismissible alert-danger">
                     <strong>{error}</strong>
@@ -145,7 +178,38 @@ function MyProductScreen() {
                                             <td>
                                                 {product.currently}
                                                 {(currentDate > product.ended || product.payed === true) &&
-                                                    <strong>  (Ended)</strong>
+                                                    <div>
+                                                        <strong>  (Ended)</strong>
+                                                        
+                                                        <Button variant= 'light' className='btn-sm' onClick = {() => sendMessageHandler(product.currentwinner)} >
+                                                            Message
+                                                        </Button>
+
+
+                                                        <>
+                                                            
+                                                            <OverlayTrigger
+                                                                trigger="click"
+                                                                key='bottom'
+                                                                placement='bottom'
+                                                                overlay={
+                                                                    <Popover id={`popover-positioned-bottom`}>
+                                                                    <Popover.Header as="h3">{`Rate the Bid Winner!`}</Popover.Header>
+                                                                    <Popover.Body>
+                                                                        <strong>Congratulations For Selling This Product!</strong> Please leave a rating :
+                                                                        <Rating onClick={handleRating} ratingValue={rating} /* Available Props */ />
+                                                                        <Button variant='light' onClick={() => submitHandler(product.currentwinner, rating)}>
+                                                                            Submit
+                                                                        </Button>
+                                                                    </Popover.Body>
+                                                                    </Popover>
+                                                                }
+                                                            >
+
+                                                                <Button variant="light">Rate</Button>
+                                                            </OverlayTrigger> 
+                                                        </>
+                                                    </div>
                                                 } 
                                             </td>
                                             <td>

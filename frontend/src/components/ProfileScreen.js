@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
+import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
@@ -17,6 +18,8 @@ function ProfileScreen() {
     const [phone, setPhone] = useState(0)
     const [afm , setAfm] = useState('') 
     const [location, setLocation] = useState('')
+    const [buyerRating, setBuyerRating] = useState(0)
+    const [sellerRating, setSellerRating] = useState(0)
     
     const dispatch = useDispatch()
 
@@ -42,6 +45,8 @@ function ProfileScreen() {
                     setPhone(user.phone)
                     setAfm(user.afm)
                     setLocation(user.location)
+                    setBuyerRating(user.buyer_rating)
+                    setSellerRating(user.seller_rating)
                 }
                 else{
                     navigate('/verify')
@@ -154,6 +159,15 @@ function ProfileScreen() {
                                   }}
                                 
                             />
+                    </Form.Group>
+                    <Form.Group controlId='buyerRating' className='py-3'>
+                        <Form.Label>Rating as Buyer : </Form.Label>
+                        <Rating readonly={true} initialValue={buyerRating} />
+                    </Form.Group>
+
+                    <Form.Group controlId='sellerRating' className='py-3'>
+                        <Form.Label>Rating as Seller : </Form.Label>
+                        <Rating readonly={true} initialValue={sellerRating} />
                     </Form.Group>
 
                     </Form>

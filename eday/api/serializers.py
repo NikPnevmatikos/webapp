@@ -2,7 +2,7 @@ from dataclasses import fields
 from xml.dom.expatbuilder import InternalSubsetExtractor
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Product, Profile, MyBids, Message
+from .models import Buyer_Review, Product, Profile, MyBids, Message, Seller_Review
 from phonenumber_field.serializerfields import PhoneNumberField
 
 
@@ -12,6 +12,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # Add serializers here
 
 class Product_Serializer(serializers.ModelSerializer):
+    owner = serializers.CharField(source = 'user.username')
+    ownerrating = serializers.CharField(source = 'user.profile.buyer_rating')
     started = serializers.DateTimeField(format = '%Y-%m-%d %H:%M:%S')
     ended = serializers.DateTimeField(format = '%Y-%m-%d %H:%M:%S')
     class Meta:
@@ -22,6 +24,7 @@ class Product_Serializer(serializers.ModelSerializer):
 class Bids_Serializer(serializers.ModelSerializer):
     
     username = serializers.CharField(source = 'user.username')
+    seller_rating = serializers.DecimalField(source = 'user.profile.seller_rating', max_digits=7, decimal_places=2)
     owner = serializers.CharField(source = 'product.user.id')
     name = serializers.CharField(source = 'product.name')
     image = serializers.ImageField(source = 'product.image')
@@ -32,6 +35,7 @@ class Bids_Serializer(serializers.ModelSerializer):
     start = serializers.DateTimeField(source = 'product.started', format = '%Y-%m-%d %H:%M:%S')
     end = serializers.DateTimeField(source = 'product.ended',format = '%Y-%m-%d %H:%M:%S')
     payed = serializers.BooleanField(source = 'product.payed')
+
     
     # created_at = serializers.DateField(format=None, input_formats=None)
 
@@ -40,6 +44,7 @@ class Bids_Serializer(serializers.ModelSerializer):
         model = MyBids
         fields = [
             'username',
+            'seller_rating',
             'owner',
             'name',
             'image',
@@ -57,7 +62,7 @@ class Bids_Serializer(serializers.ModelSerializer):
             '_id'
             ]
 
-    def get_productinfo(self,obj):
+    def get_productinfo(self, obj):
         product = Product.objects.filter(_id = obj.product._id)
 
         serializer = Product_Serializer(product,many=False)
@@ -70,6 +75,7 @@ class Profile_Serializer(serializers.ModelSerializer):
         model = Profile
         fields = '__all__'
 
+
 class User_Serializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField(read_only=True)
@@ -77,6 +83,9 @@ class User_Serializer(serializers.ModelSerializer):
     phone = PhoneNumberField(source = 'profile.phone')
     afm = serializers.CharField(source = 'profile.afm')
     verified = serializers.BooleanField(source = 'profile.verified')
+    buyer_rating = serializers.DecimalField(source = 'profile.buyer_rating', max_digits=7, decimal_places=2)
+    seller_rating = serializers.DecimalField(source = 'profile.seller_rating', max_digits=7, decimal_places=2)
+
 
     class Meta:
         model = User
@@ -90,6 +99,8 @@ class User_Serializer(serializers.ModelSerializer):
             'phone',
             'afm',
             'verified',
+            'buyer_rating',
+            'seller_rating',
         ]
         
     def get_name(self, obj):
@@ -147,10 +158,18 @@ class UserSerializerWithToken(User_Serializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
-    
-    
-    
+     
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
+        fields = '__all__'
+
+class BuyerReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Buyer_Review
+        fields = '__all__'
+
+class SellerReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller_Review
         fields = '__all__'

@@ -18,7 +18,9 @@ import { userLoginReducer,
           userUpdateReducer , 
           usersReducer , 
           userDeleteReducer,
-          userVerifyReducer
+          userVerifyReducer,
+          buyerReviewReducer,
+          sellerReviewReducer
         } from './reducers/userReducer'
 
 import {userMessageListReducer , 
@@ -49,6 +51,8 @@ const reducer = combineReducers({
     userDeleteReducer,
     userProductListReducer,
     userVerifyReducer,
+    buyerReviewReducer,
+    sellerReviewReducer,
 
     userMessageListReducer,
     userMessageSendReducer,

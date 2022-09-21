@@ -4,6 +4,7 @@ import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
 import { createBidAction } from '../actions/bidActions'
+import { Rating } from 'react-simple-star-rating'
 import Spinner from 'react-bootstrap/Spinner';
 
 
@@ -156,6 +157,7 @@ function ProductScreens() {
               </Col>
               
               <Col md={3}>
+                
                 <Card>
                   <ListGroup variant='flush'>
                     <ListGroup.Item>
@@ -210,6 +212,35 @@ function ProductScreens() {
                       
                     </ListGroup.Item>
                   </ListGroup>
+                </Card>
+                
+                <Card className='mt-3'>
+                  <ListGroup variant='flush'>
+                    <ListGroup.Item>
+                        <Row>
+                          <Col>
+                            Published By:
+                          </Col>
+                          <Col>
+                            <strong>
+                              {product.owner}
+                            </strong>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>
+                            Seller's Rating:
+                          </Col>
+                          <Col>
+                            <Rating readonly={true} initialValue={product.ownerrating} />
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                  </ListGroup>
+                
                 </Card>
 
               </Col>

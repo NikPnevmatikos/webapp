@@ -71,6 +71,7 @@ function MessageReplyScreen() {
                 }
                 
                 <Form>
+
                     <Form.Group controlId='From' className='py-1'>
                         <Form.Label>From</Form.Label>
                         <Form.Control 

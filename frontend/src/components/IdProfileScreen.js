@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
+import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
@@ -20,6 +21,8 @@ function IdProfileScreen() {
     const [phone, setPhone] = useState(0)
     const [afm , setAfm] = useState('') 
     const [location, setLocation] = useState('')  
+    const [buyerRating, setBuyerRating] = useState(0)
+    const [sellerRating, setSellerRating] = useState(0)
     const [verified, setVerified] = useState(false)
     
     const dispatch = useDispatch()
@@ -46,6 +49,8 @@ function IdProfileScreen() {
                 setAfm(user.afm)
                 setLocation(user.location)
                 setVerified(user.verified)
+                setBuyerRating(user.buyer_rating)
+                setSellerRating(user.seller_rating)
             }
         }
     }, [userInfo, navigate, dispatch, user])
@@ -163,6 +168,16 @@ function IdProfileScreen() {
                             >        
                             </Form.Check>           
                         </Form.Group> 
+
+                        <Form.Group controlId='buyerRating' className='py-3'>
+                            <Form.Label>Rating as Buyer : </Form.Label>
+                            <Rating readonly={true} initialValue={buyerRating} />
+                        </Form.Group>
+
+                        <Form.Group controlId='sellerRating' className='py-3'>
+                            <Form.Label>Rating as Seller : </Form.Label>
+                            <Rating readonly={true} initialValue={sellerRating} />
+                        </Form.Group>
 
 
                         <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>

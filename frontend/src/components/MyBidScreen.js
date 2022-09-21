@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate, useLocation} from 'react-router-dom'
 import { Table, Button, Row, Col, Image} from 'react-bootstrap'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
+import { buyerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
 import { FaTrash, FaMedal } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { Rating } from 'react-simple-star-rating'
 
 function MyBidScreen() {
   
@@ -17,6 +21,8 @@ function MyBidScreen() {
     const dispatch = useDispatch()
 
     const [currentDate, setCurrent] = useState('')
+    const [rating, setRating] = useState(0) 
+    const [ratingmessage, setRatingMessage] = useState('') 
 
     const userBids = useSelector(state => state.userBidsListReducer)
     const { error, loading, bids, page, pages} = userBids
@@ -24,11 +30,17 @@ function MyBidScreen() {
     const deleteBid = useSelector(state => state.deleteBidReducer)
     const {error: delete_error, loading: delete_load, success } = deleteBid
 
+
+    const singlerating = useSelector(state => state.buyerReviewReducer)
+    const { success: ratesuccess, message: ratemessage } = singlerating
+
     const singleuser = useSelector(state => state.userLoginReducer)
     const { userInfo } = singleuser
     
     let keyword = location.search
     useEffect(() => {
+
+        dispatch({type: 'BUYER_REVIEW_RESET'})
         let mydate = new Date()
         let month = mydate.getMonth()+1 <10 ? `0${mydate.getMonth()+1}`:`${mydate.getMonth()+1}`
         let day = mydate.getDate() <10 ? `0${mydate.getDate()}`:`${mydate.getDate()}`
@@ -49,7 +61,12 @@ function MyBidScreen() {
         else {
             navigate('/login')
         }
-    }, [dispatch , navigate, userInfo, keyword, success])
+
+        if (ratesuccess === true) {
+            setRatingMessage(ratemessage)
+        }
+
+    }, [dispatch, navigate, userInfo, keyword, success, ratesuccess])
 
     const deleteHandler = (id) => {
 
@@ -60,6 +77,15 @@ function MyBidScreen() {
 
     const sendMessageHandler = (id) => {
         navigate(`/message/${id}`)
+    }
+    
+    const handleRating = (number) => {
+        setRating(number/20)
+
+    }
+
+    const submitHandler = (id, number) => {
+        dispatch(buyerReviewAction(id, number))
     }
     
     return (
@@ -74,6 +100,13 @@ function MyBidScreen() {
                     </Button>    
                 </Col> */}
             </Row>
+
+
+            {ratingmessage &&
+                <div className="alert alert-dismissible alert-success">
+                    <strong>{ratingmessage}</strong>
+                </div> 
+            }
 
             {delete_load && 
                 <Spinner 
@@ -170,6 +203,33 @@ function MyBidScreen() {
                                                                 <Button variant= 'light' className='btn-sm' onClick = {() => sendMessageHandler(bid.owner)} >
                                                                     Message
                                                                 </Button>
+
+
+                                                                <>
+                                                                    
+                                                                    <OverlayTrigger
+                                                                        trigger="click"
+                                                                        key='bottom'
+                                                                        placement='bottom'
+                                                                        overlay={
+                                                                            <Popover id={`popover-positioned-bottom`}>
+                                                                            <Popover.Header as="h3">{`Rate the Seller!`}</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <strong>Congratulations For Winning!</strong> Please leave a rating :
+                                                                                <Rating onClick={handleRating} ratingValue={rating} /* Available Props */ />
+                                                                                <Button variant='light' onClick={() => submitHandler(bid.owner, rating)}>
+                                                                                    Submit
+                                                                                </Button>
+                                                                            </Popover.Body>
+                                                                            </Popover>
+                                                                        }
+                                                                    >
+
+                                                                        <Button variant="light">Rate</Button>
+                                                                    </OverlayTrigger>
+                                                                    
+                                                                </>
+                                                                                                                                
                                                             </div>
                                                         )
                                                         :

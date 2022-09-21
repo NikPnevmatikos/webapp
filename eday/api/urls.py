@@ -32,6 +32,10 @@ urlpatterns = [
     path('users/messages/received/', received_messages),
     path('users/messages/sended/', send_messages),
     path('users/messages/view/<str:pk>/', view_message),
-    path('users/messages/count/', unread_message)
+    path('users/messages/count/', unread_message),
+
+
+    path('users/rating/<str:pk>/', create_buyer_review),
+    path('users/seller_rating/<str:pk>/', create_seller_review)
     
 ]

@@ -9,7 +9,9 @@ function PageButtons({
                         productScreen = false, 
                         adminScreen = false, 
                         bidScreen = false, 
-                        productBidsScreen = false,  
+                        productBidsScreen = false,
+                        messageReceive = false,
+                        messageSend = false,
                         productid = 0
                     }) {
     if (keyword) {
@@ -26,8 +28,14 @@ function PageButtons({
                                 !adminScreen ?
                                     !bidScreen ?
                                         !productBidsScreen ?
-                                            `/?keyword=${keyword}&page=${x + 1}`
-                                        
+                                            !messageReceive ?
+                                                !messageSend ?
+                                                    `/?keyword=${keyword}&page=${x + 1}`
+                                                
+                                                : `/sended/?keyword=${keyword}&page=${x + 1}`
+
+                                            : `/received/?keyword=${keyword}&page=${x + 1}`
+
                                         : `/myProducts/history/${productid}/?keyword=${keyword}&page=${x + 1}`
 
                                     : `/myBids/?keyword=${keyword}&page=${x + 1}`

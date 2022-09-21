@@ -2,7 +2,7 @@ from dataclasses import fields
 from xml.dom.expatbuilder import InternalSubsetExtractor
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Product, Profile, MyBids
+from .models import Product, Profile, MyBids, Message
 from phonenumber_field.serializerfields import PhoneNumberField
 
 
@@ -22,6 +22,7 @@ class Product_Serializer(serializers.ModelSerializer):
 class Bids_Serializer(serializers.ModelSerializer):
     
     username = serializers.CharField(source = 'user.username')
+    owner = serializers.CharField(source = 'product.user.id')
     name = serializers.CharField(source = 'product.name')
     image = serializers.ImageField(source = 'product.image')
     brand = serializers.CharField(source = 'product.brand')
@@ -39,6 +40,7 @@ class Bids_Serializer(serializers.ModelSerializer):
         model = MyBids
         fields = [
             'username',
+            'owner',
             'name',
             'image',
             'brand',
@@ -146,3 +148,9 @@ class UserSerializerWithToken(User_Serializer):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
     
+    
+    
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'

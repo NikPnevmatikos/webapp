@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
@@ -13,7 +14,7 @@ class Profile(models.Model):
     phone = PhoneNumberField(blank = True, null = True)
     location = models.CharField(max_length=30, blank=True)
     afm = models.CharField(max_length=20, null=True, blank=True)
-    verified = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False) 
 
     _id = models.AutoField(primary_key=True, editable=False)  
 
@@ -70,7 +71,21 @@ class MyBids(models.Model):
 
     def __str__(self):
         return self.product.name + " -> $" + str(self.value)
-
+    
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name='sender' ,on_delete=models.SET_NULL, null=True)
+    senderName = models.CharField(max_length=200, null=True, blank=True)
+    receiver = models.ForeignKey(User,related_name='receiver', on_delete= models.SET_NULL, null=True)
+    receiverName = models.CharField(max_length=200, null=True, blank=True)
+    context = models.TextField(null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    
+    read = models.BooleanField(default=False)
+    
+    _id = models.AutoField(primary_key=True, editable=False)
+    
+    def __str__(self):
+        return str(self.createdAt)
 
 # class Review(models.Model):
 #     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -133,16 +148,3 @@ class MyBids(models.Model):
 
 #     def __str__(self):
 #         return str(self.address)
-# # from django.db import models
-
-# # Create your models here.
-
-# class Product(models.Model):
-#     id = models.AutoField(primary_key = True)
-#     name = models.CharField(max_length = 100)
-#     price = models.DecimalField(max_digits = 10000, decimal_places = 2)
-#     descriptions = models.TextField(max_length = 1000)
-#     #tags = 
-    
-#     def __str__(self):
-#         return self.name

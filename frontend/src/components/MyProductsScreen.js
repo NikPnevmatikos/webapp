@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap';
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
-import { Table, Container, Button, Row, Col, Image} from 'react-bootstrap'
+import { useNavigate, useLocation} from 'react-router-dom'
+import { Table, Button, Row, Col, Image} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons';
 import {FaTrash} from "react-icons/fa";
 
 function MyProductScreen() {
   
-    const match = useParams()
     const location = useLocation()  
     const navigate = useNavigate()
 
@@ -41,7 +39,7 @@ function MyProductScreen() {
         setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
 
         if (userInfo != null) {
-            if(userInfo.verified == true){
+            if(userInfo.verified === true){
                 dispatch(userListProductsAction(keyword)) 
             }
             else{
@@ -144,7 +142,12 @@ function MyProductScreen() {
                                             <td>{product.brand}</td>
                                             <td>{product.category}</td>
                                             <td>{product.price}</td>
-                                            <td>{product.currently}</td>
+                                            <td>
+                                                {product.currently}
+                                                {(currentDate > product.ended || product.payed === true) &&
+                                                    <strong>  (Ended)</strong>
+                                                } 
+                                            </td>
                                             <td>
                                                 <LinkContainer to={`history/${product._id}/`}>
                                                     <Button variant='light' className='btn-md'>
@@ -154,7 +157,7 @@ function MyProductScreen() {
                                             </td>
                                             <td>
                                                 <LinkContainer to={`update/${product._id}/`}>
-                                                    <Button disabled={currentDate >= product.started || product.payed == true} variant='light' className='btn-md'>
+                                                    <Button disabled={currentDate >= product.started || product.payed === true} variant='light' className='btn-md'>
                                                         {/* <i className='fas fa-edit'></i> */}
                                                         Edit
                                                     </Button>

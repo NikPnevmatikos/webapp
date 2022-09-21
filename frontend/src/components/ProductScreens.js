@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Link , useParams, useNavigate} from 'react-router-dom'
+import { useParams, useNavigate} from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
@@ -38,10 +38,10 @@ function ProductScreens() {
     
     dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
-    if (success == true) {
+    if (success === true) {
       setMessage(message)
     }
-  } , [dispatch, match, success])
+  } , [dispatch, match, success, message])
 
   const addBidHandler = () => {
     //navigate(`/myBids/${match.id}?bid=${bid}`)
@@ -66,11 +66,10 @@ function ProductScreens() {
   //let product = {}
   return (
     <div>
-      <Link to='/'>
-        <button type="button" className="btn btn-secondary my-3">
+
+        <Button onClick = {() => navigate(-1)} type="button" className="btn btn-secondary my-3">
           Go Back
-        </button>
-      </Link> 
+        </Button>
 
       {biderror ? (
           <div className="alert alert-dismissible alert-danger">
@@ -111,7 +110,7 @@ function ProductScreens() {
                 <strong>Auction has not started yet</strong>
                 </div>
                 : 
-                (product.ended < currentDate || product.payed == true) &&
+                (product.ended < currentDate || product.payed === true) &&
                   <div className="alert alert-dismissible alert-primary">
                   <strong>Auction has ended</strong>
                   </div>
@@ -204,7 +203,7 @@ function ProductScreens() {
                         onClick={addBidHandler}
                         className='btn btn-dark btn-lg'
                         type='button' 
-                        disabled={product.started > currentDate || product.ended < currentDate || product.payed == true}
+                        disabled={product.started > currentDate || product.ended < currentDate || product.payed === true}
                       >
                         Add Bid plz uwu
                       </Button>

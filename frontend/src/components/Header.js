@@ -10,12 +10,14 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import {useDispatch, useSelector} from 'react-redux'
 import {FaHeart} from "react-icons/fa";
 
+
 function Header() {
 
   const navigate = useNavigate()
   const location = useLocation()
   
   const[keyword, setKeyword] = useState('')
+  //const[unread, setUnread] = useState('')
 
   const dispatch = useDispatch()
   const userLogin = useSelector(state => state.userLoginReducer)
@@ -51,31 +53,48 @@ function Header() {
             navbarScroll
           >
             {userInfo ?(
-              <NavDropdown title={userInfo.name} id='username'>
+              <>
+                <NavDropdown title={userInfo.name} id='username'>
 
-              {/* <NavDropdown title="Link" id="navbarScrollingDropdown"> */}
-                {userInfo.is_staff == true && 
-                  <div>
-                    <NavDropdown.Item href='/admin'>
-                      Admin Page
+                {/* <NavDropdown title="Link" id="navbarScrollingDropdown"> */}
+                  {userInfo.is_staff === true && 
+                    <div>
+                      <NavDropdown.Item href='/admin'>
+                        Admin Page
+                      </NavDropdown.Item>
+                      <NavDropdown.Divider />
+                    </div>
+                  }
+                  <NavDropdown.Item href='/profile'>
+                    My Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href='/myProducts'>
+                    My Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href='/myBids'>
+                    My Bids
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Log Out
+                  </NavDropdown.Item>
+                </NavDropdown>
+
+
+                <NavDropdown title='MyMessages' id='messages'>
+
+                    <NavDropdown.Item href='/received'>
+                      Received
                     </NavDropdown.Item>
+
                     <NavDropdown.Divider />
-                  </div>
-                }
-                <NavDropdown.Item href='/profile'>
-                  My Profile
-                </NavDropdown.Item>
-                <NavDropdown.Item href='/myProducts'>
-                  My Products
-                </NavDropdown.Item>
-                <NavDropdown.Item href='/myBids'>
-                  My Bids
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={logoutHandler}>
-                  Log Out
-                </NavDropdown.Item>
-              </NavDropdown>
+
+                    <NavDropdown.Item href='/sended'>
+                      Sended
+                    </NavDropdown.Item>
+
+                  </NavDropdown>
+              </>
             ) : (
               <>
                 <Nav.Link href='/login'>

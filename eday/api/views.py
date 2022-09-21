@@ -353,26 +353,6 @@ def updateUserProfile(request):
     return Response(serializer.data)
 
 
-# @api_view(['PUT'])
-# @permission_classes([IsAdminUser])
-# def updateUserProfile_by_Id(request , pk):
-#     user = User.objects.get(id=pk)
-
-    
-#     data = request.data
-    
-#     user.first_name = data['name']
-#     user.username = data['username']
-#     user.email = data['email']
-#     user.is_staff = data['is_staff']
-
-#     user.save()    
-    
-#     serializer = User_Serializer(user, many=False)
-            
-#     return Response(serializer.data)
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
@@ -382,7 +362,7 @@ def getUserProfile(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def getUserProfile_by_Id(request, pk):
     user = User.objects.get(id=pk)
     serializer = User_Serializer(user, many=False)
@@ -436,4 +416,106 @@ def verify_user(request, pk):
     
     return Response(serializer.data)
     
+#///////////////////////////////////////////////////////////////////////////////////////////
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_message(request, pk):
+    sender = request.user
+    receiver = User.objects.get(id=pk)
+    data = request.data
     
+    message = Message.objects.create(
+        sender= sender,
+        senderName = sender.username,
+        receiver = receiver,
+        receiverName = receiver.username,
+        context = data['context']
+    )
+    
+    serializer = MessageSerializer(message, many=False)
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def received_messages(request):
+    
+    page = request.query_params.get('page')
+    
+    user = request.user
+    
+    messages = Message.objects.filter(receiver=user).order_by('-createdAt')
+    
+    paginator = Paginator(messages,5)
+    
+    try:
+        messages = paginator.page(page)
+    except PageNotAnInteger:
+        messages = paginator.page(1)
+    except EmptyPage:
+        messages = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
+    serializer = MessageSerializer(messages, many=True)
+    
+    return Response({'messages':serializer.data, 'pages': paginator.num_pages, 'page': page})
+    
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def send_messages(request):
+    
+    page = request.query_params.get('page')
+        
+    user = request.user
+    
+    messages = Message.objects.filter(sender=user).order_by('-createdAt')
+    
+    paginator = Paginator(messages,5)
+    
+    try:
+        messages = paginator.page(page)
+    except PageNotAnInteger:
+        messages = paginator.page(1)
+    except EmptyPage:
+        messages = paginator.page(paginator.num_pages)
+        
+    if page==None:
+        page=1
+        
+    page = int(page)
+    
+    serializer = MessageSerializer(messages, many=True)
+    
+    return Response({'messages':serializer.data, 'pages': paginator.num_pages, 'page': page})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_message(request,pk):
+    
+    message = Message.objects.get(_id=pk)
+    
+    if(message.read == False):
+        message.read = True
+        message.save()
+    
+    serializer = MessageSerializer(message, many=False)
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def unread_message(request):
+    
+    user = request.user
+    
+    num_of_messages = Message.objects.filter(receiver=user).filter(read = False).count()
+    
+    return Response(num_of_messages) 

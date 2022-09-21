@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap';
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
-import { Table, Container, Button, Row, Col, Image} from 'react-bootstrap'
+import { useNavigate, useLocation} from 'react-router-dom'
+import { Table, Button, Row, Col, Image} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { userListProductsAction, deleteProductAction, productsAction} from '../actions/ProductActions'
 import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons';
 import { FaTrash, FaMedal } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 function MyBidScreen() {
   
-    const match = useParams()
     const location = useLocation()  
     const navigate = useNavigate()
 
@@ -23,12 +20,6 @@ function MyBidScreen() {
 
     const userBids = useSelector(state => state.userBidsListReducer)
     const { error, loading, bids, page, pages} = userBids
-    
-    // const userProducts = useSelector(state => state.userProductListReducer)
-    // const {error, loading, products, page, pages} = userProducts 
-
-    // const singleproduct = useSelector(state => state.userProductReducer)
-    // const { product } = singleproduct
     
     const deleteBid = useSelector(state => state.deleteBidReducer)
     const {error: delete_error, loading: delete_load, success } = deleteBid
@@ -48,7 +39,7 @@ function MyBidScreen() {
         setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
 
         if (userInfo != null) {
-            if(userInfo.verified == true){
+            if(userInfo.verified === true){
                 dispatch(userListBidsAction(keyword)) 
             }
             else{
@@ -67,9 +58,9 @@ function MyBidScreen() {
         }
     }
 
-    // const createProduct = () => {
-    //     navigate('create/')
-    // }
+    const sendMessageHandler = (id) => {
+        navigate(`/message/${id}`)
+    }
     
     return (
         <div>
@@ -157,7 +148,7 @@ function MyBidScreen() {
                                                 </td>
                                                 <td>{bid.brand}</td>
                                                 <td>{bid.currently}</td>                                               
-                                                <td>{bid.currently == bid.value ?
+                                                <td>{bid.currently === bid.value ?
                                                         
                                                         <h5 className="text-success">
                                                             {bid.value}
@@ -169,11 +160,18 @@ function MyBidScreen() {
                                                     }
                                                 </td>
                                                 <td>
-                                                    {(bid.end <= currentDate || bid.payed == true) ? (
-                                                        bid.winningBid == true ?
-                                                            <h5 className="text-success">
-                                                                Winning Bid<FaMedal/>
-                                                            </h5>
+                                                    {(bid.end <= currentDate || bid.payed === true) ? (
+                                                        bid.winningBid === true ? (
+                                                            <div>
+                                                                <h5 className="text-success">
+                                                                    Winning Bid<FaMedal/>
+                                                                </h5>
+
+                                                                <Button variant= 'light' className='btn-sm' onClick = {() => sendMessageHandler(bid.owner)} >
+                                                                    Message
+                                                                </Button>
+                                                            </div>
+                                                        )
                                                         :
                                                             <h5 className="text-danger">
                                                                 Lost Bid
@@ -185,7 +183,7 @@ function MyBidScreen() {
                                                     }
                                                 </td>
                                                 <td>
-                                                    <Button disabled={currentDate >= bid.end || bid.payed == true} variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
+                                                    <Button disabled={currentDate >= bid.end || bid.payed === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
                                                         <FaTrash/>
                                                     </Button>
                                                 </td>

@@ -21,6 +21,13 @@ import { userLoginReducer,
           userVerifyReducer
         } from './reducers/userReducer'
 
+import {userMessageListReducer , 
+        userMessageSendReducer, 
+        messageReducer, 
+        createMessageReducer,
+        unreadMessageReducer 
+      } from './reducers/MessageReducer'
+
 
 const reducer = combineReducers({
     productListReducer,
@@ -42,6 +49,13 @@ const reducer = combineReducers({
     userDeleteReducer,
     userProductListReducer,
     userVerifyReducer,
+
+    userMessageListReducer,
+    userMessageSendReducer,
+    messageReducer,
+    createMessageReducer,
+    unreadMessageReducer,
+    
 })
 
 const localStoreProducts = localStorage.getItem('bidItems') ? 

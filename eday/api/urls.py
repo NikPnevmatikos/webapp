@@ -25,5 +25,13 @@ urlpatterns = [
     
     path('users/bids/', user_bids),
     path('users/bids/create/<str:pk>/', create_bid),
-    path('users/bids/delete/<str:pk>/', delete_bid)
+    path('users/bids/delete/<str:pk>/', delete_bid),
+    
+    
+    path('users/messages/send/<str:pk>/', create_message),
+    path('users/messages/received/', received_messages),
+    path('users/messages/sended/', send_messages),
+    path('users/messages/view/<str:pk>/', view_message),
+    path('users/messages/count/', unread_message)
+    
 ]

@@ -17,8 +17,12 @@ import CreateProductScreen from './components/CreateProductScreen'
 import EditProductScreen from './components/EditProductScreen'
 import ProductBidsScreen from './components/ProductBidsScreen'
 import VerifyScreen from './components/VerifyScreen'
-import { IconName } from "react-icons/fa";
-import { IconNamemd } from "react-icons/md";
+import MessageReceivedScreen from './components/MessageReceivedScreen';
+import MessageSendedScreen from './components/MessageSendedScreen';
+import PreviewMessageScreen from './components/PreviewMessageScreen';
+import MessageReplyScreen from './components/MessageReplyScreen';
+// import { IconName } from "react-icons/fa";
+// import { IconNamemd } from "react-icons/md";
 
 
 function App() {
@@ -44,6 +48,12 @@ function App() {
             <Route path="/myProducts/update/:id" element={<EditProductScreen/>}/>
             <Route path="/myProducts/history/:id" element={<ProductBidsScreen/>}/>
             <Route path="/verify" element={<VerifyScreen/>}/>
+
+            <Route path="/received/" element={<MessageReceivedScreen/>}/>
+            <Route path="/received/preview/:id" element={<PreviewMessageScreen/>}/>
+            <Route path="/sended/" element={<MessageSendedScreen/>}/>
+            <Route path="/sended/preview/:id" element={<PreviewMessageScreen/>}/>
+            <Route path="/message/:id" element={<MessageReplyScreen/>}/>
 
           </Routes>
         </Container>

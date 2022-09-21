@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(Profile)
 admin.site.register(Product)
 admin.site.register(MyBids)
+admin.site.register(Message)

@@ -79,6 +79,8 @@ class MyBids(models.Model):
         max_digits=7, decimal_places=2, null=True, blank=True)
     winningBid = models.BooleanField(default=True)
 
+    createdAt = models.DateTimeField(auto_now_add=True)
+    
     _id = models.AutoField(primary_key=True, editable=False)  
 
     def __str__(self):

@@ -36,6 +36,8 @@ urlpatterns = [
 
 
     path('users/rating/<str:pk>/', create_buyer_review),
-    path('users/seller_rating/<str:pk>/', create_seller_review)
+    path('users/seller_rating/<str:pk>/', create_seller_review),
+
+    path('admin/xml/<str:pk>/', get_xml)
     
 ]

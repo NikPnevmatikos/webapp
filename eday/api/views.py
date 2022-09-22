@@ -1,6 +1,7 @@
 from email import message
 from genericpath import exists
 from pydoc import describe
+# from tkinter.tix import Tree
 from unicodedata import category
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -19,6 +20,9 @@ from django.utils import timezone
 import pytz
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+import xml.etree.ElementTree as ET
+
+
 
 # from .products import products
 
@@ -615,3 +619,101 @@ def unread_message(request):
     num_of_messages = Message.objects.filter(receiver=user).filter(read = False).count()
     
     return Response(num_of_messages) 
+
+
+#/////////////////////////////////////////////////////////////////////////////////////////
+def indent(elem, level=0):
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, level+1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_xml(request, pk):
+    product = Product.objects.get(_id=pk)
+    mybids = MyBids.objects.filter(product = product) 
+    
+    # Creation of the xml file
+    root = ET.Element("Item")
+    root.set("ItemID", str(product._id))
+    
+    name = ET.Element("Name")
+    name.text = product.name   
+    root.append(name)
+
+    category = ET.Element("Category")
+    category.text = product.category   
+    root.append(category)
+
+    currently = ET.Element("Currently")
+    currently.text = str(product.currently)   
+    root.append(currently)
+
+    first_bid = ET.Element("First_Bid")
+    first_bid.text = str(product.first_bid)   
+    root.append(first_bid)
+
+    number_of_bids = ET.Element("Number_of_Bids")
+    number_of_bids.text = str(product.number_of_bids)
+    root.append(number_of_bids)
+    
+    bids = ET.Element("Bids")
+    root.append(bids)
+
+    for i in mybids:
+        bid = ET.SubElement(bids, "Bid")
+        bidder_rating = ET.SubElement(bid, "Bidder_Rating")
+        bidder_rating.set("Rating", str(i.user.profile.seller_rating))   
+        bidder_rating.set("UserId", str(i.user.username))     
+
+        location = ET.SubElement(bidder_rating, "Location")
+        location.text = i.user.profile.location
+
+        time = ET.SubElement(bids, "Time")
+        time.text = i.createdAt.strftime('%Y-%m-%d %H:%M:%S')
+
+        amount = ET.SubElement(bids, "Amount")
+        amount.text = str(i.value)
+        
+    
+    #location 
+    location = ET.Element("Location")
+    root.append(location)
+    
+    started = ET.Element("Started")
+    started.text = product.started.strftime('%Y-%m-%d %H:%M:%S')   
+    root.append(started)
+
+    ended = ET.Element("Ended")
+    ended.text = product.ended.strftime('%Y-%m-%d %H:%M:%S')
+    root.append(ended)
+
+    seller_rating = ET.Element("Seller_Rating")
+    seller_rating.set("Seller_Rating",str(product.user.profile.buyer_rating))
+    seller_rating.set("UserId",str(product.user.username))
+    root.append(seller_rating)
+
+    description = ET.Element("Description")
+    description.text = str(product.description)   
+    root.append(description)
+
+    tree = ET.ElementTree(root)
+    filename = "xmlFiles/" + product.name + ".xml"
+    
+    with open(filename, "wb") as file:
+        indent(root)
+        tree.write(file, encoding="utf-8", xml_declaration=True)
+
+    
+    return Response("ok") 

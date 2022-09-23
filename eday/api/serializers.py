@@ -1,17 +1,14 @@
-from dataclasses import fields
-from xml.dom.expatbuilder import InternalSubsetExtractor
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Buyer_Review, Product, Profile, MyBids, Message, Seller_Review
 from phonenumber_field.serializerfields import PhoneNumberField
-
-
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 # Add serializers here
 
 class Product_Serializer(serializers.ModelSerializer):
+    #usefull information from other models
     owner = serializers.CharField(source = 'user.username')
     ownerrating = serializers.CharField(source = 'user.profile.buyer_rating')
     started = serializers.DateTimeField(format = '%Y-%m-%d %H:%M:%S')
@@ -22,7 +19,7 @@ class Product_Serializer(serializers.ModelSerializer):
 
 
 class Bids_Serializer(serializers.ModelSerializer):
-    
+    #usefull information from other models
     username = serializers.CharField(source = 'user.username')
     seller_rating = serializers.DecimalField(source = 'user.profile.seller_rating', max_digits=7, decimal_places=2)
     owner = serializers.CharField(source = 'product.user.id')
@@ -35,10 +32,6 @@ class Bids_Serializer(serializers.ModelSerializer):
     start = serializers.DateTimeField(source = 'product.started', format = '%Y-%m-%d %H:%M:%S')
     end = serializers.DateTimeField(source = 'product.ended',format = '%Y-%m-%d %H:%M:%S')
     payed = serializers.BooleanField(source = 'product.payed')
-
-    
-    # created_at = serializers.DateField(format=None, input_formats=None)
-
 
     class Meta:
         model = MyBids
@@ -62,12 +55,6 @@ class Bids_Serializer(serializers.ModelSerializer):
             '_id'
             ]
 
-    def get_productinfo(self, obj):
-        product = Product.objects.filter(_id = obj.product._id)
-
-        serializer = Product_Serializer(product,many=False)
-
-        return serializer.data
 
 
 class Profile_Serializer(serializers.ModelSerializer):
@@ -78,6 +65,7 @@ class Profile_Serializer(serializers.ModelSerializer):
 
 class User_Serializer(serializers.ModelSerializer):
 
+    #all extra user information from profile model
     name = serializers.SerializerMethodField(read_only=True)
     location = serializers.CharField(source = 'profile.location')
     phone = PhoneNumberField(source = 'profile.phone')
@@ -112,22 +100,19 @@ class User_Serializer(serializers.ModelSerializer):
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
+    #if token is decoded the followed information would be shown
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Add custom claims
         token['username'] = user.username
         token['email'] = user.email
-        # ...
 
         return token
-        
+    
+    #all the json response information for user
     def validate(self, attrs):
         data = super().validate(attrs)
-
-        # data['username'] = self.user.username
-        # data['email'] = self.user.email
         
         serializer = UserSerializerWithToken(self.user).data
         
@@ -154,7 +139,8 @@ class UserSerializerWithToken(User_Serializer):
             'token', 
 
         ]
-        
+    
+    #new access token
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)

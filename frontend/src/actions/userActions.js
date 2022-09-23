@@ -389,3 +389,90 @@ export const sellerReviewAction = (id,rating) => async (dispatch ,getState) => {
         })
     }
 }
+
+var fileDownload = require('js-file-download');
+
+export const xmlAction = (id,name) => async (dispatch ,getState) => {
+    try {
+        dispatch({
+            type: 'XML_REQUEST'
+        })
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                responseType: 'blob',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(
+            `/api/admin/xml/${id}/`,
+            config
+        ).then(res  => {
+            fileDownload(res.data, name+".xml")
+        })
+
+        dispatch({
+            type: 'XML_SUCCESS',
+            payload: data
+        })
+
+
+    } 
+    catch (error) {
+        dispatch({
+            type: 'XML_FAIL',
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+export const jsonAction = (id,name) => async (dispatch ,getState) => {
+    try {
+        dispatch({
+            type: 'JSON_REQUEST'
+        })
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                responseType: 'blob',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(
+            `/api/admin/json/${id}/`,
+            config
+        ).then(res  => {
+            fileDownload(res.data, name+".json")
+        })
+
+        dispatch({
+            type: 'JSON_SUCCESS',
+            payload: data
+        })
+
+
+    } 
+    catch (error) {
+        dispatch({
+            type: 'JSON_FAIL',
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "Items": [
+        {
+            "ItemID": "30",
+            "Name": "Coffee Brazil Without Sugar Or Milk",
+            "Category": "Drinks",
+            "Currently": "0.00",
+            "First_Bid": "1.00",
+            "Number_0f_Bids": "0",
+            "Bids": [],
+            "Location": "",
+            "Started": "2022-09-09 14:45:00",
+            "Ends": "2022-09-09 14:49:00",
+            "Seller": [
+                {
+                    "Rating": "None",
+                    "UserID": "lala7"
+                }
+            ],
+            "Description": "It smells delicious and not like soap with plastic straw"
+        }
+    ]
+}

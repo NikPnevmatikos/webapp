@@ -178,3 +178,36 @@ export const sellerReviewReducer = (state = {}, action) => {
             return state
     }
 }
+
+export const getXmlReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'XML_REQUEST':
+            return {loading: true }
+
+        case 'XML_SUCCESS':
+            return { loading: false, success: true, file: action.payload }
+
+        case 'XML_FAIL':
+            return { loading: false, error: action.payload }
+
+        default:
+            return state
+    }
+}
+
+
+export const getJsonReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'JSON_REQUEST':
+            return {loading: true }
+
+        case 'JSON_SUCCESS':
+            return { loading: false, success: true, file: action.payload }
+
+        case 'JSON_FAIL':
+            return { loading: false, error: action.payload }
+
+        default:
+            return state
+    }
+}

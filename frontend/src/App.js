@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Homescreen from './components/Homescreen';
 import ProductScreens from './components/ProductScreens';
-import MyBids from './components/MyBids'
 import MyBidScreen from './components/MyBidScreen'
 import LoginScreen from './components/LoginScreen';
 import RegisterScreen from './components/RegisterScreen';
@@ -21,8 +20,6 @@ import MessageReceivedScreen from './components/MessageReceivedScreen';
 import MessageSendedScreen from './components/MessageSendedScreen';
 import PreviewMessageScreen from './components/PreviewMessageScreen';
 import MessageReplyScreen from './components/MessageReplyScreen';
-// import { IconName } from "react-icons/fa";
-// import { IconNamemd } from "react-icons/md";
 
 
 function App() {
@@ -34,8 +31,6 @@ function App() {
           <Routes>
             <Route path='/' element={<Homescreen/>} exact />
             <Route path='/product/:id' element={<ProductScreens/>}/>
-            <Route path="/myBids/:id" element={<MyBids/>}/>
-            {/* <Route path="/myBids/" element={<MyBids/>}/> */}
             <Route path="/myBids/" element={<MyBidScreen/>}/>
             <Route path="/login/" element={<LoginScreen/>}/>
             <Route path="/register/" element={<RegisterScreen/>}/>

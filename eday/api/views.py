@@ -1,10 +1,3 @@
-from email import message
-from genericpath import exists
-from pydoc import describe
-# from tkinter.tix import Tree
-from unicodedata import category
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework.decorators import api_view, permission_classes
@@ -12,50 +5,29 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
-from django.db.models import Max
 from .serializers import *
 from .models import Product, Profile, MyBids, Buyer_Review, Seller_Review
-from datetime import datetime
 from django.utils import timezone
 import pytz
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import xml.etree.ElementTree as ET
+import json
 
-
-
-# from .products import products
-
-
-# Create your views here.
-def hello(request):
-    return HttpResponse("<h1> E d a y <h1>")
-
-@api_view(['GET'])
-def api_overview(request):
-    apiurls = {
-        'all_products' : '/product_list/',
-        'product' : '/product/<str:pk>/',
-        'create' : '/create/',
-        'update' : '/update/<str:pk>/',
-        'delete' : '/delete/<str:pk>/'
-    }
-    return Response(apiurls)
-
+#returns all product bjects in database
 @api_view(['GET'])
 def all_products(request):
     
-    query = request.query_params.get('keyword')
-    page = request.query_params.get('page')
+    query = request.query_params.get('keyword')         #keyword is for the search option 
+    page = request.query_params.get('page')             #products are divided in pages
     
     if query == None:
         query=''
         
-    
+    #query the products that contains keyword in either name or category
     products = Product.objects.filter(name__icontains=query) | Product.objects.filter(category=query)
     products = products.order_by('-_id')
     
-    paginator = Paginator(products,4)
+    paginator = Paginator(products,4)   #4 products in each page
     
     try:
         products = paginator.page(page)
@@ -73,7 +45,7 @@ def all_products(request):
     
     return Response({'products':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
-
+#return requested user's created products
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_products(request):
@@ -101,7 +73,7 @@ def user_products(request):
     
     return Response({'products':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
-
+#returns a sigle product
 @api_view(['GET'])
 def product(request, pk):
     product = Product.objects.get(_id=pk)
@@ -109,6 +81,7 @@ def product(request, pk):
     return Response(serializer.data)      
 
 
+#creates a product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_product(request):
@@ -135,6 +108,7 @@ def create_product(request):
 
     return Response(serializer.data)
 
+#updates product
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_product(request, pk):
@@ -148,6 +122,7 @@ def update_product(request, pk):
     product.brand = data['brand']
     product.category = data['category']
     
+    #if a new image is uploaded 
     if(data['flag'] == 'true'):
         product.image = request.FILES.get('image')
     
@@ -162,7 +137,7 @@ def update_product(request, pk):
     serializer = Product_Serializer(product, many=False)
     return Response(serializer.data)
 
-
+#delete a product
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_product(request, pk):
@@ -175,7 +150,7 @@ def delete_product(request, pk):
 
 # ///////////////////////////////////////////     B   I   D   S     //////////////////////////////////////////////////////
 
-
+#returns all user related bids
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_bids(request):
@@ -203,6 +178,7 @@ def user_bids(request):
     
     return Response({'bids':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
+#return all placed bids for a product
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def product_bids(request, pk):
@@ -230,7 +206,7 @@ def product_bids(request, pk):
     
     return Response({'bids':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
-
+#delete a user bid
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_bid(request, pk):
@@ -241,6 +217,7 @@ def delete_bid(request, pk):
     
     bid.delete()
     
+    #if bid value was the highest bid for a product, update the current highest bid
     if (float(product.currently) == float(value)):
         maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
         maxbid.winningBid = True
@@ -252,7 +229,7 @@ def delete_bid(request, pk):
     
     return Response('Bid succsesfully delete!')
 
-
+#create a user bid
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_bid(request, pk):
@@ -265,13 +242,14 @@ def create_bid(request, pk):
     try:
         
         cur = timezone.now().replace(tzinfo=(pytz.timezone('Europe/Athens'))).strftime('%Y-%m-%d %H:%M:%S')
-        #current_time = datetime.now().replace(tzinfo=(pytz.timezone('Europe/Athens'))).strftime('%Y-%m-%d %H:%M:%S')
         
+        #a bid cannot be created if auction has ended
         if(cur > product.ended.strftime('%Y-%m-%d %H:%M:%S')):
             raise Exception
         
         maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
         
+        #if there are more than one bid
         if(maxbid != None):
             maxbid.winningBid = False
             maxbid.save()
@@ -281,6 +259,8 @@ def create_bid(request, pk):
             product = product,
             value = data['value']         
         )   
+        
+        #auction ends if a bid is higher or equal than buyer suggestive price
         if (float(bid.value) >= product.price):
             product.payed = True
             
@@ -306,7 +286,7 @@ def create_bid(request, pk):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
+#register a new user
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
@@ -318,6 +298,7 @@ def registerUser(request):
             password = make_password(data['password'])
         )
 
+        #extra information about user store in model Profile
         user.profile.location = data['location']
         user.profile.phone = data['phone']
         user.profile.afm = data['afm']
@@ -333,7 +314,7 @@ def registerUser(request):
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+#update user information
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
@@ -347,6 +328,7 @@ def updateUserProfile(request):
     user.username = data['username']
     user.email = data['email']
 
+    #password change is optional
     if data['password'] != '':
         user.password = make_password(data['password'])
     
@@ -358,7 +340,7 @@ def updateUserProfile(request):
     
     return Response(serializer.data)
 
-
+#get user info by requested user
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
@@ -367,6 +349,7 @@ def getUserProfile(request):
     serializer = User_Serializer(user, many=False)
     return Response(serializer.data)
 
+#get user info by userID
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile_by_Id(request, pk):
@@ -375,6 +358,7 @@ def getUserProfile_by_Id(request, pk):
     
     return Response(serializer.data)
 
+#get all users information
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUsers(request):
@@ -401,6 +385,7 @@ def getUsers(request):
     serializer = User_Serializer(users, many=True)
     return Response({'users':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
+#delete a user
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteUser(request, pk):
@@ -409,6 +394,7 @@ def deleteUser(request, pk):
 
     return Response('User succsesfully delete!')
 
+#user verification by admin
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def verify_user(request, pk):
@@ -424,6 +410,7 @@ def verify_user(request, pk):
 
 #///////////////////////////////////////////////////////////////////////////////////////////
 
+#buyer review creation
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_buyer_review(request, pk):
@@ -433,13 +420,14 @@ def create_buyer_review(request, pk):
     data = request.data
     exist = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer).exists()
 
+    #if review exist update the value
     if (exist == False):
         Buyer_Review.objects.create(
             owner = owner,
             buyer = buyer,
             rating = data['rating']
         )
-    
+    #else create the review
     else:
         review = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer)
         for i in review:
@@ -461,6 +449,7 @@ def create_buyer_review(request, pk):
 
     return Response('Rating Succesfully Uploaded.')
 
+#seller review creation
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_seller_review(request, pk):
@@ -497,27 +486,11 @@ def create_seller_review(request, pk):
     seller.save()
 
     return Response('Rating Succesfully Uploaded.')
-
-
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def create_seller_review(request, pk):
-#     owner = request.user 
-#     buyer = User.objects.get(id = pk)
-
-#     data = request.data
-#     exist = Buyer_Review.objects.filter(owner=owner).filter(buyer=buyer).exist()
-
-#     if (exist == False):
-#         Buyer_Review.objects.create(
-#             owner = owner,
-#             buyer = buyer,
-#             rating = data['rating']
-#         )
         
 
 #///////////////////////////////////////////////////////////////////////////////////////////
 
+#message creation
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_message(request, pk):
@@ -537,7 +510,7 @@ def create_message(request, pk):
     
     return Response(serializer.data)
 
-
+#return user's received messages
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def received_messages(request):
@@ -566,7 +539,7 @@ def received_messages(request):
     
     return Response({'messages':serializer.data, 'pages': paginator.num_pages, 'page': page})
     
-    
+#return user's sended messages
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def send_messages(request):
@@ -595,6 +568,7 @@ def send_messages(request):
     
     return Response({'messages':serializer.data, 'pages': paginator.num_pages, 'page': page})
 
+#single message information
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_message(request,pk):
@@ -609,7 +583,7 @@ def view_message(request,pk):
     
     return Response(serializer.data)
 
-
+#number of messages unread by requeted user
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def unread_message(request):
@@ -622,6 +596,8 @@ def unread_message(request):
 
 
 #/////////////////////////////////////////////////////////////////////////////////////////
+
+#helper function for adding lines and tabs in xml file
 def indent(elem, level=0):
     i = "\n" + level*"  "
     if len(elem):
@@ -638,6 +614,8 @@ def indent(elem, level=0):
             elem.tail = i
 
 
+
+#creates xml file and returns the data of file 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_xml(request, pk):
@@ -686,8 +664,7 @@ def get_xml(request, pk):
         amount = ET.SubElement(bids, "Amount")
         amount.text = str(i.value)
         
-    
-    #location 
+
     location = ET.Element("Location")
     root.append(location)
     
@@ -714,6 +691,66 @@ def get_xml(request, pk):
     with open(filename, "wb") as file:
         indent(root)
         tree.write(file, encoding="utf-8", xml_declaration=True)
+        file.close()
+        
+    
+    file =  open(filename, "r")   
+    
+    return Response(file.read())
+
+#creates json file and returns the data of file 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_json(request, pk):
+    product = Product.objects.get(_id=pk)
+    mybids = MyBids.objects.filter(product = product) 
+    
+    #create the list of bids first, then add to data dictionary
+    bids = []
+    for i in mybids:
+        mydict = {
+                "Bidder" : {
+                    "Rating" : str(i.user.profile.seller_rating),
+                    "UserID" : i.user.username,
+                    "Location" : i.user.profile.location,
+                },
+                "Time" : i.createdAt.strftime('%Y-%m-%d %H:%M:%S'),
+                "Amount" : str(i.value)
+            }
+        bids.append(mydict)
+        
+    
+    data = {
+        "Items" : [
+            {
+                "ItemID" : str(product._id),
+                "Name" :   product.name,
+                "Category" : product.category,
+                "Currently" : str(product.currently),
+                "First_Bid" : str(product.first_bid),
+                "Number_0f_Bids" : str(product.number_of_bids),
+                "Bids" : bids,
+                "Location": "",
+                "Started": product.started.strftime('%Y-%m-%d %H:%M:%S'),
+                "Ends": product.ended.strftime('%Y-%m-%d %H:%M:%S'),
+                "Seller" : [
+                    {
+                        "Rating" : str(product.user.profile.buyer_rating),
+                        "UserID" : product.user.username
+                    }
+                ],
+                "Description" : product.description
+            }
+        ]
+    }
+    
+    filename = "jsonFiles/" + product.name + ".json"
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+        
+    
 
     
-    return Response("ok") 
+    file =  open(filename, "r")   
+    
+    return Response(file.read())

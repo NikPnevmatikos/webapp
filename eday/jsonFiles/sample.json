@@ -1,0 +1,42 @@
+{
+    "Items": [
+        {
+            "ItemID": "42",
+            "Name": "sample",
+            "Category": "myass(update)",
+            "Currently": "2.00",
+            "First_Bid": "1.00",
+            "Number_0f_Bids": "2",
+            "Bids": [
+                {
+                    "Bidder": {
+                        "Rating": "1.50",
+                        "UserID": "lala5",
+                        "Location": "rhodes"
+                    },
+                    "Time": "2022-09-22 18:19:46",
+                    "Amount": "1.00"
+                },
+                {
+                    "Bidder": {
+                        "Rating": "1.50",
+                        "UserID": "lala5",
+                        "Location": "rhodes"
+                    },
+                    "Time": "2022-09-22 18:19:46",
+                    "Amount": "2.00"
+                }
+            ],
+            "Location": "",
+            "Started": "2022-09-09 18:01:00",
+            "Ends": "2022-09-09 18:02:00",
+            "Seller": [
+                {
+                    "Rating": "3.00",
+                    "UserID": "lala5"
+                }
+            ],
+            "Description": "1"
+        }
+    ]
+}

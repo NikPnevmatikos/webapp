@@ -11,7 +11,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { Provider } from 'react-redux'
 
 import { productListReducer , userProductListReducer, productReducer,createProductReducer, editProductReducer,deleteProductReducer} from './reducers/ProductReducers'
-import { bidReducer, userBidsListReducer,productBidsListReducer, createBidReducer, deleteBidReducer} from './reducers/bidReducers'
+import { userBidsListReducer,productBidsListReducer, createBidReducer, deleteBidReducer} from './reducers/bidReducers'
 import { userLoginReducer, 
           userRegisterReducer , 
           userProfileReducer, 
@@ -20,7 +20,9 @@ import { userLoginReducer,
           userDeleteReducer,
           userVerifyReducer,
           buyerReviewReducer,
-          sellerReviewReducer
+          sellerReviewReducer,
+          getXmlReducer,
+          getJsonReducer
         } from './reducers/userReducer'
 
 import {userMessageListReducer , 
@@ -35,7 +37,6 @@ const reducer = combineReducers({
     productListReducer,
     productReducer,
     deleteProductReducer,
-    bidReducer,
     createBidReducer,
     deleteBidReducer,
     userBidsListReducer,
@@ -53,6 +54,8 @@ const reducer = combineReducers({
     userVerifyReducer,
     buyerReviewReducer,
     sellerReviewReducer,
+    getXmlReducer,
+    getJsonReducer,
 
     userMessageListReducer,
     userMessageSendReducer,
@@ -62,14 +65,11 @@ const reducer = combineReducers({
     
 })
 
-const localStoreProducts = localStorage.getItem('bidItems') ? 
-  JSON.parse(localStorage.getItem('bidItems')) : []
 
 const localStoreUser = localStorage.getItem('userInfo') ? 
   JSON.parse(localStorage.getItem('userInfo')) : null
 
 const initialState = {
-  bidReducer: {bidItems: localStoreProducts},
   userLoginReducer: {userInfo : localStoreUser}
 }
 

@@ -1,14 +1,12 @@
-from multiprocessing import context
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator
-#from phone_field import PhoneField
 from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 # Create your models here.
 
+#extra information for User Model added with an One to One relationship
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = PhoneNumberField(blank = True, null = True)
@@ -30,11 +28,13 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+#every time a user is created a Profile is created
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+#every time a user is updated a Profile is updated
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
@@ -66,6 +66,8 @@ class Product(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     started = models.DateTimeField(null=True, blank=True)
     ended = models.DateTimeField(null=True, blank=True)
+    
+    #will be true if a a bid is higher than price
     payed = models.BooleanField(default=False)
     _id = models.AutoField(primary_key=True, editable=False)   
     
@@ -101,6 +103,8 @@ class Message(models.Model):
     def __str__(self):
         return str(self.createdAt)
 
+
+#models for buyer and seller are needed to check if a user has already made a review
 class Buyer_Review(models.Model):
     owner = models.ForeignKey(User,related_name='owner', on_delete=models.SET_NULL, null=True)
     buyer = models.ForeignKey(User,related_name='buyer', on_delete=models.SET_NULL, null=True)

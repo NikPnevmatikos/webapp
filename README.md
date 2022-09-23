@@ -34,6 +34,5 @@ Ylopoihsh:
 
 
 Ti prepei na kanoume:
--na baloume to usename username, anti gia email sto userAction kai sta upoloipa user
--na kanoume to bid decimal anti int
+
 

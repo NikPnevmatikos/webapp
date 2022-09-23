@@ -4,7 +4,10 @@ import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction } from '../actions/ProductActions'
 import { createBidAction } from '../actions/bidActions'
+import { xmlAction,jsonAction } from '../actions/userActions'
 import { Rating } from 'react-simple-star-rating'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
 
 
@@ -21,6 +24,9 @@ function ProductScreens() {
   const singleproduct = useSelector(state => state.productReducer)
   const { loading, error, product } = singleproduct
   //const {error, loading, product} = singleproduct
+
+  const userLogin = useSelector(state => state.userLoginReducer)
+  const { userInfo } = userLogin
 
   const mybid = useSelector(state => state.createBidReducer)
   const { loading: bidload, error: biderror, success, message } = mybid
@@ -64,6 +70,15 @@ function ProductScreens() {
     }
   }
 
+  const downloadHandler = (format,id,name) => {
+    window.alert('Added to downloads')
+    if(format === 'xml'){
+      dispatch(xmlAction(id,name))
+    }
+    else{
+      dispatch(jsonAction(id,name))
+    }
+  }
   //let product = {}
   return (
     <div>
@@ -72,6 +87,33 @@ function ProductScreens() {
           Go Back
         </Button>
 
+        {(userInfo && userInfo.is_staff == true) &&
+            <OverlayTrigger
+              trigger="click"
+              key='bottom'
+              placement='bottom'
+              overlay={
+                  <Popover id={`popover-positioned-bottom`}>
+                  <Popover.Header as="h3">{'Choose Format'}</Popover.Header>
+                  <Popover.Body>
+                      <Button variant='light' onClick={() => downloadHandler('xml',product._id,product.name)}>
+                          XML
+                      </Button>
+                      <Button variant='light' onClick={() => downloadHandler('json',product._id,product.name)}>
+                          JSON
+                      </Button>
+                  </Popover.Body>
+                  </Popover>
+              }
+            >
+              <Button 
+                    className="btn btn-secondary my-3"
+                    style={{float: 'right'}}
+              >
+                XML/JSON
+              </Button>
+            </OverlayTrigger>
+        }
       {biderror ? (
           <div className="alert alert-dismissible alert-danger">
             <strong>{biderror}</strong>

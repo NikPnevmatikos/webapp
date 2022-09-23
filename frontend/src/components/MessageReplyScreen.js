@@ -24,7 +24,6 @@ function MessageReplyScreen() {
     const {error, loading, user: receiver} = userReceiver
 
     useEffect(() =>{
-        //dispatch({type: 'MESSAGE_RESET'})
         if (userInfo === null) {
             navigate('/login')
         }

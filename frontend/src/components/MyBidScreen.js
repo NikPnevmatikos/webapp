@@ -66,7 +66,7 @@ function MyBidScreen() {
             setRatingMessage(ratemessage)
         }
 
-    }, [dispatch, navigate, userInfo, keyword, success, ratesuccess])
+    }, [dispatch, navigate, userInfo, keyword, success, ratesuccess, ratemessage])
 
     const deleteHandler = (id) => {
 
@@ -94,11 +94,6 @@ function MyBidScreen() {
                 <Col>
                     <h5>uwu my little kawaii Bid list uwu</h5>
                 </Col>
-                {/* <Col className='text-right'>
-                    <Button className="btn btn-dark btn-lg float-right" style={{float: 'right'}} onClick={() => createProduct()}>
-                        Create Product    
-                    </Button>    
-                </Col> */}
             </Row>
 
 

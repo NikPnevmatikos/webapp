@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link , useNavigate, useLocation } from 'react-router-dom'
+import { Link , useNavigate } from 'react-router-dom'
 import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,8 +8,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
 function RegisterScreen() {
-
-    const location = useLocation()  
+ 
     const navigate = useNavigate()
 
 
@@ -40,15 +39,15 @@ function RegisterScreen() {
             navigate('/login')
         }
         else {
-            if (user == null || user.name == null || success == true)  {
-                if(success == true){
+            if (user == null || user.name == null || success === true)  {
+                if(success === true){
                     navigate('/profile')
                 }
                 dispatch({type:'USER_UPDATE_RESET'})
                 dispatch(userProfile('profile'))
             }
             else {
-                if(user.verified == true){
+                if(user.verified === true){
                     setUsername(user.username)
                     setName(user.name)
                     setEmail(user.email)
@@ -61,7 +60,7 @@ function RegisterScreen() {
                 }
             }
         }
-    }, [userInfo, navigate, dispatch, user])
+    }, [userInfo, navigate, dispatch, user, success])
 
 
     const submitHandler = (e) =>{

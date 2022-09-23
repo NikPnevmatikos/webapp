@@ -62,7 +62,7 @@ function MyProductScreen() {
             setRatingMessage(ratemessage)
         }
 
-    }, [dispatch , navigate, userInfo, success, keyword, ratesuccess])
+    }, [dispatch , navigate, userInfo, success, keyword, ratesuccess, ratemessage])
 
     const deleteHandler = (id) => {
 
@@ -222,7 +222,6 @@ function MyProductScreen() {
                                             <td>
                                                 <LinkContainer to={`update/${product._id}/`}>
                                                     <Button disabled={currentDate >= product.started || product.payed === true} variant='light' className='btn-md'>
-                                                        {/* <i className='fas fa-edit'></i> */}
                                                         Edit
                                                     </Button>
                                                 </LinkContainer>

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Table, Container, Button} from 'react-bootstrap'
+import { Table, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { allUsers, deleteUser, verifyUser } from '../actions/userActions'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageButtons from './PageButtons'
+import { FaTrash } from "react-icons/fa";
 
 function AdminScreen() {
   
@@ -30,7 +30,7 @@ function AdminScreen() {
     let keyword = location.search
     
     useEffect(() => {
-        if (userInfo != null && userInfo.is_staff == true) {
+        if (userInfo != null && userInfo.is_staff === true) {
             dispatch(allUsers(keyword))
         }
         else {
@@ -77,7 +77,6 @@ function AdminScreen() {
                                 <th>EMAIL</th>
                                 <th>VERIFIED</th>
                                 <th></th>
-                                {/* na valw kapoio field gia verify user */}
                             </tr>
                         </thead>
 
@@ -92,9 +91,7 @@ function AdminScreen() {
                                         <td>{user.email}</td>
                                         <td>{user.verified ? (
                                             <h5>yes</h5>
-                                            // <i className='fas fa-check' style={{ color: 'green' }}></i>
                                         ) : (
-                                                // <i className='fas fa-check' style={{ color: 'red' }}></i>
                                             <Button 
                                                 variant='light' 
                                                 className='btn-sm' 
@@ -107,14 +104,12 @@ function AdminScreen() {
                                         <td>
                                             <LinkContainer to={`/admin/user/${user.id}/`}>
                                                 <Button variant='light' className='btn-sm'>
-                                                    {/* <i className='fas fa-edit'></i> */}
-                                                    <h5>Edit</h5>
+                                                    <h5>View</h5>
                                                 </Button>
                                             </LinkContainer>
 
                                             <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
-                                                {/* <i className='fas fa-trash'></i> */}
-                                                <h5>X</h5>
+                                                <FaTrash/>
                                             </Button>
                                         </td>
                                     </tr>

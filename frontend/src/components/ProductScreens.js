@@ -23,7 +23,6 @@ function ProductScreens() {
   const dispatch = useDispatch()
   const singleproduct = useSelector(state => state.productReducer)
   const { loading, error, product } = singleproduct
-  //const {error, loading, product} = singleproduct
 
   const userLogin = useSelector(state => state.userLoginReducer)
   const { userInfo } = userLogin
@@ -51,7 +50,6 @@ function ProductScreens() {
   } , [dispatch, match, success, message])
 
   const addBidHandler = () => {
-    //navigate(`/myBids/${match.id}?bid=${bid}`)
     if (Number(product.currently) <= 0) {
       if (Number(bid) < Number(product.first_bid)) {
         window.alert('Your bid must be higher or equal to starting bid price!')
@@ -79,7 +77,7 @@ function ProductScreens() {
       dispatch(jsonAction(id,name))
     }
   }
-  //let product = {}
+  
   return (
     <div>
 
@@ -87,7 +85,7 @@ function ProductScreens() {
           Go Back
         </Button>
 
-        {(userInfo && userInfo.is_staff == true) &&
+        {(userInfo && userInfo.is_staff === true) &&
             <OverlayTrigger
               trigger="click"
               key='bottom'

@@ -41,7 +41,7 @@ function Product({product}) {
                     </Card.Text>
 
                     <Card.Text className='secondary'>
-                        {product.ended <= currentDate || product.payed == true 
+                        {product.ended <= currentDate || product.payed === true 
                             ? 'expired'
 
                             : product.started < currentDate 

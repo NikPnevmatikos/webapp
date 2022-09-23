@@ -5,7 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Product from './Product'
 import PageButtons from './PageButtons';
 import { listProductsAction } from '../actions/ProductActions'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 
 function Homescreen() {

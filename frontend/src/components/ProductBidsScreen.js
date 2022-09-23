@@ -29,7 +29,7 @@ function ProductBidScreen() {
     let keyword = location.search
     useEffect(() => {
         if (userInfo != null) {
-            if(userInfo.verified == true){
+            if(userInfo.verified === true){
                 dispatch(productListBidsAction(match.id,keyword)) 
                 dispatch({ type: 'PRODUCT_RESET' })
                 dispatch(productsAction(match.id))

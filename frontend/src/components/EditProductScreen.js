@@ -35,9 +35,6 @@ function EditProduct() {
     const { error: errorEdit, loading: loadingEdit, success: successEdit } = editproduct
 
 
-    // const userLogin = useSelector(state => state.userLoginReducer)
-    // const {userInfo} = userLogin
-
     useEffect(() =>{
 
         let mydate = new Date()
@@ -50,11 +47,11 @@ function EditProduct() {
         setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
 
         if (startingdate != null && currentDate != null) {
-            if (currentDate > startingdate || payed == true) {
+            if (currentDate > startingdate || payed === true) {
                 navigate('/myProducts')
             }
         }
-        if (successEdit == true) {
+        if (successEdit === true) {
             dispatch({ type: 'EDIT_PRODUCT_RESET' })
             navigate('/myProducts')
         }
@@ -75,7 +72,7 @@ function EditProduct() {
             setendingdate(product.ended)
             setPayed(product.payed)
         }
-    }, [dispatch, product, match, navigate, successEdit, startingdate, currentDate])
+    }, [dispatch, product, match, navigate, successEdit, startingdate, currentDate, payed])
 
     const upload = (e) => {
         setFlag(true)

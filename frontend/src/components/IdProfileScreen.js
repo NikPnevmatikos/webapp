@@ -34,11 +34,11 @@ function IdProfileScreen() {
     const { userInfo } = userLogin
 
     useEffect(() =>{
-        if (userInfo == null || userInfo.is_staff == false) {
+        if (userInfo == null || userInfo.is_staff === false) {
             navigate('/login')
         }
         else {
-            if (user == null || !user.name || user.id != userId)  {
+            if (user == null || !user.name || Number(user.id) !== Number(userId))  {
                 dispatch(userProfile(`profile/${userId}`))
             }
             else {
@@ -53,7 +53,7 @@ function IdProfileScreen() {
                 setSellerRating(user.seller_rating)
             }
         }
-    }, [userInfo, navigate, dispatch, user])
+    }, [userInfo, navigate, dispatch, user, userId])
 
     const submitHandler = (e) =>{
         e.preventDefault()

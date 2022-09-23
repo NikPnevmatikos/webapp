@@ -44,7 +44,7 @@ export const userMessageSendReducer = (state = {messages:[]}, action) => {
 export const messageReducer = (state = {message:{}}, action) => {
     switch(action.type){
         case 'MESSAGE_REQUEST' :
-            return{loading: true, ...state }  //previously -> '...state'
+            return{loading: true, ...state }
         
         case 'MESSAGE_SUCCESS' :
             return {loading: false , message: action.payload }

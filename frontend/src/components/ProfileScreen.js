@@ -34,11 +34,11 @@ function ProfileScreen() {
             navigate('/login')
         }
         else {
-            if (user == null || !user.name || userInfo.id != user.id)  {
+            if (user == null || !user.name || Number(userInfo.id) !== Number(user.id))  {
                     dispatch(userProfile('profile'))
             }
             else {
-                if(user.verified == true){
+                if(user.verified === true){
                     setUsername(user.username)
                     setName(user.name)
                     setEmail(user.email)

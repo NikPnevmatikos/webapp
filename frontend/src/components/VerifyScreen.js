@@ -16,7 +16,7 @@ function VerifyScreen() {
             navigate('/login')
         }
         else{
-            if(userInfo.verified == true){
+            if(userInfo.verified === true){
                 navigate('/')
             }
         }

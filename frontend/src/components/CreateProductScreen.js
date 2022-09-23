@@ -1,17 +1,14 @@
 import React, { useState, useEffect} from 'react'
-import { Link , useNavigate, useLocation } from 'react-router-dom'
+import { Link , useNavigate } from 'react-router-dom'
 import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '../actions/userActions'
 import { createProductAction } from '../actions/ProductActions';
-import DateTimePicker from 'react-datetime-picker';
+// import DateTimePicker from 'react-datetime-picker';
 
 function CreateProductScreen() {
-
-    const location = useLocation()  
+ 
     const navigate = useNavigate()
-    const redirect = location.search ? location.search.split('=')[1] : '/'
 
     const [name, setName] = useState('')
     const [brand, setBrand] = useState('')
@@ -31,7 +28,7 @@ function CreateProductScreen() {
     const dispatch = useDispatch()
 
     const createProduct = useSelector(state => state.createProductReducer)
-    const {error, loading, success, product} = createProduct
+    const {error, loading, product} = createProduct
 
     const userLogin = useSelector(state => state.userLoginReducer)
     const {userInfo} = userLogin
@@ -55,7 +52,7 @@ function CreateProductScreen() {
                 navigate('/myProducts')
             }
         }
-    }, [userInfo, navigate, product])
+    }, [dispatch, userInfo, navigate, product])
 
 
     const submitHandler = (e) => {
@@ -150,7 +147,6 @@ function CreateProductScreen() {
                         <Form.Control 
                             required
                             type='file' 
-                            //value={image ? image.name : undefined}
                             onChange = {upload}                            
                         >        
                         </Form.Control>

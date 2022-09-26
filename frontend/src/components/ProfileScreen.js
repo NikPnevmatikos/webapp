@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
 import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
+import { MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet'
 import 'react-phone-input-2/lib/style.css'
 
 function ProfileScreen() {
@@ -17,9 +18,12 @@ function ProfileScreen() {
     const [name, setName] = useState('')   
     const [phone, setPhone] = useState(0)
     const [afm , setAfm] = useState('') 
-    const [location, setLocation] = useState('')
     const [buyerRating, setBuyerRating] = useState(0)
     const [sellerRating, setSellerRating] = useState(0)
+    const [lat, setLat] = useState(0.0)
+    const [lng, setLng] = useState(0.0)
+    const [country, setCountry] = useState('')
+    const [location, setLocation] = useState('')
     
     const dispatch = useDispatch()
 
@@ -44,9 +48,12 @@ function ProfileScreen() {
                     setEmail(user.email)
                     setPhone(user.phone)
                     setAfm(user.afm)
-                    setLocation(user.location)
                     setBuyerRating(user.buyer_rating)
                     setSellerRating(user.seller_rating)
+                    setLat(user.lat)
+                    setLng(user.lng)
+                    setCountry(user.country)
+                    setLocation(user.location)
                 }
                 else{
                     navigate('/verify')
@@ -59,6 +66,18 @@ function ProfileScreen() {
         e.preventDefault()
         navigate('/profile/update')
     }
+
+    const CenterMap = ({lat,lng}) => {
+        const map = useMap()
+        
+        useEffect(() => {
+          map.setView([lat,lng])
+        }, [lat,lng, map])
+        
+        return null
+    
+    }
+
 
     return (
         <Container>
@@ -120,18 +139,6 @@ function ProfileScreen() {
                             >        
                             </Form.Control>           
                         </Form.Group> 
-                        
-                        <Form.Group controlId='location' className='py-1'>
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control 
-                                type='Location'   
-                                placeholder='Disabled input' 
-                                value={location}
-                                disabled
-                                readOnly  
-                            >        
-                            </Form.Control>           
-                        </Form.Group> 
 
                         <Form.Group controlId='afm' className='py-1'>
                             <Form.Label>AFM</Form.Label>
@@ -160,6 +167,53 @@ function ProfileScreen() {
                                 
                             />
                     </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            disabled
+                            readOnly 
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                            disabled
+                            readOnly 
+                            type='text' 
+                            placeholder='Enter Location' 
+                            value={location}
+                            onChange = {(e) => setLocation(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+                    
+                    <Form.Group> 
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[0.0,0.0]} 
+                                zoom={13} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={[lat, lng]}>
+                                <Popup>
+                                    Product Location.
+                                </Popup>
+                            </Marker>
+                            <CenterMap lat={lat} lng = {lng} />
+                        </MapContainer>
+                    </Form.Group> 
                     <Form.Group controlId='buyerRating' className='py-3'>
                         <Form.Label>Rating as Buyer : </Form.Label>
                         <Rating readonly={true} initialValue={buyerRating} />

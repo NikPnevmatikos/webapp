@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction , editProductAction} from '../actions/ProductActions';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 
 function EditProduct() {
 
@@ -14,7 +15,7 @@ function EditProduct() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setPrice] = useState()   
+    const [price, setPrice] = useState('')   
     const [firstBid, setFirstBid] = useState('')
     const [countInStock, setCountInStock] = useState(0)
     const [image, setImage] = useState('')
@@ -24,7 +25,11 @@ function EditProduct() {
     const [payed, setPayed] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [currentDate, setCurrent] = useState('')
+    const [lat, setLat] = useState(0.0)
+    const [lng, setLng] = useState(0.0)
     const [flag, setFlag] = useState(false)
+    const [country, setCountry] = useState('')
+    const [location, setLocation] = useState('')
 
     const dispatch = useDispatch()
 
@@ -71,6 +76,10 @@ function EditProduct() {
             setstartingdate(product.started)
             setendingdate(product.ended)
             setPayed(product.payed)
+            setLat(product.lat)
+            setLng(product.lng)
+            setCountry(product.country)
+            setLocation(product.location)
         }
     }, [dispatch, product, match, navigate, successEdit, startingdate, currentDate, payed])
 
@@ -104,9 +113,37 @@ function EditProduct() {
             form.append('firstBid', firstBid)
             form.append('startingdate', startingdate)
             form.append('endingdate', endingdate)
+            form.append('lat', lat)
+            form.append('lng', lng)
+            form.append('country', country)
+            form.append('location', location)
 
             dispatch(editProductAction(form))
         }
+    }
+
+
+    const CenterMap = ({lat,lng}) => {
+        const map = useMap()
+        
+        useEffect(() => {
+          map.setView([lat,lng])
+        }, [lat,lng, map])
+        
+        return null
+    
+    }
+
+    const LocationSet = () => {
+        const map = useMapEvents({
+            click(e) {
+              const {lat, lng} = e.latlng
+              setLat(lat)
+              setLng(lng)
+              map.flyTo(e.latlng, map.getZoom())
+            },
+        })
+        return null
     }
 
     return (
@@ -297,6 +334,52 @@ function EditProduct() {
                             value={endingdate}
                             onChange = {(e) => setendingdate(e.target.value)}                            
                         ></Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Location' 
+                            value={location}
+                            onChange = {(e) => setLocation(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+                    
+                    <Form.Group> 
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[0.0,0.0]} 
+                                zoom={13} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <LocationSet/>
+                            <Marker position={[lat, lng]}>
+                                <Popup>
+                                    Product Location.
+                                </Popup>
+                            </Marker>
+                            <CenterMap lat={lat} lng = {lng} />
+                        </MapContainer>
                     </Form.Group> 
             
                                 <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>

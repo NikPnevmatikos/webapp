@@ -9,12 +9,14 @@ import { Rating } from 'react-simple-star-rating'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 
 
 function ProductScreens() {
   const [bid, setBid] = useState('')
   const [Message, setMessage] = useState('')
   const [currentDate, setCurrent] = useState('')
+
 
   const match = useParams()
 
@@ -41,9 +43,10 @@ function ProductScreens() {
     
     setCurrent(`${mydate.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`)
 
-    
     dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
+
+
     if (success === true) {
       setMessage(message)
     }
@@ -77,6 +80,17 @@ function ProductScreens() {
       dispatch(jsonAction(id,name))
     }
   }
+
+  const CenterMap = ({lat,lng}) => {
+    const map = useMap()
+    
+    useEffect(() => {
+      map.setView([lat,lng])
+    }, [lat,lng, map])
+    
+    return null
+
+  } 
   
   return (
     <div>
@@ -284,6 +298,28 @@ function ProductScreens() {
                 </Card>
 
               </Col>
+            </Row>
+            <Row>
+              {product &&
+                <MapContainer 
+                        style={{width:'60vw', height:'60vh'}} 
+                        center={[0.0,0.0]} 
+                        zoom={13} 
+                        scrollWheelZoom={false}
+                        //onClick={clickHandler}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[product.lat, product.lng]}>
+                        <Popup>
+                            {product.location} in {product.country}.
+                        </Popup>
+                    </Marker>
+                    <CenterMap lat={product.lat} lng = {product.lng} />
+                </MapContainer>
+            }
             </Row>
           </div>
       }                            

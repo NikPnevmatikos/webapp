@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile, userUpdate } from '../actions/userActions'
 import PhoneInput from 'react-phone-input-2'
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import 'react-phone-input-2/lib/style.css'
 
 function RegisterScreen() {
@@ -18,6 +19,9 @@ function RegisterScreen() {
     const [phone, setPhone] = useState(0)
     const [afm , setAfm] = useState('') 
     const [userlocation, setLocation] = useState('')
+    const [lat, setLat] = useState(0.0)
+    const [lng, setLng] = useState(0.0)
+    const [country, setCountry] = useState('')
     const [password, setPassword] = useState('')   
     const [confirmPassword, setConfirmPassword] = useState('')   
     const [errorMessage, setErrorMessage] = useState('')
@@ -54,6 +58,9 @@ function RegisterScreen() {
                     setPhone(user.phone)
                     setAfm(user.afm)
                     setLocation(user.location)
+                    setLat(user.lat)
+                    setLng(user.lng)
+                    setCountry(user.country)
                 }
                 else{
                     navigate('/verify')
@@ -76,10 +83,36 @@ function RegisterScreen() {
                 'password': password,
                 'email': email,
                 'location': userlocation,
+                'country': country,
+                'lat' : lat,
+                'lng' : lng,
                 'afm' : afm,
                 'phone' : phone
             }))
         }
+    }
+
+    const CenterMap = ({lat,lng}) => {
+        const map = useMap()
+        
+        useEffect(() => {
+          map.setView([lat,lng])
+        }, [lat,lng, map])
+        
+        return null
+    
+    }
+
+    const LocationSet = () => {
+        const map = useMapEvents({
+            click(e) {
+              const {lat, lng} = e.latlng
+              setLat(lat)
+              setLng(lng)
+              map.flyTo(e.latlng, map.getZoom())
+            },
+        })
+        return null
     }
 
     return (
@@ -145,18 +178,6 @@ function RegisterScreen() {
                         </Form.Control>
                     </Form.Group> 
 
-                    <Form.Group controlId='location' className='py-1'>
-                        <Form.Label>Location</Form.Label>
-                        <Form.Control 
-                            required
-                            type='Location'   
-                            placeholder='Disabled input' 
-                            value={userlocation}
-                            onChange = {(e) => setLocation(e.target.value)}
-                        >        
-                        </Form.Control>           
-                    </Form.Group> 
-
                     <Form.Group controlId='afm' className='py-1'>
                         <Form.Label>AFM</Form.Label>
                         <Form.Control 
@@ -206,15 +227,62 @@ function RegisterScreen() {
                         >
                         </Form.Control>
                     </Form.Group> 
-                        <Button type='submit' className="btn btn-dark btn-lg" style={{float: 'right'}}>
-                            Save Changes
-                        </Button>
+                    
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Location' 
+                            value={userlocation}
+                            onChange = {(e) => setLocation(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
 
-                        <Link to='/profile'>
-                            <Button type="button" className="btn btn-dark btn-lg">
-                                Discard Changes
-                            </Button>
-                        </Link>
+                    <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group> 
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[0.0,0.0]} 
+                                zoom={13} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <LocationSet/>
+                            <Marker position={[lat, lng]}>
+                                <Popup>
+                                    Product Location.
+                                </Popup>
+                            </Marker>
+                            <CenterMap lat={lat} lng = {lng} />
+                        </MapContainer>
+                    </Form.Group> 
+            
+                    <Button type='submit' className="btn btn-dark btn-lg" style={{float: 'right'}}>
+                        Save Changes
+                    </Button>
+
+                    <Link to='/profile'>
+                        <Button type="button" className="btn btn-dark btn-lg">
+                            Discard Changes
+                        </Button>
+                    </Link>
 
                 </Form>
 

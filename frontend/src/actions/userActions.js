@@ -54,7 +54,7 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (username, email, name, location,phone,afm, password) => async (dispatch) => {
+export const register = (username, email, name, location, country, lat, lng, phone,afm, password) => async (dispatch) => {
     try {
 
         dispatch({
@@ -73,6 +73,9 @@ export const register = (username, email, name, location,phone,afm, password) =>
                 'name': name, 
                 'email': email,
                 'location': location,
+                'country' : country,
+                'lat' : lat,
+                'lng' : lng,
                 'afm' : afm,
                 'phone' : phone,
                 'password': password 

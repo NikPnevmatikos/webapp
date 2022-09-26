@@ -3,6 +3,7 @@ import { Link , useNavigate } from 'react-router-dom'
 import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
+import { MapContainer, TileLayer, useMapEvents, Marker, Popup } from 'react-leaflet'
 import { createProductAction } from '../actions/ProductActions';
 // import DateTimePicker from 'react-datetime-picker';
 
@@ -14,7 +15,7 @@ function CreateProductScreen() {
     const [brand, setBrand] = useState('')
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
-    const [price, setPrice] = useState()   
+    const [price, setPrice] = useState(0)   
     const [countInStock, setCountInStock] = useState(0)
     const [preview, setPreview] = useState('')
     const [image, setImage] = useState()
@@ -23,6 +24,10 @@ function CreateProductScreen() {
     const [endingdate, setendingdate] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
     const [currentDate, setCurrent] = useState('')
+    const [lat, setLat] = useState(0)
+    const [lng, setLng] = useState(0)
+    const [country, setCountry] = useState('')
+    const [location, setLocation] = useState('')
 
 
     const dispatch = useDispatch()
@@ -52,7 +57,9 @@ function CreateProductScreen() {
                 navigate('/myProducts')
             }
         }
-    }, [dispatch, userInfo, navigate, product])
+
+        console.log(lat,lng)
+    }, [dispatch, userInfo, navigate, product,lat,lng])
 
 
     const submitHandler = (e) => {
@@ -76,6 +83,10 @@ function CreateProductScreen() {
             form.append('firstBid', firstBid)
             form.append('startingdate', startingdate)
             form.append('endingdate', endingdate)
+            form.append('lat', lat)
+            form.append('lng', lng)
+            form.append('country', country)
+            form.append('location', location)
 
             dispatch(createProductAction(form))
         }
@@ -85,6 +96,18 @@ function CreateProductScreen() {
         const file = e.target.files[0]
         setImage(file)
         setPreview(URL.createObjectURL(file))
+    }
+
+    const LocationSet = () => {
+        const map = useMapEvents({
+            click(e) {
+              const {lat, lng} = e.latlng
+              setLat(lat)
+              setLng(lng)
+              map.flyTo(e.latlng, map.getZoom())
+            },
+        })
+        return null
     }
 
 
@@ -262,6 +285,56 @@ function CreateProductScreen() {
                             value={endingdate}
                             onChange = {(e) => setendingdate(e.target.value)}                            
                         ></Form.Control>
+                    </Form.Group> 
+
+                    <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Location' 
+                            value={location}
+                            onChange = {(e) => setLocation(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+
+                    <Form.Group controlId='map' className='py-1'>
+                        <Form.Label>Map data</Form.Label>    
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[37.962687, 23.721688]} 
+                                zoom={7} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <LocationSet/>
+                            {(lat != null && lng != null) &&
+                                <Marker position={[lat, lng]}>
+                                    <Popup>
+                                        You are Here.
+                                    </Popup>
+                                </Marker>
+
+                            }
+                        </MapContainer>
                     </Form.Group> 
 
                     <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>

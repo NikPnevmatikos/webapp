@@ -11,19 +11,24 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = PhoneNumberField(blank = True, null = True)
     location = models.CharField(max_length=30, blank=True)
+    country = models.CharField(max_length=30, blank=True)
     afm = models.CharField(max_length=20, null=True, blank=True)
     verified = models.BooleanField(default=False) 
 
     buyer_rating = models.DecimalField(
-                max_digits=7, decimal_places=2, null=True, blank=True)
+                max_digits=12, decimal_places=2, null=True, blank=True)
     buyer_rev_num = models.IntegerField(null=True, blank=True, default=0)
     
     seller_rating = models.DecimalField(
-                max_digits=7, decimal_places=2, null=True, blank=True)
+                max_digits=12, decimal_places=2, null=True, blank=True)
     
     seller_rev_num = models.IntegerField(null=True, blank=True, default=0)
 
     _id = models.AutoField(primary_key=True, editable=False)  
+    
+    lat = models.FloatField(null=True, blank=True)
+    
+    lng = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
@@ -48,18 +53,22 @@ class Product(models.Model):
     brand = models.CharField(max_length=200, null=True, blank=True)
     category = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    
+    location = models.CharField(max_length=30, blank=True)
+    country = models.CharField(max_length=30, blank=True)
+    
     rating = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=12, decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
     price = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=12, decimal_places=2, null=True, blank=True)
     currently = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True, default=0)
+        max_digits=12, decimal_places=2, null=True, blank=True, default=0)
 
     currentwinner = models.IntegerField(null=True, blank=True)
 
     first_bid = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=12, decimal_places=2, null=True, blank=True)
     number_of_bids = models.IntegerField(null=True, blank=True, default=0)
 
     countInStock = models.IntegerField(null=True, blank=True, default=0)
@@ -69,6 +78,11 @@ class Product(models.Model):
     
     #will be true if a a bid is higher than price
     payed = models.BooleanField(default=False)
+    
+    lat = models.FloatField(null=True, blank=True)
+    
+    lng = models.FloatField(null=True, blank=True)
+    
     _id = models.AutoField(primary_key=True, editable=False)   
     
     def __str__(self):
@@ -78,7 +92,7 @@ class MyBids(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     value = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=12, decimal_places=2, null=True, blank=True)
     winningBid = models.BooleanField(default=True)
 
     createdAt = models.DateTimeField(auto_now_add=True)

@@ -68,6 +68,9 @@ class User_Serializer(serializers.ModelSerializer):
     #all extra user information from profile model
     name = serializers.SerializerMethodField(read_only=True)
     location = serializers.CharField(source = 'profile.location')
+    country = serializers.CharField(source = 'profile.country')
+    lat = serializers.FloatField(source = 'profile.lat')
+    lng = serializers.FloatField(source = 'profile.lng')
     phone = PhoneNumberField(source = 'profile.phone')
     afm = serializers.CharField(source = 'profile.afm')
     verified = serializers.BooleanField(source = 'profile.verified')
@@ -84,6 +87,9 @@ class User_Serializer(serializers.ModelSerializer):
             'name', 
             'is_staff', 
             'location',
+            'country',
+            'lat',
+            'lng',
             'phone',
             'afm',
             'verified',

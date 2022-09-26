@@ -80,7 +80,7 @@ def product(request, pk):
     serializer = Product_Serializer(product, many=False)
     return Response(serializer.data)      
 
-
+from decimal import *
 #creates a product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -88,20 +88,23 @@ def create_product(request):
 
     user = request.user
     data = request.data
-    
-    
+
     product = Product.objects.create (
         user = user,
         name =  data['name'],
-        price = data['price'],
+        price = float(data['price']),
         brand = data['brand'],
         category = data['category'],
         image = request.FILES.get('image'),
         description = data['description'],
         countInStock = data['countInStock'],
-        first_bid = data['firstBid'],
+        first_bid = float(data['firstBid']),
         started = data['startingdate'],
-        ended = data['endingdate']   
+        ended = data['endingdate'],
+        lat = float(data['lat']),
+        lng = float(data['lng']),
+        country = data['country'],
+        location = data['location']   
     )   
     
     serializer = Product_Serializer(product, many = False)
@@ -118,7 +121,7 @@ def update_product(request, pk):
     product = Product.objects.get(_id=pk)
 
     product.name = data['name']
-    product.price = data['price']
+    product.price = float(data['price'])
     product.brand = data['brand']
     product.category = data['category']
     
@@ -128,9 +131,13 @@ def update_product(request, pk):
     
     product.countInStock = data['countInStock']
     product.description = data['description']
-    product.first_bid = data['firstBid']
+    product.first_bid = float(data['firstBid'])
     product.started = data['startingdate'] 
     product.ended = data['endingdate']  
+    product.lat = float(data['lat'])
+    product.lng = float(data['lng'])
+    product.country = data['country']
+    product.location = data['location']
     
     product.save()
 
@@ -257,7 +264,7 @@ def create_bid(request, pk):
         bid = MyBids.objects.create (
             user = user,
             product = product,
-            value = data['value']         
+            value = float(data['value'])         
         )   
         
         #auction ends if a bid is higher or equal than buyer suggestive price
@@ -266,7 +273,7 @@ def create_bid(request, pk):
             
         bid.save()
         
-        product.currently = data['value']
+        product.currently = float(data['value'])
         product.currentwinner = user.id
         product.number_of_bids += 1
         product.save()
@@ -300,6 +307,9 @@ def registerUser(request):
 
         #extra information about user store in model Profile
         user.profile.location = data['location']
+        user.profile.country = data['country']
+        user.profile.lat = data['lat']
+        user.profile.lng = data['lng']
         user.profile.phone = data['phone']
         user.profile.afm = data['afm']
         user.save()
@@ -333,6 +343,9 @@ def updateUserProfile(request):
         user.password = make_password(data['password'])
     
     user.profile.location = data['location']
+    user.profile.country = data['country']
+    user.profile.lat = data['lat']
+    user.profile.lng = data['lng']
     user.profile.phone = data['phone']
     user.profile.afm = data['afm']
     
@@ -657,6 +670,9 @@ def get_xml(request, pk):
 
         location = ET.SubElement(bidder_rating, "Location")
         location.text = i.user.profile.location
+        
+        country = ET.SubElement(bidder_rating, "Country")
+        country.text = i.user.profile.country
 
         time = ET.SubElement(bids, "Time")
         time.text = i.createdAt.strftime('%Y-%m-%d %H:%M:%S')
@@ -666,7 +682,12 @@ def get_xml(request, pk):
         
 
     location = ET.Element("Location")
+    location.text = product.location
     root.append(location)
+
+    country = ET.Element("Country")
+    country.text = product.country
+    root.append(country)
     
     started = ET.Element("Started")
     started.text = product.started.strftime('%Y-%m-%d %H:%M:%S')   
@@ -713,6 +734,7 @@ def get_json(request, pk):
                     "Rating" : str(i.user.profile.seller_rating),
                     "UserID" : i.user.username,
                     "Location" : i.user.profile.location,
+                    "Country"  : i.user.profile.country
                 },
                 "Time" : i.createdAt.strftime('%Y-%m-%d %H:%M:%S'),
                 "Amount" : str(i.value)
@@ -730,7 +752,8 @@ def get_json(request, pk):
                 "First_Bid" : str(product.first_bid),
                 "Number_0f_Bids" : str(product.number_of_bids),
                 "Bids" : bids,
-                "Location": "",
+                "Location": product.location,
+                "Country" : product.country,
                 "Started": product.started.strftime('%Y-%m-%d %H:%M:%S'),
                 "Ends": product.ended.strftime('%Y-%m-%d %H:%M:%S'),
                 "Seller" : [

@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
 import PhoneInput from 'react-phone-input-2'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import 'react-phone-input-2/lib/style.css'
 
 function RegisterScreen() {
@@ -17,13 +18,15 @@ function RegisterScreen() {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')    
     const [phone, setPhone] = useState()
-    const [afm , setAfm] = useState('') 
-    const [userlocation, setLocation] = useState('')
+    const [afm , setAfm] = useState('')
+    const [lat, setLat] = useState(null)
+    const [lng, setLng] = useState(null)
+    const [country, setCountry] = useState('')
+    const [userlocation, setUserLocation] = useState('')
+
     const [password, setPassword] = useState('')   
     const [confirmPassword, setConfirmPassword] = useState('')   
     const [errorMessage, setErrorMessage] = useState('')
-
-    
 
     const dispatch = useDispatch()
     const userRegister = useSelector(state => state.userRegisterReducer)
@@ -46,9 +49,23 @@ function RegisterScreen() {
             setErrorMessage("Password does not match.")
         }
         else {
-            dispatch(register(username, email, name, userlocation, phone, afm, password))
+            dispatch(register(username, email, name, userlocation, country, lat, lng, phone, afm, password))
         }
     }
+
+
+    const LocationSet = () => {
+        const map = useMapEvents({
+            click(e) {
+              const {lat, lng} = e.latlng
+              setLat(lat)
+              setLng(lng)
+              map.flyTo(e.latlng, map.getZoom())
+            },
+        })
+        return null
+    }
+
 
     return (
     <Container>
@@ -98,18 +115,6 @@ function RegisterScreen() {
                             onChange = {(e) => setName(e.target.value)}                            
                         >        
                         </Form.Control>
-                    </Form.Group> 
-
-                    <Form.Group controlId='location' className='py-1'>
-                        <Form.Label>Location</Form.Label>
-                        <Form.Control 
-                            required
-                            type='Location'   
-                            placeholder='Enter your Location' 
-                            value={userlocation}
-                            onChange = {(e) => setLocation(e.target.value)}
-                        >        
-                        </Form.Control>           
                     </Form.Group> 
 
                     <Form.Group controlId='afm' className='py-1'>
@@ -174,6 +179,56 @@ function RegisterScreen() {
                         >
                         </Form.Control>
                     </Form.Group> 
+
+
+                    <Form.Group controlId='location' className='py-1'>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control 
+                            required
+                            type='Location'   
+                            placeholder='Enter your Location' 
+                            value={userlocation}
+                            onChange = {(e) => setUserLocation(e.target.value)}
+                        >        
+                        </Form.Control>           
+                    </Form.Group> 
+                    
+                    <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            required
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group> 
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[37.962687, 23.721688]} 
+                                zoom={13} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <LocationSet/>
+                            {(lat != null && lng != null) &&
+                                <Marker position={[lat, lng]}>
+                                    <Popup>
+                                        You are Here.
+                                    </Popup>
+                                </Marker>
+
+                            }
+                        </MapContainer>
+                    </Form.Group> 
+            
 
                     <Button type='submit' className="btn btn-dark btn-lg float-right" style={{float: 'right'}}>
                         Register

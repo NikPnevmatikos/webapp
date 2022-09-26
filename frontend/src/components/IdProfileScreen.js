@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
 import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
+import { MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet'
 import 'react-phone-input-2/lib/style.css'
 
 function IdProfileScreen() {
@@ -21,8 +22,12 @@ function IdProfileScreen() {
     const [phone, setPhone] = useState(0)
     const [afm , setAfm] = useState('') 
     const [location, setLocation] = useState('')  
+    const [lat, setLat] = useState(0.0)
+    const [lng, setLng] = useState(0.0)
+    const [country, setCountry] = useState('')
     const [buyerRating, setBuyerRating] = useState(0)
     const [sellerRating, setSellerRating] = useState(0)
+
     const [verified, setVerified] = useState(false)
     
     const dispatch = useDispatch()
@@ -48,6 +53,9 @@ function IdProfileScreen() {
                 setPhone(user.phone)
                 setAfm(user.afm)
                 setLocation(user.location)
+                setLat(user.lat)
+                setLng(user.lng)
+                setCountry(user.country)
                 setVerified(user.verified)
                 setBuyerRating(user.buyer_rating)
                 setSellerRating(user.seller_rating)
@@ -59,6 +67,17 @@ function IdProfileScreen() {
         e.preventDefault()
         navigate('/admin')
     }
+
+    const CenterMap = ({lat,lng}) => {
+        const map = useMap()
+        
+        useEffect(() => {
+          map.setView([lat,lng])
+        }, [lat,lng, map])
+        
+        return null
+    }
+    
 
     return (
         <Container>
@@ -156,6 +175,53 @@ function IdProfileScreen() {
                             >        
                             </Form.Control>           
                         </Form.Group> 
+
+                        <Form.Group>
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            disabled
+                            readOnly 
+                            type='text' 
+                            placeholder='Enter Country' 
+                            value={country}
+                            onChange = {(e) => setCountry(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                            disabled
+                            readOnly 
+                            type='text' 
+                            placeholder='Enter Location' 
+                            value={location}
+                            onChange = {(e) => setLocation(e.target.value)}   
+                        >
+                        </Form.Control>
+                    </Form.Group>
+                    
+                    <Form.Group> 
+                        <MapContainer 
+                                style={{width:'40vw', height:'35vh'}} 
+                                center={[0.0,0.0]} 
+                                zoom={13} 
+                                scrollWheelZoom={false}
+                                //onClick={clickHandler}
+                        >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={[lat, lng]}>
+                                <Popup>
+                                    Users Location.
+                                </Popup>
+                            </Marker>
+                            <CenterMap lat={lat} lng = {lng} />
+                        </MapContainer>
+                    </Form.Group> 
                         
 
                         <Form.Group controlId='verified' className='py-1'>

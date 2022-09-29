@@ -8,7 +8,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {useDispatch, useSelector} from 'react-redux'
-import {FaHeart} from "react-icons/fa";
 
 
 function Header() {
@@ -17,7 +16,6 @@ function Header() {
   const location = useLocation()
   
   const[keyword, setKeyword] = useState('')
-  //const[unread, setUnread] = useState('')
 
   const dispatch = useDispatch()
   const userLogin = useSelector(state => state.userLoginReducer)
@@ -42,7 +40,7 @@ function Header() {
     <Navbar bg="dark" expand="lg" variant="dark">
       <Container fluid>
         <Navbar.Brand href='/'>
-          <FaHeart/>
+          <img style={{width:"40px", height:"40px"}} src="/eDayLogo.png" alt="" ></img>
           eDay
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -56,7 +54,6 @@ function Header() {
               <>
                 <NavDropdown title={userInfo.name} id='username'>
 
-                {/* <NavDropdown title="Link" id="navbarScrollingDropdown"> */}
                   {userInfo.is_staff === true && 
                     <div>
                       <NavDropdown.Item href='/admin'>

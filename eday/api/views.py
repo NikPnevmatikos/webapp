@@ -24,8 +24,9 @@ def all_products(request):
         query=''
         
     #query the products that contains keyword in either name or category
-    products = Product.objects.filter(name__icontains=query) | Product.objects.filter(category=query)
-    products = products.order_by('-_id')
+    products = Product.objects.filter(name__icontains=query) | Product.objects.filter(category__icontains=query) | Product.objects.filter(brand__icontains=query)
+            
+    products = products.order_by('-createdAt')
     
     paginator = Paginator(products,4)   #4 products in each page
     
@@ -97,7 +98,6 @@ def create_product(request):
         category = data['category'],
         image = request.FILES.get('image'),
         description = data['description'],
-        countInStock = data['countInStock'],
         first_bid = float(data['firstBid']),
         started = data['startingdate'],
         ended = data['endingdate'],
@@ -129,7 +129,6 @@ def update_product(request, pk):
     if(data['flag'] == 'true'):
         product.image = request.FILES.get('image')
     
-    product.countInStock = data['countInStock']
     product.description = data['description']
     product.first_bid = float(data['firstBid'])
     product.started = data['startingdate'] 

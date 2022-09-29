@@ -15,7 +15,6 @@ function CreateProductScreen() {
     const [category, setCategory] = useState('')    
     const [description, setDescription] = useState('')   
     const [price, setPrice] = useState(0)   
-    const [countInStock, setCountInStock] = useState(0)
     const [preview, setPreview] = useState('')
     const [image, setImage] = useState()
     const [firstBid, setFirstBid] = useState(0)
@@ -77,7 +76,6 @@ function CreateProductScreen() {
             form.append('category', category)
             form.append('price', price)
             form.append('description', description)
-            form.append('countInStock', countInStock)
             form.append('image', image)
             form.append('firstBid', firstBid)
             form.append('startingdate', startingdate)
@@ -230,18 +228,6 @@ function CreateProductScreen() {
                             placeholder='Enter Description' 
                             value={description}
                             onChange = {(e) => setDescription(e.target.value)}                            
-                        >
-                        </Form.Control>
-                    </Form.Group> 
-
-                    <Form.Group controlId='countInStock' className='py-1'>
-                        <Form.Label>Count In Stock:</Form.Label>
-                        <Form.Control 
-                            required
-                            type='number' 
-                            placeholder='Enter Count In Stock' 
-                            value={countInStock}
-                            onChange = {(e) => setCountInStock(e.target.value)}                            
                         >
                         </Form.Control>
                     </Form.Group> 

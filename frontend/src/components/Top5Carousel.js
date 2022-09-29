@@ -54,13 +54,22 @@ function Top5Carousel() {
                                             fluid />
                             
                                         <Carousel.Caption className='carousel.caption'>
-                                            <h4><strong>{product.name}</strong></h4>
+                                            <h4>
+                                                <strong>
+                                                    {product.name.length > 35 ? 
+                                                        (product.name).substring(0, 32) + '...'
+                                                        :
+                                                        (product.name)
+                                                    }
+                                                </strong>
+                                            </h4>
                                         </Carousel.Caption>
                                     </Link>
                                 </Carousel.Item>           
                             ))
                             }
                         </Carousel>
+                        <hr className='py-2'/>
                     </div>)
                     
                     : null

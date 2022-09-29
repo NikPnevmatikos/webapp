@@ -40,15 +40,14 @@ function Homescreen() {
             </div> 
             :
             <div>
-              {!keyword &&
-                <Row>
+              {(!keyword || keyword.split("&")[0].endsWith("=") === true) &&
+                <Row> 
                   <Top5Carousel/>
                 </Row>
               }
 
-              {!keyword ? 
+              {(!keyword || keyword.split("&")[0].endsWith("=") === true) ?
                 <div>
-                  <hr className='py-2'/>
                   <h1 className='py-4'>Recently Uploaded</h1>              
                 </div>
                 :

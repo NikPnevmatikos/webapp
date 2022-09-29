@@ -71,7 +71,6 @@ class Product(models.Model):
         max_digits=12, decimal_places=2, null=True, blank=True)
     number_of_bids = models.IntegerField(null=True, blank=True, default=0)
 
-    countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
     started = models.DateTimeField(null=True, blank=True)
     ended = models.DateTimeField(null=True, blank=True)

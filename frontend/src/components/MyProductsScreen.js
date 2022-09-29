@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
 import { sellerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
-import { FaTrash, FaStoreAlt } from "react-icons/fa";
+import { FaTrash, FaStoreAlt, FaSadCry } from "react-icons/fa";
 import { Rating } from 'react-simple-star-rating'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
@@ -247,7 +247,7 @@ function MyProductScreen() {
                     </div>  
                 
                 ):
-                <h1>You Have No Products Yet :(</h1> 
+                <h5>You Have <strong>No Products</strong> Yet <FaSadCry/> </h5> 
             }
     </div>
     )

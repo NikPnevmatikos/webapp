@@ -17,7 +17,6 @@ function EditProduct() {
     const [description, setDescription] = useState('')   
     const [price, setPrice] = useState('')   
     const [firstBid, setFirstBid] = useState('')
-    const [countInStock, setCountInStock] = useState(0)
     const [image, setImage] = useState('')
     const [preview, setPreview] = useState('')
     const [startingdate, setstartingdate] = useState('');
@@ -72,7 +71,6 @@ function EditProduct() {
             setDescription(product.description)
             setFirstBid(product.first_bid)
             setPrice(product.price)
-            setCountInStock(product.countInStock)
             setstartingdate(product.started)
             setendingdate(product.ended)
             setPayed(product.payed)
@@ -108,7 +106,6 @@ function EditProduct() {
             form.append('category', category)
             form.append('price', price)
             form.append('description', description)
-            form.append('countInStock', countInStock)
             form.append('image', image)
             form.append('firstBid', firstBid)
             form.append('startingdate', startingdate)
@@ -279,18 +276,6 @@ function EditProduct() {
                                         placeholder='Enter Description' 
                                         value={description}
                                         onChange = {(e) => setDescription(e.target.value)}                            
-                                    >
-                                    </Form.Control>
-                                </Form.Group> 
-            
-                                <Form.Group controlId='countInStock' className='py-1'>
-                                    <Form.Label>Count In Stock:</Form.Label>
-                                    <Form.Control 
-                                        required
-                                        type='number' 
-                                        placeholder='Enter Count In Stock' 
-                                        value={countInStock}
-                                        onChange = {(e) => setCountInStock(e.target.value)}                            
                                     >
                                     </Form.Control>
                                 </Form.Group> 

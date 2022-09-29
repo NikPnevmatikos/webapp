@@ -103,25 +103,6 @@ function ProductScreens() {
 
   } 
 
-
-//   const setMap = ( map ) => {
-//     const resizeObserver = new ResizeObserver( () => {
-//       map.invalidateSize()
-//     } 
-    
-//     const container = document.getElementById('map-container')
-//     resizeObserver.observe(container!)
-// }
-
-  
-// //   componentDidMount() { 
-// //     const map = this.mapRef.current.leafletElement; 
-// //     setTimeout(() => { 
-// //         map.invalidateSize(); 
-// //     }, 250); 
-// // }
-// const map = useMap()
-
   
   return (
     <div>
@@ -214,20 +195,11 @@ function ProductScreens() {
                     <Popover style={{width:"100%"}} id={`popover-positioned-bottom`}>
                       <Popover.Header as="h3">{'Map Location'}</Popover.Header>
                       <Popover.Body>
-                    {/* <Accordion>
-                      <Accordion.Item eventKey="0">
-                        <Accordion.Header> 
-                          <div>See the <strong>location</strong> of the product!  <FaMapMarkedAlt/></div>
-                          </Accordion.Header>
-                        <Accordion.Body> */}
                           <MapContainer 
                             style={{width:"100%", height:'40vh'}} 
                             center={[0.0, 0.0]} 
                             zoom={13} 
                             scrollWheelZoom={false}
-                            //id='map-container'
-                            // whenCreated={setMap}
-                            //onClick={clickHandler}
                           >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -240,10 +212,6 @@ function ProductScreens() {
                             </Marker>
                             <CenterMap lat={product.lat} lng = {product.lng} />
                           </MapContainer>
-                        {/* </Accordion.Body>
-                      </Accordion.Item>
-                      
-                    </Accordion> */}
                           </Popover.Body>
                       </Popover>
                     }>
@@ -307,33 +275,20 @@ function ProductScreens() {
                         </Col>
                       </Row>
                     </ListGroup.Item>
-
+                    
                     <ListGroup.Item>
                       <Row>
+                        <Col>Bid:</Col>
                         <Col>
-                          Status:
-                        </Col>
-                        <Col>
-                          {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                          <Form.Control 
+                            type='number' 
+                            placeholder='Bid'
+                            value = {bid}
+                            onChange= {(e) => setBid(e.target.value)}  
+                          />                              
                         </Col>
                       </Row>
                     </ListGroup.Item>
-                    
-                    {product.countInStock > 0 && (
-                      <ListGroup.Item>
-                        <Row>
-                          <Col>Bid:</Col>
-                          <Col>
-                            <Form.Control 
-                              type='number' 
-                              placeholder='Bid'
-                              value = {bid}
-                              onChange= {(e) => setBid(e.target.value)}  
-                            />                              
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-                    )}
                               
                     <ListGroup.Item className='d-grid gap-2'>
                       <Button 
@@ -342,7 +297,7 @@ function ProductScreens() {
                         type='button' 
                         disabled={product.started > currentDate || product.ended < currentDate || product.payed === true}
                       >
-                        Add Bid plz uwu
+                        Add Bid
                       </Button>
                       
                     </ListGroup.Item>
@@ -379,32 +334,6 @@ function ProductScreens() {
                 </Card>
 
               </Col>
-            </Row>
-            <Row> 
-              {/* {product &&
-
-                    <MapContainer 
-                      style={{width:"100%", height:'40vh'}} 
-                      center={[0.0, 0.0]} 
-                      zoom={13} 
-                      scrollWheelZoom={false}
-                      // id='map-container'
-                      // whenCreated={setMap}
-                      //onClick={clickHandler}
-                    >
-                      <TileLayer
-                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <Marker position={[product.lat, product.lng]}>
-                          <Popup>
-                              {product.location} in {product.country}.
-                          </Popup>
-                      </Marker>
-                      <CenterMap lat={product.lat} lng = {product.lng} />
-                    </MapContainer>
-
-            } */}
             </Row>
           </div>
       }                            

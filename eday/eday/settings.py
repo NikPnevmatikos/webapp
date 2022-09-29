@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'phonenumber_field',
+    'django_extensions',
 ]
 
 REST_FRAMEWORK = {

@@ -5,7 +5,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { MapContainer, TileLayer, useMapEvents, Marker, Popup } from 'react-leaflet'
 import { createProductAction } from '../actions/ProductActions';
-// import DateTimePicker from 'react-datetime-picker';
 
 function CreateProductScreen() {
  
@@ -115,7 +114,7 @@ function CreateProductScreen() {
     <Container>
         <Row className = "justify-content-md-center">
             <Col xs={12} md={6}>
-                <h1>Create a Little Product</h1>
+                <h1>Create A Product</h1>
 
                 {errorMessage && 
                     <div className="alert alert-dismissible alert-danger">
@@ -140,7 +139,7 @@ function CreateProductScreen() {
                 
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='name' className='py-1'>
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label>Name:</Form.Label>
                         <Form.Control 
                             required
                             type='name' 
@@ -153,7 +152,7 @@ function CreateProductScreen() {
 
                     {preview && 
                         <Form.Group>
-                            <Form.Label>Preview</Form.Label>
+                            <Form.Label>Preview:</Form.Label>
                             <Image 
                                 src={preview} 
                                 alt= {preview} 
@@ -166,7 +165,7 @@ function CreateProductScreen() {
                         </Form.Group>}
 
                     <Form.Group controlId='image' className='py-1'>
-                        <Form.Label>Image</Form.Label>
+                        <Form.Label>Image:</Form.Label>
                         <Form.Control 
                             required
                             type='file' 
@@ -176,7 +175,7 @@ function CreateProductScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='brand' className='py-1'>
-                        <Form.Label>Brand</Form.Label>
+                        <Form.Label>Brand:</Form.Label>
                         <Form.Control 
                             required
                             type='brand' 
@@ -188,7 +187,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='category' className='py-1'>
-                        <Form.Label>Category</Form.Label>
+                        <Form.Label>Category:</Form.Label>
                         <Form.Control 
                             required
                             type='Category' 
@@ -200,7 +199,7 @@ function CreateProductScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='price' className='py-1'>
-                        <Form.Label>Buy Price</Form.Label>
+                        <Form.Label>Buy Price:</Form.Label>
                         <Form.Control 
                             required
                             type='number' 
@@ -212,7 +211,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='bid' className='py-1'>
-                        <Form.Label>Starting Bid</Form.Label>
+                        <Form.Label>Starting Bid:</Form.Label>
                         <Form.Control 
                             required
                             type='number' 
@@ -224,7 +223,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='description' className='py-1'>
-                        <Form.Label>Description</Form.Label>
+                        <Form.Label>Description:</Form.Label>
                         <Form.Control 
                             required
                             type='text' 
@@ -236,7 +235,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='countInStock' className='py-1'>
-                        <Form.Label>Count In Stock</Form.Label>
+                        <Form.Label>Count In Stock:</Form.Label>
                         <Form.Control 
                             required
                             type='number' 
@@ -248,16 +247,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='startingdate' className='py-1'>
-                        <Form.Label>Starting Date</Form.Label>                        
-                            {/* <DateTimePicker 
-                                required
-                                // controls={['date', 'time']}
-                                // dateFormat="YYYY-MM-DD"
-                                // timeFormat="H:MM:ss"
-                                format = "y-MM-dd h:mm:ss"
-                                onChange={(e) => setstartingdate(new Date(e.target.value))} 
-                                value={startingdate} 
-                            /> */}
+                        <Form.Label>Starting Date:</Form.Label>                        
                         <Form.Control 
                             required
                             type='text' 
@@ -268,16 +258,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='endingdate' className='py-1'>
-                        <Form.Label>Ending Date</Form.Label>                        
-                            {/* <DateTimePicker 
-                                required
-                                // controls={['date', 'time']}
-                                // dateFormat="YYYY-MM-DD"
-                                // timeFormat="H:MM:ss"
-                                format = "y-MM-dd h:mm:ss"
-                                onChange={(e) => setendingdate(new Date(e.target.value))} 
-                                value={endingdate} 
-                            /> */}
+                        <Form.Label>Ending Date:</Form.Label>                        
                         <Form.Control 
                             required
                             type='text' 
@@ -288,7 +269,7 @@ function CreateProductScreen() {
                     </Form.Group> 
 
                     <Form.Group>
-                        <Form.Label>Country</Form.Label>
+                        <Form.Label>Country:</Form.Label>
                         <Form.Control
                             required
                             type='text' 
@@ -300,7 +281,7 @@ function CreateProductScreen() {
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Location</Form.Label>
+                        <Form.Label>Location:</Form.Label>
                         <Form.Control
                             required
                             type='text' 
@@ -313,13 +294,13 @@ function CreateProductScreen() {
 
 
                     <Form.Group controlId='map' className='py-1'>
-                        <Form.Label>Map data</Form.Label>    
+                        <Form.Label>Map data:</Form.Label>    
                         <MapContainer 
-                                style={{width:'40vw', height:'35vh'}} 
+                                required
+                                style={{width:'100%', height:'35vh'}} 
                                 center={[37.962687, 23.721688]} 
                                 zoom={7} 
                                 scrollWheelZoom={false}
-                                //onClick={clickHandler}
                         >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from .serializers import *
-from .models import Product, Profile, MyBids, Buyer_Review, Seller_Review
+from .models import Product, Profile, MyBids, Buyer_Review, Seller_Review,Product_Viewed
 from django.utils import timezone
 import pytz
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -226,10 +226,11 @@ def delete_bid(request, pk):
     
     #if bid value was the highest bid for a product, update the current highest bid
     if (float(product.currently) == float(value)):
-        maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
-        maxbid.winningBid = True
-        maxbid.save()
-        product.currently = maxbid.value    
+        if(MyBids.objects.filter(product = product._id).count() > 0):
+            maxbid = MyBids.objects.filter(product = product._id).order_by('-value').first()
+            maxbid.winningBid = True
+            maxbid.save()
+            product.currently = maxbid.value    
     
     product.number_of_bids -= 1
     product.save()
@@ -777,3 +778,50 @@ def get_json(request, pk):
     file =  open(filename, "r")   
     
     return Response(file.read())
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////
+
+#bonus
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_top_products(request):
+    user = request.user
+
+    with open('scripts/recommend.json') as f:
+        data = f.read()
+        f.close()
+
+    tojson = json.loads(data)
+
+    if (str(user.id) in tojson):
+        products = tojson[str(user.id)]
+
+        mylist = []
+        for i in products:
+            product = Product.objects.get(_id = i)
+            mylist.append(product)
+
+        serializer = Product_Serializer(mylist, many = True)
+        #return Response(tojson)
+        return Response({"products":serializer.data})
+    else:
+        return Response({"products":[]})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def viewed_product(request,pk):
+
+    user = request.user
+    product = Product.objects.get(_id=pk)
+
+    exist = Product_Viewed.objects.filter(user=user).filter(product=product).exists()
+
+    if(exist == False):
+        Product_Viewed.objects.create(
+            user = user,
+            product = product
+        )
+    
+    return Response("Viewed")

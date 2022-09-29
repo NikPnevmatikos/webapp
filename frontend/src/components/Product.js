@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {Card} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
+import "../image_style.css"
 
 
 function Product({product}) {
@@ -24,12 +25,18 @@ function Product({product}) {
     return (
         <Card className="my-3 p-3 rounded">
             <Link style={{color:'black'}} to={`/product/${product._id}`}>
-                <Card.Img src={product.image}/>
+                <Card.Img className="img-responsive image-resize" src={product.image}/>
             </Link>
             <Card.Body>
                 <Link style={{color:'black'}} to={`/product/${product._id}`}>
                     <Card.Title as="div">
-                        <strong>{product.name}</strong>
+                        <strong>
+                            {product.name.length > 31 ? 
+                                (product.name).substring(0, 28) + '...'
+                                :
+                                (product.name)
+                            }
+                        </strong>
                     </Card.Title>
                 </Link>
                     <Card.Text as="h3">

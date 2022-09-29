@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
 import { buyerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
-import { FaTrash, FaMedal } from "react-icons/fa";
+import { FaTrash, FaMedal, FaSadCry } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
 
@@ -92,7 +92,7 @@ function MyBidScreen() {
         <div>
             <Row className="align-items-center my-3">
                 <Col>
-                    <h5>uwu my little kawaii Bid list uwu</h5>
+                    <h1>My Bid List</h1>
                 </Col>
             </Row>
 
@@ -178,13 +178,13 @@ function MyBidScreen() {
                                                 <td>{bid.currently}</td>                                               
                                                 <td>{bid.currently === bid.value ?
                                                         
-                                                        <h5 className="text-success">
+                                                        <div className="text-success">
                                                             {bid.value}
-                                                        </h5> 
+                                                        </div> 
                                                     :
-                                                        <h5 className="text-danger">
+                                                        <div className="text-primary">
                                                             {bid.value}
-                                                        </h5> 
+                                                        </div> 
                                                     }
                                                 </td>
                                                 <td>
@@ -192,10 +192,10 @@ function MyBidScreen() {
                                                         bid.winningBid === true ? (
                                                             <div>
                                                                 <h5 className="text-success">
-                                                                    Winning Bid<FaMedal/>
+                                                                    Winning Bid <FaMedal/>
                                                                 </h5>
 
-                                                                <Button variant= 'light' className='btn-sm' onClick = {() => sendMessageHandler(bid.owner)} >
+                                                                <Button className="btn-default btn-secondary" onClick = {() => sendMessageHandler(bid.owner)} >
                                                                     Message
                                                                 </Button>
 
@@ -228,17 +228,17 @@ function MyBidScreen() {
                                                             </div>
                                                         )
                                                         :
-                                                            <h5 className="text-danger">
+                                                            <div className="text-primary">
                                                                 Lost Bid
-                                                            </h5>
+                                                            </div>
                                                     ) : 
-                                                    <h5>
+                                                    <div>
                                                         Pending...
-                                                    </h5>
+                                                    </div>
                                                     }
                                                 </td>
                                                 <td>
-                                                    <Button disabled={currentDate >= bid.end || bid.payed === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(bid._id)}>
+                                                    <Button disabled={currentDate >= bid.end || bid.payed === true} className="btn-default btn-danger" onClick={() => deleteHandler(bid._id)}>
                                                         <FaTrash/>
                                                     </Button>
                                                 </td>
@@ -259,7 +259,7 @@ function MyBidScreen() {
                     </div>  
                 
                 ):
-                <h1>You Have No Bids Yet :( You Must Be Poor</h1> 
+                <h4>You Have <strong>No Bids</strong> Yet <FaSadCry/> </h4> 
             }
     </div>
     )

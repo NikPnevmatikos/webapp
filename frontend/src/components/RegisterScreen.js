@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link , useNavigate, useLocation } from 'react-router-dom'
-import { Form, Container, Button, Col, Row } from 'react-bootstrap'
+import { Form, Container, Button, Col, Row, FormLabel } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
@@ -95,7 +95,7 @@ function RegisterScreen() {
                 
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='username' className='py-1'>
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label>Username:</Form.Label>
                         <Form.Control 
                             required
                             type='username' 
@@ -107,7 +107,7 @@ function RegisterScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='name' className='py-1'>
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label>Name:</Form.Label>
                         <Form.Control 
                             type='name' 
                             placeholder='Enter name' 
@@ -118,7 +118,7 @@ function RegisterScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='afm' className='py-1'>
-                        <Form.Label>AFM</Form.Label>
+                        <Form.Label>AFM:</Form.Label>
                         <Form.Control 
                             required
                             type='text'   
@@ -130,22 +130,17 @@ function RegisterScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='phone' className='py-1'>
-                            <Form.Label>Phone</Form.Label>
+                            <Form.Label>Phone:</Form.Label>
                                 <PhoneInput
                                     required
                                     placeholder='Enter your Phone'
                                     value={phone}
-                                    onChange = {setPhone}
-                                    inputStyle={{
-                                        width: "535px",
-                                        height: "40px",
-                                    }}
-                                    
+                                    onChange = {setPhone}                                   
                                 />
                         </Form.Group>
 
                     <Form.Group controlId='email' className='py-1'>
-                        <Form.Label>Email</Form.Label>
+                        <Form.Label>Email:</Form.Label>
                         <Form.Control 
                             required
                             type='Email' 
@@ -157,7 +152,7 @@ function RegisterScreen() {
                     </Form.Group> 
                     
                     <Form.Group controlId='password' className='py-1'>
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Password:</Form.Label>
                         <Form.Control 
                             required
                             type='password' 
@@ -169,7 +164,7 @@ function RegisterScreen() {
                     </Form.Group> 
 
                     <Form.Group controlId='passwordConfirm' className='py-1'>
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label>Confirm Password:</Form.Label>
                         <Form.Control 
                             required
                             type='password' 
@@ -182,7 +177,7 @@ function RegisterScreen() {
 
 
                     <Form.Group controlId='location' className='py-1'>
-                        <Form.Label>Location</Form.Label>
+                        <Form.Label>Location:</Form.Label>
                         <Form.Control 
                             required
                             type='Location'   
@@ -194,7 +189,7 @@ function RegisterScreen() {
                     </Form.Group> 
                     
                     <Form.Group>
-                        <Form.Label>Country</Form.Label>
+                        <Form.Label>Country:</Form.Label>
                         <Form.Control
                             required
                             type='text' 
@@ -205,9 +200,11 @@ function RegisterScreen() {
                         </Form.Control>
                     </Form.Group>
 
-                    <Form.Group> 
+                    <Form.Group className='py-3'> 
+                        <FormLabel>Map Location:</FormLabel>
                         <MapContainer 
-                                style={{width:'40vw', height:'35vh'}} 
+                                required
+                                style={{width:'100%', height:'35vh'}} 
                                 center={[37.962687, 23.721688]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}

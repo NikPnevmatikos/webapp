@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {useNavigate, useParams } from 'react-router-dom'
-import { Form, Container, Button, Col, Row } from 'react-bootstrap'
+import { Form, Container, Button, Col, Row, FormLabel } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
@@ -101,7 +101,7 @@ function IdProfileScreen() {
                     
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId='username' className='py-3'>
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label>Username:</Form.Label>
                             <Form.Control 
                                 type='username' 
                                 placeholder='Disabled input' 
@@ -113,7 +113,7 @@ function IdProfileScreen() {
                         </Form.Group> 
                         
                         <Form.Group controlId='name' className='py-1'>
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label>Name:</Form.Label>
                             <Form.Control 
                                 type='name'   
                                 placeholder='Disabled input' 
@@ -125,7 +125,7 @@ function IdProfileScreen() {
                         </Form.Group> 
 
                         <Form.Group controlId='email' className='py-1'>
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>Email:</Form.Label>
                             <Form.Control 
                                 type='Email'   
                                 placeholder='Disabled input' 
@@ -137,7 +137,7 @@ function IdProfileScreen() {
                         </Form.Group> 
 
                         <Form.Group controlId='location' className='py-1'>
-                            <Form.Label>Location</Form.Label>
+                            <Form.Label>Location:</Form.Label>
                             <Form.Control 
                                 type='Location'   
                                 placeholder='Disabled input' 
@@ -149,23 +149,21 @@ function IdProfileScreen() {
                         </Form.Group> 
 
                         <Form.Group controlId='phone' className='py-1'>
-                            <Form.Label>Phone</Form.Label>
+                            <Form.Label>Phone:</Form.Label>
                                 <PhoneInput
                                     required
                                     disabled
                                     placeholder='Enter your Phone'
                                     value={phone}
                                     onChange = {setPhone}
-                                    inputStyle={{
-                                        width: "535px",
-                                        height: "40px",
-                                    }}
-                                    
+                                    inputStyle = {{
+                                        background: "#f8f5f0"
+                                    }}                                    
                                 />
                         </Form.Group>
 
                         <Form.Group controlId='afm' className='py-1'>
-                            <Form.Label>AFM</Form.Label>
+                            <Form.Label>AFM:</Form.Label>
                             <Form.Control 
                                 type='text'   
                                 placeholder='Disabled input' 
@@ -177,7 +175,7 @@ function IdProfileScreen() {
                         </Form.Group> 
 
                         <Form.Group>
-                        <Form.Label>Country</Form.Label>
+                        <Form.Label>Country:</Form.Label>
                         <Form.Control
                             disabled
                             readOnly 
@@ -190,7 +188,7 @@ function IdProfileScreen() {
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Location</Form.Label>
+                        <Form.Label>Location:</Form.Label>
                         <Form.Control
                             disabled
                             readOnly 
@@ -202,9 +200,10 @@ function IdProfileScreen() {
                         </Form.Control>
                     </Form.Group>
                     
-                    <Form.Group> 
+                    <Form.Group className='py-2'>
+                        <FormLabel>Map Location:</FormLabel> 
                         <MapContainer 
-                                style={{width:'40vw', height:'35vh'}} 
+                                style={{width:'100%', height:'35vh'}} 
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}

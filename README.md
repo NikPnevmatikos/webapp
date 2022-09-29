@@ -7,7 +7,7 @@ pip install pillow
 pip install djangorestframework-simplejwt
 postman
 pip install django-phone-field
-
+pip install django-celery
 
 frontend:
 

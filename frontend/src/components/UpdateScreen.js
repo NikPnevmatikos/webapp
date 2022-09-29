@@ -196,12 +196,7 @@ function RegisterScreen() {
                                 required
                                 placeholder='Enter your Phone'
                                 value={phone}
-                                onChange = {setPhone}
-                                inputStyle={{
-                                    width: "535px",
-                                    height: "40px",
-                                  }}
-                                
+                                onChange = {setPhone}                              
                             />
                     </Form.Group>
 
@@ -240,7 +235,7 @@ function RegisterScreen() {
                         </Form.Control>
                     </Form.Group>
 
-                    <Form.Group>
+                    <Form.Group className='py-2'>
                         <Form.Label>Country</Form.Label>
                         <Form.Control
                             required
@@ -252,12 +247,14 @@ function RegisterScreen() {
                         </Form.Control>
                     </Form.Group>
 
-                    <Form.Group> 
+                    <Form.Group className='py-2'> 
+                        <Form.Label>Map Location</Form.Label>
                         <MapContainer 
-                                style={{width:'40vw', height:'35vh'}} 
+                                style={{width:'100%', height:'35vh'}} 
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}
+                                // position={position}
                                 //onClick={clickHandler}
                         >
                             <TileLayer
@@ -267,7 +264,7 @@ function RegisterScreen() {
                             <LocationSet/>
                             <Marker position={[lat, lng]}>
                                 <Popup>
-                                    Product Location.
+                                    Product's Location
                                 </Popup>
                             </Marker>
                             <CenterMap lat={lat} lng = {lng} />

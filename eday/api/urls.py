@@ -40,6 +40,10 @@ urlpatterns = [
 
     #xml and json file format related urls
     path('admin/xml/<str:pk>/', get_xml),
-    path('admin/json/<str:pk>/', get_json)
+    path('admin/json/<str:pk>/', get_json),
+
+    #bonus
+    path('users/recommended/', get_top_products),
+    path('product_view/<str:pk>/', viewed_product)
     
 ]

@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import { Link , useNavigate ,useParams} from 'react-router-dom'
-import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
+import { Form, Container, Button, Col, Row, Image, FormLabel } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction , editProductAction} from '../actions/ProductActions';
@@ -188,7 +188,7 @@ function EditProduct() {
                         : (
                             <Form onSubmit={submitHandler}>
                                 <Form.Group controlId='name' className='py-1'>
-                                    <Form.Label>Name</Form.Label>
+                                    <Form.Label>Name:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='name' 
@@ -202,7 +202,7 @@ function EditProduct() {
 
                                 {preview && 
                                     <Form.Group>
-                                        <Form.Label>Image Preview</Form.Label>
+                                        <Form.Label>Image Preview:</Form.Label>
                                         <Image 
                                             src={preview} 
                                             alt= {preview} 
@@ -215,7 +215,7 @@ function EditProduct() {
                                     </Form.Group>}
 
                                 <Form.Group controlId='image' className='py-1'>
-                                    <Form.Label>Image</Form.Label>
+                                    <Form.Label>Image:</Form.Label>
                                     <Form.Control 
                                         type='file' 
                                         onChange = {upload}                            
@@ -224,7 +224,7 @@ function EditProduct() {
                                 </Form.Group> 
                                 
                                 <Form.Group controlId='brand' className='py-1'>
-                                    <Form.Label>Brand</Form.Label>
+                                    <Form.Label>Brand:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='brand' 
@@ -236,7 +236,7 @@ function EditProduct() {
                                 </Form.Group> 
             
                                 <Form.Group controlId='category' className='py-1'>
-                                    <Form.Label>Category</Form.Label>
+                                    <Form.Label>Category:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='Category' 
@@ -248,7 +248,7 @@ function EditProduct() {
                                 </Form.Group> 
                                 
                                 <Form.Group controlId='price' className='py-1'>
-                                    <Form.Label>Buy Price</Form.Label>
+                                    <Form.Label>Buy Price:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='number' 
@@ -260,7 +260,7 @@ function EditProduct() {
                                 </Form.Group> 
 
                                 <Form.Group controlId='firstbid' className='py-1'>
-                                    <Form.Label>Starting Bid</Form.Label>
+                                    <Form.Label>Starting Bid:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='number' 
@@ -272,7 +272,7 @@ function EditProduct() {
                                 </Form.Group> 
             
                                 <Form.Group controlId='description' className='py-1'>
-                                    <Form.Label>Description</Form.Label>
+                                    <Form.Label>Description:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='text' 
@@ -284,7 +284,7 @@ function EditProduct() {
                                 </Form.Group> 
             
                                 <Form.Group controlId='countInStock' className='py-1'>
-                                    <Form.Label>Count In Stock</Form.Label>
+                                    <Form.Label>Count In Stock:</Form.Label>
                                     <Form.Control 
                                         required
                                         type='number' 
@@ -297,7 +297,7 @@ function EditProduct() {
                                 
                                 <Form.Group controlId='startingdate' className='py-1'>
 
-                                    <Form.Label>Starting Date</Form.Label>                        
+                                    <Form.Label>Starting Date:</Form.Label>                        
                                     {/* <DateTimePicker 
                                         required
                                         // controls={['date', 'time']}
@@ -317,7 +317,7 @@ function EditProduct() {
                             </Form.Group> 
 
                     <Form.Group controlId='endingdate' className='py-1'>
-                        <Form.Label>Ending Date</Form.Label>                        
+                        <Form.Label>Ending Date:</Form.Label>                        
                             {/* <DateTimePicker 
                                 required
                                 // controls={['date', 'time']}
@@ -337,7 +337,7 @@ function EditProduct() {
                     </Form.Group> 
 
                     <Form.Group>
-                        <Form.Label>Country</Form.Label>
+                        <Form.Label>Country:</Form.Label>
                         <Form.Control
                             required
                             type='text' 
@@ -349,7 +349,7 @@ function EditProduct() {
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Location</Form.Label>
+                        <Form.Label>Location:</Form.Label>
                         <Form.Control
                             required
                             type='text' 
@@ -360,9 +360,11 @@ function EditProduct() {
                         </Form.Control>
                     </Form.Group>
                     
-                    <Form.Group> 
+                    <Form.Group className='py-2'> 
+                        <FormLabel>Map Location:</FormLabel>
                         <MapContainer 
-                                style={{width:'40vw', height:'35vh'}} 
+                                required
+                                style={{width:'100%', height:'35vh'}} 
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { useParams, useNavigate} from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card ,Form} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { productsAction } from '../actions/ProductActions'
+import { productsAction, viewProductAction } from '../actions/ProductActions'
 import { createBidAction } from '../actions/bidActions'
 import { xmlAction,jsonAction } from '../actions/userActions'
 import { Rating } from 'react-simple-star-rating'
@@ -10,13 +10,13 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { FaMapMarkedAlt } from "react-icons/fa";
 
 
 function ProductScreens() {
   const [bid, setBid] = useState('')
   const [Message, setMessage] = useState('')
   const [currentDate, setCurrent] = useState('')
-
 
   const match = useParams()
 
@@ -46,29 +46,39 @@ function ProductScreens() {
     dispatch({ type: 'PRODUCT_RESET' })
     dispatch(productsAction(match.id))
 
+    if(userInfo != null){
+      dispatch(viewProductAction(match.id))
+    }
+
 
     if (success === true) {
       setMessage(message)
     }
-  } , [dispatch, match, success, message])
+  } , [dispatch, match, success, message, userInfo])
 
   const addBidHandler = () => {
-    if (Number(product.currently) <= 0) {
-      if (Number(bid) < Number(product.first_bid)) {
-        window.alert('Your bid must be higher or equal to starting bid price!')
+    if (userInfo != null) {
+      if (Number(product.currently) <= 0) {
+        if (Number(bid) < Number(product.first_bid)) {
+          window.alert('Your bid must be higher or equal to starting bid price!')
+        }
+        else {
+          dispatch(createBidAction(product._id, bid))
+        }
       }
       else {
-        dispatch(createBidAction(product._id, bid))
+        if (Number(bid) <= Number(product.currently)) {
+          window.alert('Your bid must be higher than the current bid price!')
+        }
+        else {
+          dispatch(createBidAction(product._id, bid))
+        }
       }
     }
     else {
-      if (Number(bid) <= Number(product.currently)) {
-        window.alert('Your bid must be higher than the current bid price!')
-      }
-      else {
-        dispatch(createBidAction(product._id, bid))
-      }
+      navigate("/login")
     }
+    
   }
 
   const downloadHandler = (format,id,name) => {
@@ -84,6 +94,7 @@ function ProductScreens() {
   const CenterMap = ({lat,lng}) => {
     const map = useMap()
     
+
     useEffect(() => {
       map.setView([lat,lng])
     }, [lat,lng, map])
@@ -91,6 +102,26 @@ function ProductScreens() {
     return null
 
   } 
+
+
+//   const setMap = ( map ) => {
+//     const resizeObserver = new ResizeObserver( () => {
+//       map.invalidateSize()
+//     } 
+    
+//     const container = document.getElementById('map-container')
+//     resizeObserver.observe(container!)
+// }
+
+  
+// //   componentDidMount() { 
+// //     const map = this.mapRef.current.leafletElement; 
+// //     setTimeout(() => { 
+// //         map.invalidateSize(); 
+// //     }, 250); 
+// // }
+// const map = useMap()
+
   
   return (
     <div>
@@ -174,6 +205,56 @@ function ProductScreens() {
             <Row>
               <Col md={5}>
                 <Image src={product.image} alt={product.name} fluid />
+                <OverlayTrigger
+                              
+                              trigger="click"
+                              key='bottom'
+                              placement='bottom'
+                              overlay={
+                    <Popover style={{width:"100%"}} id={`popover-positioned-bottom`}>
+                      <Popover.Header as="h3">{'Map Location'}</Popover.Header>
+                      <Popover.Body>
+                    {/* <Accordion>
+                      <Accordion.Item eventKey="0">
+                        <Accordion.Header> 
+                          <div>See the <strong>location</strong> of the product!  <FaMapMarkedAlt/></div>
+                          </Accordion.Header>
+                        <Accordion.Body> */}
+                          <MapContainer 
+                            style={{width:"100%", height:'40vh'}} 
+                            center={[0.0, 0.0]} 
+                            zoom={13} 
+                            scrollWheelZoom={false}
+                            //id='map-container'
+                            // whenCreated={setMap}
+                            //onClick={clickHandler}
+                          >
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={[product.lat, product.lng]}>
+                                <Popup>
+                                    {product.location} in {product.country}.
+                                </Popup>
+                            </Marker>
+                            <CenterMap lat={product.lat} lng = {product.lng} />
+                          </MapContainer>
+                        {/* </Accordion.Body>
+                      </Accordion.Item>
+                      
+                    </Accordion> */}
+                          </Popover.Body>
+                      </Popover>
+                    }>
+                    <div className="text-center">
+                      <Button 
+                        className="btn btn-secondary my-3"
+                      >
+                        Show Map <FaMapMarkedAlt/>
+                      </Button>
+                    </div>
+                  </OverlayTrigger>
               </Col>
 
               <Col md={4}>
@@ -192,7 +273,7 @@ function ProductScreens() {
                   </ListGroup.Item>
 
                   <ListGroup.Item>
-                    <strong>Starting Bid: </strong> {product.first_bid}
+                    <strong>Starting Bid: </strong> {product.first_bid}$
                   </ListGroup.Item>
 
                   <ListGroup.Item>
@@ -299,27 +380,31 @@ function ProductScreens() {
 
               </Col>
             </Row>
-            <Row>
-              {product &&
-                <MapContainer 
-                        style={{width:'60vw', height:'60vh'}} 
-                        center={[0.0,0.0]} 
-                        zoom={13} 
-                        scrollWheelZoom={false}
-                        //onClick={clickHandler}
-                >
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={[product.lat, product.lng]}>
-                        <Popup>
-                            {product.location} in {product.country}.
-                        </Popup>
-                    </Marker>
-                    <CenterMap lat={product.lat} lng = {product.lng} />
-                </MapContainer>
-            }
+            <Row> 
+              {/* {product &&
+
+                    <MapContainer 
+                      style={{width:"100%", height:'40vh'}} 
+                      center={[0.0, 0.0]} 
+                      zoom={13} 
+                      scrollWheelZoom={false}
+                      // id='map-container'
+                      // whenCreated={setMap}
+                      //onClick={clickHandler}
+                    >
+                      <TileLayer
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[product.lat, product.lng]}>
+                          <Popup>
+                              {product.location} in {product.country}.
+                          </Popup>
+                      </Marker>
+                      <CenterMap lat={product.lat} lng = {product.lng} />
+                    </MapContainer>
+
+            } */}
             </Row>
           </div>
       }                            

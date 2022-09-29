@@ -139,3 +139,9 @@ class Seller_Review(models.Model):
     def __str__(self):
         return str(self.rating)
 
+#model to see if a user has visited a product
+class Product_Viewed(models.Model):
+    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product,  related_name='product' ,on_delete=models.CASCADE, null=True)
+    
+    _id = models.AutoField(primary_key=True, editable=False)

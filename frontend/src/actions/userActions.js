@@ -51,6 +51,10 @@ export const logout = () => (dispatch) => {
     dispatch({ 
         type: 'USERS_RESET' 
     })
+
+    dispatch({ 
+        type: 'RECOMMEND_PRODUCTS_RESET' 
+    })
 }
 
 

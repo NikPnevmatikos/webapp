@@ -4,7 +4,8 @@ import { Table,Row, Col, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import PageButtons from './PageButtons';
-import { userMessagesAction, unreadMessageAction } from '../actions/MessagesActions'
+import { userMessagesAction, unreadMessageAction, messageAction } from '../actions/MessagesActions'
+import {FaMailBulk} from "react-icons/fa";
 
 function MessageReceivedScreen() {
 
@@ -58,8 +59,14 @@ function MessageReceivedScreen() {
             <Row className="align-items-center my-3">
                 <Col>
                     <div>
-                        <h5>Received Messages</h5>
-                        <h5>You Have {unread} Unread Messages</h5>
+                        <h3>
+                            <strong>
+                                Received Messages <FaMailBulk/>
+                            </strong>
+                        </h3>
+                        <h5 className="text-muted">
+                            You Have <strong>{unread}</strong> Unread Messages
+                        </h5>
                     </div>
                 </Col>
             </Row>
@@ -98,24 +105,41 @@ function MessageReceivedScreen() {
                                             <tr key={message._id}>
                                                 <td>
                                                     {message.read === false ? 
-                                                        <h5 className="text-danger">
+                                                        <div className="text-primary">
                                                             {message.senderName}
-                                                        </h5>
+                                                        </div>
                                                     :
                                                         message.senderName
                                                     }
                                                 
                                                 </td>
                                                 <td>
-                                                    {(message.context).substring(0,50) + '...'}
+                                                    {message.read === false ? (
+                                                        message.context.length > 50 ?
+                                                            <div className="text-primary">
+                                                                {(message.context).substring(0, 50) + '...'}
+                                                            </div>
+                                                            
+                                                        :
+                                                            <div className="text-primary">
+                                                                {(message.context)}
+                                                            </div>
+                                                        )
+                                                    : (
+                                                        (message.context.length > 50) ?
+                                                            (message.context).substring(0, 50) + '...'
+                                                        :
+                                                            (message.context)
+                                                        )
+                                                    }
                                                 </td>
                                                 <td>
-                                                    <Button variant='light' className="btn-sm px-3" onClick={() => previewHandler(message._id)}>
-                                                        <h5>View</h5>
+                                                    <Button className="btn-sm btn-secondary" onClick={() => previewHandler(message._id)}>
+                                                        View
                                                     </Button>
 
-                                                    <Button variant='light' className='btn-sm' onClick={() => replyHandler(message.senderName, message.sender, message.receiver)}>
-                                                        <h5>Reply</h5>
+                                                    <Button className="btn-sm btn-secondary" onClick={() => replyHandler(message.senderName, message.sender, message.receiver)}>
+                                                        Reply
                                                     </Button>
                                                 </td>
                                             </tr>

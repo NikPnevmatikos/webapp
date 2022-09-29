@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
 import { sellerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
-import {FaTrash} from "react-icons/fa";
+import { FaTrash, FaStoreAlt } from "react-icons/fa";
 import { Rating } from 'react-simple-star-rating'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
@@ -93,7 +93,7 @@ function MyProductScreen() {
         <div>
             <Row className="align-items-center my-3">
                 <Col>
-                    <h5>uwu my little kawaii product list uwu</h5>
+                    <h1>My Product List <FaStoreAlt/></h1>
                 </Col>
                 <Col className='text-right'>
                     <Button className="btn btn-dark btn-lg float-right" style={{float: 'right'}} onClick={() => createProduct()}>

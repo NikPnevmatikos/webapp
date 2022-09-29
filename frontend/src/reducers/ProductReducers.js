@@ -113,3 +113,43 @@ export const deleteProductReducer = (state = {}, action) => {
             return state
         }       
 }
+
+
+//bonus
+export const recommendedProductReducer = (state = {products:[]}, action) => {
+    switch(action.type){
+        case 'RECOMMEND_PRODUCTS_REQUEST' :
+           return{loading: true, products: [] }
+        
+        case 'RECOMMEND_PRODUCTS_SUCCESS' :
+            return {                
+                loading: false , 
+                products: action.payload.products
+            }
+        
+        case 'RECOMMEND_PRODUCTS_FAIL' :
+            return {loading: false, error: action.payload}
+
+        case 'RECOMMEND_PRODUCTS_RESET':
+            return {products: []}
+            
+        default:
+            return state
+        }       
+}
+
+export const viewProductReducer = (state = {}, action) => {
+    switch(action.type){
+        case 'PRODUCT_VIEW_REQUEST' :
+            return{loading: true}
+        
+        case 'PRODUCT_VIEW_SUCCESS' :
+            return {loading: false , success: true}
+        
+        case 'PRODUCT_VIEW_FAIL' :
+            return {loading: false, error: action.payload}
+            
+        default:
+            return state
+        }       
+}

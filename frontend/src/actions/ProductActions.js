@@ -209,3 +209,83 @@ export const deleteProductAction = (id) => async(dispatch, getState) =>{
         })
     }
 }
+
+
+//bonus
+export const recommendProductsAction = () => async(dispatch, getState) =>{
+    
+    try {
+        dispatch({
+            type: 'RECOMMEND_PRODUCTS_REQUEST'
+        })
+        
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(
+            'api/users/recommended/',
+            config
+        )
+
+        dispatch ({
+            type: 'RECOMMEND_PRODUCTS_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error) {
+        dispatch ({
+            type: 'RECOMMEND_PRODUCTS_FAIL',
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+              
+        })
+    }
+}
+
+
+export const viewProductAction = (id) => async(dispatch, getState) =>{
+    
+    try {
+        dispatch({
+            type: 'PRODUCT_VIEW_REQUEST'
+        })
+        
+
+        const {
+            userLoginReducer: { userInfo }, 
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/product_view/${id}/`,
+            {},
+            config
+        )
+
+        dispatch ({
+            type: 'PRODUCT_VIEW_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error) {
+        dispatch ({
+            type: 'PRODUCT_VIEW_FAIL',
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message,
+              
+        })
+    }
+}

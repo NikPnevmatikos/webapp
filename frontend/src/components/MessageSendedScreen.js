@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import PageButtons from './PageButtons';
 import { userMessagesSendAction } from '../actions/MessagesActions'
+import {FaMailBulk} from "react-icons/fa";
 
 function MessageSendedScreen() {
 
@@ -54,7 +55,10 @@ function MessageSendedScreen() {
         <div>
             <Row className="align-items-center my-3">
                 <Col>
-                    <h5>Sended Messages</h5>
+                    <h4>
+                        Sended Messages <FaMailBulk/>
+                    </h4>
+                    
                 </Col>
             </Row>
 
@@ -94,15 +98,19 @@ function MessageSendedScreen() {
                                                     {message.receiverName}
                                                 </td>
                                                 <td>    
-                                                    {(message.context).substring(0,50) + '...'}
+                                                    {message.context.length > 50 ?
+                                                        (message.context).substring(0, 50) + '...'
+                                                    :
+                                                        (message.context)
+                                                    }
                                                 </td>
                                                 <td>
-                                                    <Button variant='light' className='btn-sm' onClick={() => previewHandler(message._id)}>
-                                                        <h5>View</h5>
+                                                    <Button className="btn-sm btn-secondary" onClick={() => previewHandler(message._id)}>
+                                                        View
                                                     </Button>
 
-                                                    <Button variant='light' className='btn-sm' onClick={() => replyHandler(message.senderName, message.sender, message.receiver)}>
-                                                        <h5>Reply</h5>
+                                                    <Button className="btn-sm btn-secondary" onClick={() => replyHandler(message.senderName, message.sender, message.receiver)}>
+                                                        Reply
                                                     </Button>
 
                                                 </td>

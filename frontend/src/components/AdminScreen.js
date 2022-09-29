@@ -53,7 +53,9 @@ function AdminScreen() {
 
     return (
         <div>
-            uwu my little kawaii admin page uwu
+            <h2>
+                My <strong>Admin</strong> Page
+            </h2>
 
             {loading ? (
                 <Spinner 
@@ -68,7 +70,7 @@ function AdminScreen() {
                     <strong>{error}</strong>
                     </div>
                 ) : (
-                    <div>
+                    <div className='py-3'>
                         <Table striped bordered hover responsive className='table-sm'>
                         <thead>
                             <tr>
@@ -87,28 +89,29 @@ function AdminScreen() {
                                 (users.map(user => (
                                     <tr key={user.id}>
                                         <td>{user.id}</td>
-                                        <td>{user.name}</td>
+                                        <td><div><strong>{user.name}</strong></div></td>
                                         <td>{user.email}</td>
                                         <td>{user.verified ? (
-                                            <h5>yes</h5>
+                                            <div className='text-primary'>Has Been Verified.</div>
                                         ) : (
-                                            <Button 
-                                                variant='light' 
-                                                className='btn-sm' 
+                                            <Button  
+                                                className='btn-sm btn-primary' 
                                                 onClick={() => verifyHandler(user.id)}>
                                                 {/* <i className='fas fa-trash'></i> */}
-                                                <h5>verify</h5>
+                                                verify user
                                             </Button>
                                             )}</td>
 
                                         <td>
                                             <LinkContainer to={`/admin/user/${user.id}/`}>
-                                                <Button variant='light' className='btn-sm'>
-                                                    <h5>View</h5>
+                                                <Button className='btn-default btn-secondary'>
+                                                    <div>View</div>
                                                 </Button>
                                             </LinkContainer>
 
-                                            <Button disabled={user.is_staff === true} variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
+                                            <Button disabled={user.is_staff === true} 
+                                                    className='btn-default btn-danger' 
+                                                    onClick={() => deleteHandler(user.id)}>
                                                 <FaTrash/>
                                             </Button>
                                         </td>

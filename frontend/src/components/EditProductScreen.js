@@ -283,15 +283,7 @@ function EditProduct() {
                                 <Form.Group controlId='startingdate' className='py-1'>
 
                                     <Form.Label>Starting Date:</Form.Label>                        
-                                    {/* <DateTimePicker 
-                                        required
-                                        // controls={['date', 'time']}
-                                        // dateFormat="YYYY-MM-DD"
-                                        // timeFormat="H:MM:ss"
-                                        format = "y-MM-dd h:mm:ss"
-                                        onChange={(e) => setstartingdate(new Date(e.target.value))} 
-                                        value={startingdate} 
-                                    /> */}
+                                    
                                 <Form.Control 
                                     required
                                     type='text' 
@@ -303,15 +295,7 @@ function EditProduct() {
 
                     <Form.Group controlId='endingdate' className='py-1'>
                         <Form.Label>Ending Date:</Form.Label>                        
-                            {/* <DateTimePicker 
-                                required
-                                // controls={['date', 'time']}
-                                // dateFormat="YYYY-MM-DD"
-                                // timeFormat="H:MM:ss"
-                                format = "y-MM-dd h:mm:ss"
-                                onChange={(e) => setendingdate(new Date(e.target.value))} 
-                                value={endingdate} 
-                            /> */}
+                           
                         <Form.Control 
                             required
                             type='text' 

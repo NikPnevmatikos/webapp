@@ -1,0 +1,11 @@
+celery==3.1.26.post2
+Django==4.1
+django_phonenumber_field==7.0.0
+djangorestframework==3.14.0
+django-cors-headers==3.13.0
+djangorestframework_simplejwt==5.2.0
+numpy==1.23.3
+pytz==2019.3
+Werkzeug==2.2.2
+Pillow==7.0.0
+pyOpenSSL==22.1.0

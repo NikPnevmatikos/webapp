@@ -4,7 +4,7 @@ import { Table,Row, Col, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import PageButtons from './PageButtons';
-import { userMessagesAction, unreadMessageAction, messageAction } from '../actions/MessagesActions'
+import { userMessagesAction, unreadMessageAction } from '../actions/MessagesActions'
 import {FaMailBulk} from "react-icons/fa";
 
 function MessageReceivedScreen() {

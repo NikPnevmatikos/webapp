@@ -147,7 +147,7 @@ function EditProduct() {
     <Container>
         <Row className = "justify-content-md-center">
             <Col xs={12} md={6}>
-                <h1>Edit a Little Product</h1>
+                <h1>Edit your Product</h1>
 
                 {errorMessage && 
                     <div className="alert alert-dismissible alert-danger">
@@ -337,7 +337,6 @@ function EditProduct() {
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}
-                                //onClick={clickHandler}
                         >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

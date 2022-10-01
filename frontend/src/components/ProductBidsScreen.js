@@ -116,7 +116,7 @@ function ProductBidScreen() {
                     </div>  
                 
                 ):
-                <h1>There is no placed bids Yet :(</h1> 
+                <h1>There is no placed bids Yet</h1> 
             }
     </div>
     )

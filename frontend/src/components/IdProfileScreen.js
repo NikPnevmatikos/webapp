@@ -207,7 +207,6 @@ function IdProfileScreen() {
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}
-                                //onClick={clickHandler}
                         >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

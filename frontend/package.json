@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "https://127.0.0.1:8000",
+  "proxy": "http://127.0.0.1:8000",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-leaflet": "^4.1.0",
+    "react-leaflet-fullscreen": "^2.0.2",
     "react-phone-input-2": "^2.15.1",
     "react-phone-number-input": "^3.2.11",
     "react-redux": "^8.0.4",
@@ -34,7 +35,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "HTTPS=true SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

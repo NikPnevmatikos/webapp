@@ -43,7 +43,6 @@ function App() {
             <Route path="/myProducts/update/:id" element={<EditProductScreen/>}/>
             <Route path="/myProducts/history/:id" element={<ProductBidsScreen/>}/>
             <Route path="/verify" element={<VerifyScreen/>}/>
-
             <Route path="/received/" element={<MessageReceivedScreen/>}/>
             <Route path="/received/preview/:id" element={<PreviewMessageScreen/>}/>
             <Route path="/sended/" element={<MessageSendedScreen/>}/>

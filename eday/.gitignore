@@ -1,0 +1,3 @@
+#ssl certificate local keys
+/cert.pem
+/key.pem

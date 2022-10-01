@@ -254,8 +254,6 @@ function RegisterScreen() {
                                 center={[0.0,0.0]} 
                                 zoom={13} 
                                 scrollWheelZoom={false}
-                                // position={position}
-                                //onClick={clickHandler}
                         >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

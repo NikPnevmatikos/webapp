@@ -97,7 +97,6 @@ function AdminScreen() {
                                             <Button  
                                                 className='btn-sm btn-primary' 
                                                 onClick={() => verifyHandler(user.id)}>
-                                                {/* <i className='fas fa-trash'></i> */}
                                                 verify user
                                             </Button>
                                             )}</td>

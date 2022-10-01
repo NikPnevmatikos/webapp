@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
-/.cert
+/.cert/*
 .pnp.js
 
 # testing

@@ -9,9 +9,9 @@ pip install django-phone-field\
 pip install django-celery\
 \
 frontend:\
-npm\ 
-nodejs\
-npm install\
+npm
+nodejs
+npm install
 
 
 

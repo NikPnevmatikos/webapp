@@ -1,4 +1,4 @@
-# webapp\
+# webapp
 backend:\
 django \
 django rest framework\

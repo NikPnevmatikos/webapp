@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Item ItemID="7">
+  <Name>Apple iPhone 14 , 64GB, Black </Name>
+  <Category>Electronics</Category>
+  <Currently>1200.00</Currently>
+  <First_Bid>399.00</First_Bid>
+  <Number_of_Bids>1</Number_of_Bids>
+  <Bids>
+    <Bid>
+      <Bidder_Rating Rating="None" UserId="MaryDiam">
+        <Location>Athens</Location>
+        <Country>Greece</Country>
+      </Bidder_Rating>
+    </Bid>
+    <Time>2022-10-02 16:04:19</Time>
+    <Amount>1200.00</Amount>
+  </Bids>
+  <Location>Athens</Location>
+  <Country>Greece</Country>
+  <Started>2022-09-30 16:00:33</Started>
+  <Ended>2023-09-30 16:00:33</Ended>
+  <Seller_Rating Seller_Rating="None" UserId="admin" />
+  <Description>Includes a brand new, generic charging cable that is certified Mfi (Made for iPhone) and a brand new, generic wall plug that is UL certified for performance and safety. Also includes a SIM tray removal tool but does not come with headphones or a SIM card.</Description>
+</Item>

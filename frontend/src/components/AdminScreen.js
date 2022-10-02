@@ -5,6 +5,7 @@ import { Table, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { allUsers, deleteUser, verifyUser } from '../actions/userActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import PageButtons from './PageButtons'
 import { FaTrash } from "react-icons/fa";
 
@@ -32,6 +33,7 @@ function AdminScreen() {
     useEffect(() => {
         if (userInfo != null && userInfo.is_staff === true) {
             dispatch(allUsers(keyword))
+            dispatch(unreadMessageAction())
         }
         else {
             navigate('/login')

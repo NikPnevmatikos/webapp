@@ -21,6 +21,9 @@ function Header() {
   const userLogin = useSelector(state => state.userLoginReducer)
   const {userInfo} = userLogin
 
+  const unreadMessages = useSelector(state => state.unreadMessageReducer)
+  const {message:unread} = unreadMessages
+  
   const logoutHandler = () => {
     dispatch(logout())
   }
@@ -78,16 +81,16 @@ function Header() {
                 </NavDropdown>
 
 
-                <NavDropdown title='MyMessages' id='messages'>
+                <NavDropdown title={unread > 0 ? `MyMessages (${unread})` : `MyMessages` } id='messages'>
 
                     <NavDropdown.Item href='/received'>
-                      Received
+                      Received {unread > 0 && <strong>({unread})</strong>}
                     </NavDropdown.Item>
 
                     <NavDropdown.Divider />
 
                     <NavDropdown.Item href='/sended'>
-                      Sended
+                      Sent
                     </NavDropdown.Item>
 
                   </NavDropdown>

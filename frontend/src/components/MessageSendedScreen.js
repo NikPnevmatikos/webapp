@@ -4,7 +4,7 @@ import { Table,Row, Col, Button} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import PageButtons from './PageButtons';
-import { userMessagesSendAction } from '../actions/MessagesActions'
+import { userMessagesSendAction, unreadMessageAction } from '../actions/MessagesActions'
 import {FaMailBulk} from "react-icons/fa";
 
 function MessageSendedScreen() {
@@ -26,6 +26,7 @@ function MessageSendedScreen() {
         if (userInfo != null) {
             if(userInfo.verified === true){
                 dispatch(userMessagesSendAction(keyword)) 
+                dispatch(unreadMessageAction())
             }
             else{
                 navigate('/verify')
@@ -56,7 +57,7 @@ function MessageSendedScreen() {
             <Row className="align-items-center my-3">
                 <Col>
                     <h4>
-                        Sended Messages <FaMailBulk/>
+                        Sent Messages <FaMailBulk/>
                     </h4>
                     
                 </Col>

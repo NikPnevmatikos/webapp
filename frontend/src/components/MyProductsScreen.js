@@ -5,6 +5,7 @@ import { Table, Button, Row, Col, Image} from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListProductsAction, deleteProductAction} from '../actions/ProductActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { sellerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
 import { FaTrash, FaStoreAlt, FaSadCry } from "react-icons/fa";
@@ -50,6 +51,7 @@ function MyProductScreen() {
         if (userInfo != null) {
             if(userInfo.verified === true){
                 dispatch(userListProductsAction(keyword)) 
+                dispatch(unreadMessageAction())
             }
             else{
                 navigate('/verify')

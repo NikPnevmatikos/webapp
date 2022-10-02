@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row, Image, FormLabel } from 'react-boots
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction , editProductAction} from '../actions/ProductActions';
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 
 function EditProduct() {
@@ -61,6 +62,7 @@ function EditProduct() {
         }
         if (!product || product._id !== Number(match.id)) {
             dispatch(productsAction(match.id))
+            dispatch(unreadMessageAction())
         }
         else {
             setName(product.name)

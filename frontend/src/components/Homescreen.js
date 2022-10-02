@@ -7,6 +7,7 @@ import Top5Carousel from './Top5Carousel'
 import PageButtons from './PageButtons';
 import { listProductsAction } from '../actions/ProductActions'
 import { useLocation } from 'react-router-dom'
+import { unreadMessageAction } from '../actions/MessagesActions'
 
 
 function Homescreen() {
@@ -17,12 +18,19 @@ function Homescreen() {
   const productList = useSelector(state => state.productListReducer)
   const {error, loading, products, page, pages} = productList
 
+  const userLogin = useSelector(state => state.userLoginReducer)
+  const {userInfo} = userLogin
+
 
   let keyword = location.search
   useEffect(() => {
     dispatch(listProductsAction(keyword))
 
-  } , [dispatch , keyword])
+    if(userInfo){
+      dispatch(unreadMessageAction())
+    }
+
+  } , [dispatch , keyword, userInfo])
 
   return (
     <div>

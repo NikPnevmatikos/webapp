@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile, userUpdate } from '../actions/userActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import PhoneInput from 'react-phone-input-2'
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import 'react-phone-input-2/lib/style.css'
@@ -49,6 +50,7 @@ function RegisterScreen() {
                 }
                 dispatch({type:'USER_UPDATE_RESET'})
                 dispatch(userProfile('profile'))
+                dispatch(unreadMessageAction())
             }
             else {
                 if(user.verified === true){

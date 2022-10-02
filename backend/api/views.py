@@ -586,9 +586,10 @@ def send_messages(request):
 @permission_classes([IsAuthenticated])
 def view_message(request,pk):
     
+    user = request.user
     message = Message.objects.get(_id=pk)
     
-    if(message.read == False):
+    if(message.receiver == user.id and message.read == False):
         message.read = True
         message.save()
     

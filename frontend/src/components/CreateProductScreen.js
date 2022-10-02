@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row, Image } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { MapContainer, TileLayer, useMapEvents, Marker, Popup } from 'react-leaflet'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { createProductAction } from '../actions/ProductActions';
 
 function CreateProductScreen() {
@@ -54,6 +55,7 @@ function CreateProductScreen() {
             if (product != null) {
                 navigate('/myProducts')
             }
+            dispatch(unreadMessageAction())
         }
 
         console.log(lat,lng)

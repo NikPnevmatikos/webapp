@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { productsAction} from '../actions/ProductActions'
 import { productListBidsAction } from '../actions/bidActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { Rating } from 'react-simple-star-rating'
 import PageButtons from './PageButtons';
 import { Link } from 'react-router-dom';
@@ -33,6 +34,7 @@ function ProductBidScreen() {
                 dispatch(productListBidsAction(match.id,keyword)) 
                 dispatch({ type: 'PRODUCT_RESET' })
                 dispatch(productsAction(match.id))
+                dispatch(unreadMessageAction())
             }
             else {
                 navigate('/verify')

@@ -3,7 +3,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { createMessageAction} from '../actions/MessagesActions'
+import { createMessageAction, unreadMessageAction} from '../actions/MessagesActions'
 import { userProfile } from '../actions/userActions'
 
 function MessageReplyScreen() {
@@ -30,6 +30,7 @@ function MessageReplyScreen() {
         else {
             if (receiver == null || Number(userId) !== receiver.id )  {
                 dispatch(userProfile(`profile/${userId}`))
+                dispatch(unreadMessageAction())
             }
             else {
                 if(userInfo.verified === true){

@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
 import { MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet'
@@ -40,6 +41,7 @@ function ProfileScreen() {
         else {
             if (user == null || !user.name || Number(userInfo.id) !== Number(user.id))  {
                     dispatch(userProfile('profile'))
+                    dispatch(unreadMessageAction())
             }
             else {
                 if(user.verified === true){

@@ -4,6 +4,7 @@ import { Form, Container, Button, Col, Row, FormLabel } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../actions/userActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { Rating } from 'react-simple-star-rating'
 import PhoneInput from 'react-phone-input-2'
 import { MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet'
@@ -45,6 +46,7 @@ function IdProfileScreen() {
         else {
             if (user == null || !user.name || Number(user.id) !== Number(userId))  {
                 dispatch(userProfile(`profile/${userId}`))
+                dispatch(unreadMessageAction())
             }
             else {
                 setUsername(user.username)
@@ -65,7 +67,7 @@ function IdProfileScreen() {
 
     const submitHandler = (e) =>{
         e.preventDefault()
-        navigate('/admin')
+        navigate(-1)
     }
 
     const CenterMap = ({lat,lng}) => {

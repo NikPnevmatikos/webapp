@@ -7,6 +7,7 @@ import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
 import { userListBidsAction, deleteBidAction } from '../actions/bidActions'
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { buyerReviewAction } from '../actions/userActions'
 import PageButtons from './PageButtons';
 import { FaTrash, FaMedal, FaSadCry } from "react-icons/fa";
@@ -52,7 +53,8 @@ function MyBidScreen() {
 
         if (userInfo != null) {
             if(userInfo.verified === true){
-                dispatch(userListBidsAction(keyword)) 
+                dispatch(userListBidsAction(keyword))
+                dispatch(unreadMessageAction()) 
             }
             else{
                 navigate('/verify')

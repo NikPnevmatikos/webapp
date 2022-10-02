@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Item ItemID="12">
+  <Name>May Stack Overflow Be With You T-Shirt</Name>
+  <Category>Clothing</Category>
+  <Currently>12.00</Currently>
+  <First_Bid>10.00</First_Bid>
+  <Number_of_Bids>3</Number_of_Bids>
+  <Bids>
+    <Bid>
+      <Bidder_Rating Rating="None" UserId="NikPnevmatikos">
+        <Location>Larissa</Location>
+        <Country>Greece</Country>
+      </Bidder_Rating>
+    </Bid>
+    <Time>2022-10-02 00:42:18</Time>
+    <Amount>10.00</Amount>
+    <Bid>
+      <Bidder_Rating Rating="None" UserId="NikPnevmatikos">
+        <Location>Larissa</Location>
+        <Country>Greece</Country>
+      </Bidder_Rating>
+    </Bid>
+    <Time>2022-10-02 00:42:21</Time>
+    <Amount>11.00</Amount>
+    <Bid>
+      <Bidder_Rating Rating="None" UserId="admin">
+        <Location>Athens</Location>
+        <Country>Greece</Country>
+      </Bidder_Rating>
+    </Bid>
+    <Time>2022-10-02 00:42:37</Time>
+    <Amount>12.00</Amount>
+  </Bids>
+  <Location>Rhodes, Old Town</Location>
+  <Country>Greece</Country>
+  <Started>2022-10-02 00:41:33</Started>
+  <Ended>2022-11-02 01:41:33</Ended>
+  <Seller_Rating Seller_Rating="None" UserId="MaryDiam" />
+  <Description>Star Wars and Coding Funny Shirt for your geeky friends! Dark green colored t-shirt with yellow stamp! Comes in XS-S-M-L-XL.</Description>
+</Item>

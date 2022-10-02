@@ -3,7 +3,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import { Form, Container, Button, Col, Row } from 'react-bootstrap'
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux'
-import { messageAction } from '../actions/MessagesActions'
+import { messageAction, unreadMessageAction } from '../actions/MessagesActions'
 
 function PreviewMessageScreen() {
 
@@ -38,6 +38,7 @@ function PreviewMessageScreen() {
         else {
             if (message === null || !message.senderName || !message.receiverName)  {
                 dispatch(messageAction(match.id))
+                dispatch(unreadMessageAction())
             }
             else {
                 if(userInfo.verified === true){

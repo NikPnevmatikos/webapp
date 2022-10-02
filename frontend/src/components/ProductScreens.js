@@ -9,6 +9,7 @@ import { Rating } from 'react-simple-star-rating'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Spinner from 'react-bootstrap/Spinner';
+import { unreadMessageAction } from '../actions/MessagesActions'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { FaMapMarkedAlt } from "react-icons/fa";
 
@@ -48,6 +49,7 @@ function ProductScreens() {
 
     if(userInfo != null){
       dispatch(viewProductAction(match.id))
+      dispatch(unreadMessageAction())
     }
 
 
